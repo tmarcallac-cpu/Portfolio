@@ -53,6 +53,12 @@
   .prose strong{font-weight:600;}
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
 
+  .prose-list{max-width:64ch; font-family:'IBM Plex Sans', sans-serif; font-size:15.5px; color:var(--ink); margin:14px 0; padding-left:20px; list-style:disc;}
+  .prose-list li{margin-bottom:10px;}
+  .prose-list li:last-child{margin-bottom:0;}
+  .prose-list li::marker{color:var(--muted);}
+  .prose-list strong{font-weight:600;}
+
   .img-slot{
     border:1.5px dashed var(--line); border-radius:var(--radius); background:var(--card); padding:44px 16px;
     text-align:center; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px; margin:20px 0 8px;
@@ -574,10 +580,20 @@
   <div class="img-slot">[ IMAGEN — modal de invitación por email, diseño en Figma o resultado final ]</div>
 
   <h3 class="sub-h">Resultado</h3>
-  <p class="prose">La versión final lleva en producción desde hace una semana, así que todavía es pronto para conclusiones firmes. Estamos revisando su comportamiento cada 2 semanas para ver si finalmente resuelve el problema de fondo que arrastraba el flujo desde la V1.</p>
+  <p class="prose">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
+  <p class="prose">Lo que se observó:</p>
+  <ul class="prose-list">
+    <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos, y en llamadas de venta con agencias ya no surgían tantas dudas sobre este paso.</li>
+    <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
+    <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba en la V3.</li>
+    <li><strong>Detectamos un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
+  </ul>
 
   <h3 class="sub-h">Aprendizajes</h3>
-  <p class="prose"><em class="ph">[placeholder: 2-3 líneas sobre qué aprendiste de este proyecto]</em></p>
+  <ul class="prose-list">
+    <li>Sin datos cuantitativos sólidos, observar sesiones reales de uso puede ser una fuente de validación igual de valiosa para detectar patrones de comportamiento.</li>
+    <li>Resolver un problema de fondo, en este caso, quién conecta LinkedIn, tiene efecto más allá de la UI: se nota en ventas y en cuánto soporte manual necesita el equipo.</li>
+  </ul>
 
   <div class="nextproj">
     <a href="index.html">← Volver a proyectos</a>
