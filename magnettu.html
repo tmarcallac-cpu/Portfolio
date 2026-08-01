@@ -52,6 +52,7 @@
   .prose + .prose{margin-top:14px;}
   .prose strong{font-weight:600;}
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
+  .prose.prose-wide{max-width:none;}
 
   .prose-list{max-width:64ch; font-family:'IBM Plex Sans', sans-serif; font-size:15.5px; color:var(--ink); margin:14px 0; padding-left:20px; list-style:disc;}
   .prose-list li{margin-bottom:10px;}
@@ -78,6 +79,7 @@
   .tl-item.fail .tl-version{color:var(--coral);}
   .tl-item h4{font-family:'Space Grotesk', sans-serif; font-size:16.5px; margin-bottom:6px;}
   .tl-item p{color:var(--muted); font-size:14.5px; max-width:58ch;}
+  .tl-item:has(.img-slot) p{max-width:none;}
   .tl-item .why{margin-top:9px; font-size:13.5px; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--coral); border-radius:0 4px 4px 0;}
   .tl-item .why b{color:var(--coral);}
   .tl-item .why.positive{border-left-color:var(--mint);}
@@ -115,14 +117,20 @@
   </div>
 
   <h3 class="sub-h">Contexto</h3>
-  <p class="prose">Cuando entré en Magnettu, la plataforma aún no tenía ningún apartado pensado para agencias. Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar <strong>perfiles, usuarios y grupos</strong>, algo que hasta entonces no existía como tal.</p>
-  <p class="prose">La primera solución, diseñada por otra diseñadora del equipo sobre la que yo luego iteré, se llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.</p>
+  <p class="prose prose-wide">Cuando entré en Magnettu, la plataforma aún no tenía ningún apartado pensado para agencias. Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar <strong>perfiles, usuarios y grupos</strong>, algo que hasta entonces no existía como tal.</p>
+  <p class="prose prose-wide">La primera solución, diseñada por otra diseñadora del equipo sobre la que yo luego iteré, se llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.</p>
 
   <div class="img-slot">[ IMAGEN — captura de "Grupos y Miembros" original, antes de separar ]</div>
 
   <h3 class="sub-h">El problema</h3>
-  <p class="prose">El primer paso no fue separar del todo, sino consolidar: agrupamos todo bajo un apartado llamado <strong>Marcas Personales</strong>, que en la práctica seguía mezclando lo mismo que antes, perfiles personales (entonces llamados "marcas personales"), perfiles de empresa y grupos, solo que ahora bajo un nombre y un espacio común. Para entender bien qué necesitaba realmente una agencia, tuvimos varias sesiones de research directo con una agencia real que usaba la herramienta.</p>
-  <p class="prose">Parte del reto de fondo era que Magnettu no servía solo a agencias que colaboran con clientes, sino también a departamentos de marketing gestionando programas de <strong>employee advocacy</strong>. Crear un perfil tenía que funcionar para los dos casos, pero sus necesidades chocaban entre sí: para una agencia, el email del propietario era imprescindible, para un programa de advocacy interno, pedirlo como obligatorio no tenía sentido. Intentamos simplificar el flujo para que sirviera a ambos, pero seguían apareciendo casos de uso nuevos que nos obligaban a seguir ajustándolo. Fue más adelante, en V3, cuando finalmente separamos perfiles personales, perfiles de empresa y grupos en sus propias secciones independientes.</p>
+  <p class="prose">El primer paso no fue separar del todo, sino consolidar: agrupamos todo bajo <strong>Marcas Personales</strong>, que en la práctica seguía mezclando perfiles personales, perfiles de empresa y grupos, solo que ahora bajo un nombre y espacio común. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
+  <p class="prose">El reto de fondo:</p>
+  <ul class="prose-list">
+    <li>Magnettu servía tanto a <strong>agencias</strong> (colaboración con clientes) como a <strong>departamentos de marketing</strong> con programas de employee advocacy.</li>
+    <li>Para una agencia, el email del propietario era imprescindible. Para advocacy interno, pedirlo como obligatorio no tenía sentido.</li>
+    <li>Intentar simplificar el flujo para ambos casos generó fricción constante con cada caso de uso nuevo.</li>
+  </ul>
+  <p class="prose">Fue más adelante, en V2, cuando finalmente separamos perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
 
   <h3 class="sub-h">Evolución del flujo, y por qué cada versión se quedaba corta</h3>
   <p class="prose">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
@@ -133,28 +141,24 @@
       <h4>4 tabs: nombre, objetivos, LinkedIn y permisos</h4>
       <p>El flujo pedía nombre de la marca, objetivos, conectar LinkedIn (opcional) e invitar usuarios con permisos, todo dividido en 4 pestañas.</p>
       <div class="why"><b>Por qué no era suficiente:</b> no se entendía cuándo había que meter el email del propietario de la marca. Muchos managers decían "lo haré después" y se olvidaban, dejando el perfil a medio configurar.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-version">V2</div>
-      <h4>Ajustes de UI: marcas ilimitadas y tipo de marca</h4>
-      <p>Se actualizó la UI para permitir añadir marcas sin límite, y se añadió la opción de especificar si una marca era de empresa o personal.</p>
-      <div class="why"><b>Por qué no era suficiente:</b> seguía sin resolverse el problema de fondo, el email del propietario seguía sin entenderse, así que el mismo cuello de botella persistía.</div>
+      <div class="img-slot filled"><img src="v1.png" alt="Captura de la V1 del modal de creación de perfiles"></div>
     </div>
     <div class="tl-item fail">
-      <div class="tl-version">V3</div>
+      <div class="tl-version">V2</div>
       <h4>Todo en un solo modal, con reorganización de fondo</h4>
       <p>Nombre del perfil, URL de LinkedIn obligatoria, cómo se conectaría y permisos, todo en una sola pantalla. Esta versión también reorganizó la estructura: "marcas" pasó a llamarse "perfiles personales", los grupos se separaron en su propia sección, y perfiles personales y perfiles de empresa quedaron cada uno en su propio apartado para que no se confundieran entre sí.</p>
       <div class="why"><b>Por qué falló:</b> seguía sin entenderse por qué pedíamos cierta información. Algunos no querían añadir 50 marcas de golpe, y al ser la URL de LinkedIn obligatoria, muchos managers acababan pidiéndonos a nosotros mismos que creáramos los perfiles.</div>
+      <div class="img-slot filled"><img src="v2.png" alt="Captura de la V2 del modal de creación de perfiles"></div>
     </div>
     <div class="tl-item">
-      <div class="tl-version">V4 · Actual</div>
+      <div class="tl-version">V3 · Actual</div>
       <h4>Flujo guiado en 3 pasos</h4>
       <p>La versión vigente, con más preguntas pero mejor explicadas y contextualizadas, pensada para ser coherente tanto para agencias como para programas de advocacy.</p>
       <div class="why positive"><b>Estado:</b> lanzada hace una semana, aún en validación. Estamos revisando resultados cada 2 semanas antes de sacar conclusiones.</div>
     </div>
   </div>
 
-  <div class="img-slot filled"><img src="paso%201.png" alt="Flujo guiado V4 — paso 1"></div>
+  <div class="img-slot filled"><img src="paso%201.png" alt="Flujo guiado V3 — paso 1"></div>
 
   <h3 class="sub-h">Mi rediseño</h3>
   <p class="prose">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
