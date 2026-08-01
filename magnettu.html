@@ -57,6 +57,8 @@
     border:1.5px dashed var(--line); border-radius:var(--radius); background:var(--card); padding:44px 16px;
     text-align:center; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px; margin:20px 0 8px;
   }
+  .img-slot.filled{border-style:solid; padding:0; overflow:hidden;}
+  .img-slot.filled img{width:100%; height:auto; display:block;}
 
   .timeline{margin:28px 0 8px; border-left:2px solid var(--line); padding-left:24px;}
   .tl-item{position:relative; padding-bottom:28px;}
@@ -146,7 +148,7 @@
     </div>
   </div>
 
-  <div class="img-slot">[ IMAGEN — comparativa de las 3 versiones del modal, o la V3 completa ]</div>
+  <div class="img-slot filled"><img src="paso%201.png" alt="Flujo guiado V4 — paso 1"></div>
 
   <h3 class="sub-h">Mi rediseño</h3>
   <p class="prose">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
