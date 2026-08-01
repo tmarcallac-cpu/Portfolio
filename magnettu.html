@@ -59,6 +59,7 @@
   .prose-list li:last-child{margin-bottom:0;}
   .prose-list li::marker{color:var(--muted);}
   .prose-list strong{font-weight:600;}
+  .prose-list.prose-wide{max-width:none;}
 
   .img-slot{
     border:1.5px dashed var(--line); border-radius:var(--radius); background:var(--card); padding:44px 16px;
@@ -133,7 +134,7 @@
   <p class="prose">Fue más adelante, en V2, cuando finalmente separamos perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
 
   <h3 class="sub-h">Evolución del flujo, y por qué cada versión se quedaba corta</h3>
-  <p class="prose">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
+  <p class="prose prose-wide">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
 
   <div class="timeline">
     <div class="tl-item">
@@ -166,7 +167,7 @@
   <p class="prose">Esto resolvía un problema muy concreto que veíamos una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
 
   <h3 class="sub-h">Decisiones que tomamos</h3>
-  <p class="prose">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
+  <p class="prose prose-wide">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
 
   <div class="decision-block">
     <div class="decision-img"><img src="paso%207.png" alt="Flujo completo de creación de un único perfil, los 5 pasos"></div>
@@ -578,9 +579,9 @@
   </div>
 
   <h3 class="sub-h">De Figma a código: el modal de invitación</h3>
-  <p class="prose">Para el modal del email de invitación, fui un paso más allá del prototipo de validación: diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual. Para que el traspaso funcionara, entré en el código real con Claude Code y Cursor, reutilizando componentes ya existentes, en paralelo a una actualización del design system que estaba en curso.</p>
-  <p class="prose">Este flujo tiene, en realidad, dos versiones, según dónde vive el formulario cuando la persona lo completa, no según quién creó el perfil:</p>
-  <ul class="prose-list">
+  <p class="prose prose-wide">Para el modal del email de invitación, fui un paso más allá del prototipo de validación: diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual. Para que el traspaso funcionara, entré en el código real con Claude Code y Cursor, reutilizando componentes ya existentes, en paralelo a una actualización del design system que estaba en curso.</p>
+  <p class="prose prose-wide">Este flujo tiene, en realidad, dos versiones, según dónde vive el formulario cuando la persona lo completa, no según quién creó el perfil:</p>
+  <ul class="prose-list prose-wide">
     <li><strong>Contexto A · Por email.</strong> El propietario llega desde el enlace de invitación sin sesión iniciada en Magnettu. Ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde".</li>
     <li><strong>Contexto B · Dentro de Magnettu.</strong> El propietario ya tiene sesión activa. Ve el mismo flujo como un modal flotando sobre el dashboard, con la opción de posponer siempre disponible, y que se cierra solo al conectar o al posponer.</li>
   </ul>
