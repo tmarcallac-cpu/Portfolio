@@ -165,7 +165,7 @@
   <p class="prose">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
 
   <div class="decision-block">
-    <div class="decision-img img-slot">[ IMAGEN — flujo completo con 1 perfil, los 5 pasos ]</div>
+    <div class="decision-img"><img src="paso%207.png" alt="Flujo completo de creación de un único perfil, los 5 pasos"></div>
     <div class="decision-txt">
       <span class="decision-tag">Decisión</span>
       <p class="prose">Cuando se crea <strong>un único perfil</strong>, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento. <em class="ph">[placeholder: confírmame si el motivo real es este o hay otro]</em></p>
@@ -173,7 +173,7 @@
   </div>
 
   <div class="decision-block reverse">
-    <div class="decision-img img-slot">[ IMAGEN — flujo con varios perfiles, terminando en permisos, 3 pasos ]</div>
+    <div class="decision-img"><img src="paso%209.png" alt="Flujo de creación de varios perfiles a la vez, terminando en permisos, 3 pasos"></div>
     <div class="decision-txt">
       <span class="decision-tag">Decisión</span>
       <p class="prose">Cuando se crean <strong>varios perfiles a la vez</strong>, el flujo se detiene en permisos. Repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante. <em class="ph">[placeholder: confírmame si el motivo real es este o hay otro]</em></p>
@@ -184,6 +184,7 @@
     .decision-block{display:flex; gap:28px; align-items:center; margin:24px 0;}
     .decision-block.reverse{flex-direction:row-reverse;}
     .decision-img{flex:1; margin:0;}
+    .decision-img img{width:100%; height:auto; display:block; border-radius:var(--radius);}
     .decision-txt{flex:1;}
     .decision-tag{
       display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase;
