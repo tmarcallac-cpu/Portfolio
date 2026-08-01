@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planes — Nueva funcionalidad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --yellow:#FFC629; --yellow-soft:#FFF3D0; --black:#1A1A1A; --white:#FFFFFF;
+    --off:#FAF9F6; --muted:#6B6B66; --line:#EAE7DE;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--off); color:var(--black); font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--black); outline-offset:3px;}
+  img, .ph-img{display:block;}
+
+  /* meta banner for portfolio context */
+  .meta-banner{
+    background:var(--black); color:#fff; text-align:center; padding:10px 20px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+  }
+  .meta-banner a{color:var(--yellow); text-decoration:none; border-bottom:1px solid var(--yellow);}
+
+  nav.bnav{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 6vw; max-width:1280px; margin:0 auto;
+  }
+  .wordmark{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:22px; letter-spacing:-0.01em;}
+  .wordmark span{color:var(--yellow); -webkit-text-stroke:1px var(--black);}
+  .bnav-links{display:flex; gap:28px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em;}
+  .bnav-cta{background:var(--black); color:#fff; padding:10px 20px; border-radius:100px; text-decoration:none; font-family:'IBM Plex Mono', monospace; font-size:12.5px;}
+  @media (max-width:700px){.bnav-links{display:none;}}
+
+  /* HERO */
+  .hero{max-width:1280px; margin:0 auto; padding:30px 6vw 70px; text-align:center;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono', monospace; font-size:12px;
+    background:var(--yellow-soft); color:var(--black); padding:6px 16px; border-radius:100px; margin-bottom:26px;
+    text-transform:uppercase; letter-spacing:.04em; font-weight:600;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--yellow); border:1.5px solid var(--black);}
+  h1.hero-title{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; text-transform:uppercase;
+    font-size:clamp(38px,7vw,84px); line-height:0.98; letter-spacing:-0.01em; max-width:16ch; margin:0 auto;
+  }
+  h1.hero-title em{font-style:normal; background:var(--yellow); padding:0 10px; box-decoration-break:clone; -webkit-box-decoration-break:clone;}
+  .hero-sub{margin:26px auto 0; font-size:17px; color:var(--muted); max-width:46ch;}
+  .hero-cta{
+    display:inline-block; margin-top:34px; background:var(--black); color:#fff; text-decoration:none;
+    padding:15px 32px; border-radius:100px; font-family:'IBM Plex Mono', monospace; font-size:13.5px;
+    text-transform:uppercase; letter-spacing:.03em; font-weight:600;
+  }
+
+  .hero-visual{
+    margin:56px auto 0; max-width:920px; aspect-ratio:16/8.5; background:var(--yellow);
+    border-radius:20px; display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:rgba(26,26,26,.55);
+    position:relative; overflow:hidden;
+  }
+  .hero-visual::before, .hero-visual::after{
+    content:''; position:absolute; border-radius:50%; background:rgba(26,26,26,.06);
+  }
+  .hero-visual::before{width:220px; height:220px; top:-60px; left:-60px;}
+  .hero-visual::after{width:160px; height:160px; bottom:-50px; right:8%;}
+
+  /* FEATURE SECTIONS */
+  .feature{
+    max-width:1100px; margin:0 auto; padding:70px 6vw;
+    display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;
+  }
+  .feature.reverse .f-visual{order:2;}
+  .feature.reverse .f-text{order:1;}
+  @media (max-width:820px){
+    .feature, .feature.reverse{grid-template-columns:1fr; gap:26px;}
+    .feature.reverse .f-visual, .feature.reverse .f-text{order:initial;}
+  }
+  .f-visual{
+    aspect-ratio:4/4.6; border-radius:18px; display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:rgba(26,26,26,.4);
+  }
+  .feature:nth-of-type(odd) .f-visual{background:var(--yellow-soft);}
+  .feature:nth-of-type(even) .f-visual{background:var(--black); color:rgba(255,255,255,.4);}
+  .f-tag{font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase; color:var(--muted); letter-spacing:.04em; margin-bottom:12px; display:block;}
+  .f-text h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; text-transform:uppercase; font-size:clamp(24px,3.4vw,34px);
+    line-height:1.08; margin-bottom:18px;
+  }
+  .f-text p{font-size:15.5px; color:var(--muted); max-width:42ch;}
+  .f-cta{
+    display:inline-block; margin-top:22px; text-decoration:none; color:var(--black); font-weight:600;
+    font-family:'IBM Plex Mono', monospace; font-size:13px; border-bottom:2px solid var(--yellow); padding-bottom:2px;
+  }
+
+  /* FAQ */
+  .faq-section{max-width:760px; margin:20px auto 0; padding:70px 6vw;}
+  .faq-section h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; text-transform:uppercase; font-size:26px; margin-bottom:30px; text-align:center;
+  }
+  .faq-item{border-top:1px solid var(--line);}
+  .faq-item:last-child{border-bottom:1px solid var(--line);}
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; padding:20px 4px; cursor:pointer;
+    display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Sans', sans-serif;
+    font-size:15.5px; font-weight:600; color:var(--black);
+  }
+  .faq-q .plus{font-size:20px; font-weight:400; transition:transform .2s; flex-shrink:0; margin-left:16px;}
+  .faq-item.open .faq-q .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .faq-a p{padding:0 4px 20px; font-size:14.5px; color:var(--muted); max-width:56ch;}
+
+  /* BOTTOM CTA */
+  .bottom-cta{background:var(--black); color:#fff; text-align:center; padding:80px 6vw; margin-top:20px;}
+  .bottom-cta h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; text-transform:uppercase; font-size:clamp(26px,4vw,40px);
+    max-width:18ch; margin:0 auto 28px; line-height:1.1;
+  }
+  .store-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .store-btn{
+    display:flex; align-items:center; gap:8px; background:#fff; color:var(--black); text-decoration:none;
+    padding:11px 20px; border-radius:8px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:600;
+  }
+
+  footer.simple{
+    text-align:center; padding:40px 24px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="meta-banner">Concepto de landing para el rediseño de Bumble · Parte del case study · <a href="rediseno.html">← Volver al case study</a></div>
+
+<nav class="bnav">
+  <span class="wordmark">bumble<span>.</span></span>
+  <div class="bnav-links">
+    <span>Date</span><span>BFF</span><span>Seguridad</span>
+  </div>
+  <a class="bnav-cta" href="#">Descargar</a>
+</nav>
+
+<section class="hero">
+  <span class="eyebrow"><span class="dot"></span> Nueva funcionalidad</span>
+  <h1 class="hero-title">Match por lo que <em>queréis vivir</em></h1>
+  <p class="hero-sub">[PLACEHOLDER — subtítulo del hero, 1 línea explicando qué es "Planes" y por qué importa]</p>
+  <a class="hero-cta" href="#">[Placeholder CTA]</a>
+
+  <div class="hero-visual">[ IMAGEN — mockup de perfil con planes visibles ]</div>
+</section>
+
+<section class="feature">
+  <div class="f-visual">[ IMAGEN — pantalla de selección de planes en onboarding ]</div>
+  <div class="f-text">
+    <span class="f-tag">Por qué existe</span>
+    <h2>La foto no cuenta toda la historia</h2>
+    <p>[PLACEHOLDER — explicar que el match hoy se reduce casi por completo al aspecto físico, y que Planes añade una señal real de compatibilidad]</p>
+    <a class="f-cta" href="#">[Placeholder link] →</a>
+  </div>
+</section>
+
+<section class="feature reverse">
+  <div class="f-visual">[ IMAGEN — badge "Los dos queréis: [plan]" sobre un perfil ]</div>
+  <div class="f-text">
+    <span class="f-tag">Cómo funciona</span>
+    <h2>Descubre lo que ya tenéis en común</h2>
+    <p>[PLACEHOLDER — explicar que en cada perfil se ve el plan que coincide, antes incluso de dar like]</p>
+    <a class="f-cta" href="#">[Placeholder link] →</a>
+  </div>
+</section>
+
+<section class="feature">
+  <div class="f-visual">[ IMAGEN — checkpoint de doble opt-in en el chat ]</div>
+  <div class="f-text">
+    <span class="f-tag">Y cuando toca quedar</span>
+    <h2>Proponer una cita ya no es cosa de uno solo</h2>
+    <p>[PLACEHOLDER — explicar el checkpoint de doble opt-in, sin presión ni rechazo explícito]</p>
+    <a class="f-cta" href="#">[Placeholder link] →</a>
+  </div>
+</section>
+
+<section class="faq-section">
+  <h2>Preguntas frecuentes</h2>
+
+  <div class="faq-item">
+    <button class="faq-q"><span>[Placeholder pregunta 1]</span><span class="plus">+</span></button>
+    <div class="faq-a"><p>[PLACEHOLDER — respuesta]</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q"><span>[Placeholder pregunta 2]</span><span class="plus">+</span></button>
+    <div class="faq-a"><p>[PLACEHOLDER — respuesta]</p></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q"><span>[Placeholder pregunta 3]</span><span class="plus">+</span></button>
+    <div class="faq-a"><p>[PLACEHOLDER — respuesta]</p></div>
+  </div>
+</section>
+
+<div class="bottom-cta">
+  <h2>[Placeholder — llamada final a probar Planes]</h2>
+  <div class="store-row">
+    <a class="store-btn" href="#">App Store</a>
+    <a class="store-btn" href="#">Google Play</a>
+  </div>
+</div>
+
+<footer class="simple">Concepto de diseño, no es un producto oficial de Bumble · Parte del portfolio de Tatiana</footer>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const btn = item.querySelector('.faq-q');
+    const ans = item.querySelector('.faq-a');
+    btn.addEventListener('click', ()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(o=>{
+        o.classList.remove('open');
+        o.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        ans.style.maxHeight = ans.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

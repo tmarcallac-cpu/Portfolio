@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre mí — Tatiana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
+    --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
+    --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
+    --card:#FFFFFF; --radius:6px; --maxw:1040px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:radial-gradient(var(--dot) 1px, transparent 1px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:'IBM Plex Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  header.top{
+    max-width:var(--maxw); margin:0 auto; padding:22px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .logo{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:18px; color:var(--accent);}
+  header.top nav{display:flex; gap:26px; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;}
+  header.top nav a{text-decoration:none; color:var(--muted); transition:.15s;}
+  header.top nav a:hover, header.top nav a.active{color:var(--ink);}
+  .btn-ghost{border:1px solid var(--line); border-radius:100px; padding:7px 16px; text-decoration:none; color:var(--ink);}
+  .btn-solid{background:var(--accent); color:#fff; border-radius:100px; padding:7px 18px; text-decoration:none;}
+
+  main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
+
+  .intro-block{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; padding:36px 0 70px;}
+  @media (max-width:820px){.intro-block{grid-template-columns:1fr;}}
+  .intro-photo{aspect-ratio:4/3.2; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px;}
+  .intro-text h2{font-family:'Space Grotesk', sans-serif; font-size:24px; font-weight:600; margin-bottom:22px;}
+  .hobby-track{height:4px; border-radius:100px; background:var(--accent-soft); margin-bottom:26px; overflow:hidden;}
+  .hobby-track span{display:block; height:100%; width:55%; background:var(--accent);}
+  .hobby-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 20px;}
+  .hobby-col{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  .hobby-col + .hobby-col{border-left:1px solid var(--line); padding-left:20px;}
+  .hobby-item{aspect-ratio:1; background:var(--accent-soft); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace; font-size:9.5px; color:var(--accent); text-align:center; padding:4px;}
+
+  .chapter{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; padding:60px 0; border-top:1px solid var(--line);}
+  .chapter:first-of-type{border-top:none;}
+  @media (max-width:820px){.chapter{grid-template-columns:1fr; gap:28px;}}
+  .chapter.reverse .chapter-photo{order:2;}
+  .chapter.reverse .chapter-text{order:1;}
+  @media (max-width:820px){.chapter.reverse .chapter-photo, .chapter.reverse .chapter-text{order:initial;}}
+
+  .chapter-photo{aspect-ratio:4/3; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px;}
+  .chapter-photo img{width:100%; height:100%; object-fit:cover;}
+
+  .chapter-text h3{font-family:'Space Grotesk', sans-serif; font-size:22px; font-weight:600; margin-bottom:16px;}
+  .chapter-text p{color:var(--ink); font-size:15px; max-width:56ch;}
+  .chapter-text p + p{margin-top:12px;}
+  .chapter-text strong{font-weight:600; color:var(--accent);}
+
+  .skills-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--muted); margin:24px 0 10px;}
+  .skills-grid{display:flex; flex-wrap:wrap; gap:9px;}
+  .skills-grid span{font-family:'IBM Plex Mono', monospace; font-size:11.5px; border:1px solid var(--line); background:var(--card); padding:6px 12px; border-radius:100px; color:var(--ink);}
+
+  footer.contact{text-align:center; padding:60px 24px 90px; border-top:1px solid var(--line); margin-top:20px;}
+  footer.contact h2{font-family:'Space Grotesk', sans-serif; font-size:26px; margin-bottom:12px;}
+  footer.contact a.mail{display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:15px; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="index.html">Tatiana</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#proyectos">Proyectos</a>
+    <a href="about.html" class="active">About me</a>
+    <a class="btn-ghost" href="index.html#contacto">Contacto</a>
+    <a class="btn-solid" href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- INTRO + HOBBIES -->
+  <section class="intro-block">
+    <div class="intro-photo">[ TU FOTO — retrato ]</div>
+    <div class="intro-text">
+      <h2>Aparte de diseñar, me encanta otros hobbies</h2>
+      <div class="hobby-track"><span></span></div>
+      <div class="hobby-grid">
+        <div class="hobby-col">
+          <div class="hobby-item">[hobby 1]</div>
+          <div class="hobby-item">[hobby 2]</div>
+          <div class="hobby-item">[hobby 3]</div>
+          <div class="hobby-item">[hobby 4]</div>
+        </div>
+        <div class="hobby-col">
+          <div class="hobby-item">[hobby 5]</div>
+          <div class="hobby-item">[hobby 6]</div>
+          <div class="hobby-item">[hobby 7]</div>
+          <div class="hobby-item">[hobby 8]</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 1 -->
+  <section class="chapter">
+    <div class="chapter-photo">[ IMAGEN — foto de tu etapa en Ironhack ]</div>
+    <div class="chapter-text">
+      <h3>Empezando como diseñadora UX/UI</h3>
+      <p>Mi trayectoria empezó con una inmersión total en el diseño UX/UI a través de un bootcamp intensivo en <strong>Ironhack Barcelona</strong>. Durante dos meses a tiempo completo, trabajé en proyectos de complejidad creciente cada semana, bajo una metodología que simulaba entornos profesionales reales, equilibrando teoría y práctica.</p>
+      <p>Mi mayor aprendizaje fue el proyecto final, diseñar para una empresa real, lo que me permitió entender el impacto del diseño en el negocio desde el primer día, además de aprender a investigar con usuarios reales y a defender decisiones frente a un equipo.</p>
+      <div class="skills-label">Habilidades que aprendí</div>
+      <div class="skills-grid">
+        <span>Design Thinking</span><span>UX Research</span><span>Usability Testing</span><span>Trabajo en equipo</span>
+        <span>Metodología ágil</span><span>Ideación</span><span>Wireframing & Prototyping</span><span>Comunicación</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 2 -->
+  <section class="chapter reverse">
+    <div class="chapter-photo">[ IMAGEN — foto del equipo en Magnettu ]</div>
+    <div class="chapter-text">
+      <h3>De diseñadora UX/UI a Product Designer en una startup</h3>
+      <p>En <strong>Magnettu</strong>, una startup en fase inicial, asumí el reto de evolucionar de diseñadora UI a Product Designer. Me adapté rápidamente a un entorno de alta incertidumbre donde el producto pivotaba constantemente, eso significó probar mucho, hacer entrevistas, y diseñar y rediseñar por completo más de una vez.</p>
+      <p>Pasé a encargarme desde la creación de nuevas ideas hasta el mantenimiento de funcionalidades críticas, la comunicación directa con clientes y con el equipo técnico, y la responsabilidad del design system, tanto en tokens como en la librería de componentes.</p>
+      <p>Esta experiencia me enseñó a manejar la IA como aliada en mis flujos de prototipado, a construir sistemas de diseño escalables, y a entender que un producto nunca está terminado, se mantiene, se itera y se mejora constantemente.</p>
+      <div class="skills-label">Habilidades que aprendí</div>
+      <div class="skills-grid">
+        <span>Product Ownership</span><span>SaaS Product Design</span><span>Iteración basada en datos</span>
+        <span>Design Systems</span><span>Hand-off técnico</span><span>AI for Design</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 3 -->
+  <section class="chapter">
+    <div class="chapter-photo">[ IMAGEN — opcional, algo que represente tu momento actual ]</div>
+    <div class="chapter-text">
+      <h3>Mejorando como profesional</h3>
+      <p>Hoy, mi foco está en seguir elevando el estándar de mis diseños a través del análisis de datos de uso real y el prototipado avanzado con IA. En paralelo, estoy desarrollando un proyecto personal desde cero para explorar nuevas verticales de producto, lo que me permite seguir experimentando fuera de mi zona de confort.</p>
+      <p>Me motiva enfrentarme a problemas complejos y encontrar soluciones que sean sencillas, rápidas de implementar y fáciles de usar.</p>
+      <div class="skills-label">Habilidades que aprendí</div>
+      <div class="skills-grid">
+        <span>High-speed Delivery</span><span>Comunicación asertiva</span><span>Growth Mindset</span>
+        <span>Resiliencia & Adaptabilidad</span><span>Problem Solving</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="contact" id="contacto">
+  <h2>Hablemos.</h2>
+  <p style="color:var(--muted)">[PLACEHOLDER — una línea breve invitando a contactar]</p>
+  <a class="mail" href="mailto:tu@email.com">tu@email.com</a>
+</footer>
+
+</body>
+</html>

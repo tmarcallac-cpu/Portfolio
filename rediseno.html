@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rediseño de Bumble — Case study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
+    --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
+    --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
+    --card:#FFFFFF; --radius:5px; --maxw:820px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:radial-gradient(var(--dot) 1px, transparent 1px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:'IBM Plex Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  header.top{
+    max-width:var(--maxw); margin:0 auto; padding:26px 24px;
+    display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+  }
+  header.top a.back{color:var(--muted); text-decoration:none;}
+  header.top a.back:hover{color:var(--ink);}
+
+  main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
+
+  .cs-tag{
+    display:inline-flex; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
+    background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;
+  }
+  h1.cs-title{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(30px,4.6vw,44px); line-height:1.12; max-width:18ch;
+  }
+  p.cs-sub{margin-top:18px; font-size:16.5px; color:var(--muted); max-width:60ch;}
+
+  .meta-strip{
+    margin-top:32px; padding-top:20px; border-top:1px solid var(--line);
+    display:flex; gap:36px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+  }
+  .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
+
+  h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:19px; margin:44px 0 12px;}
+  .prose{max-width:64ch; font-size:15.5px; color:var(--ink);}
+  .prose + .prose{margin-top:14px;}
+  .prose strong{font-weight:600;}
+  .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
+
+  .problem-statement{
+    border-left:3px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:0 var(--radius) var(--radius) 0;
+    margin:22px 0; font-size:15px; font-style:italic;
+  }
+
+  .research-cards{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin:20px 0 8px;}
+  @media (max-width:700px){.research-cards{grid-template-columns:1fr;}}
+  .research-card{border:1px solid var(--line); border-radius:var(--radius); background:var(--card); padding:18px;}
+  .research-card .rc-tag{font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:block;}
+  .research-card p{font-size:13.5px; color:var(--muted);}
+
+  .doc-link{
+    display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px; margin:18px 0; text-decoration:none; background:var(--card); transition:border-color .15s;
+  }
+  .doc-link:hover{border-color:var(--accent);}
+  .doc-link .ic{width:36px; height:36px; border-radius:6px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace; font-size:11px; flex-shrink:0;}
+  .doc-link .tx strong{font-size:14px; display:block;}
+  .doc-link .tx span{font-size:12.5px; color:var(--muted);}
+
+  table.matrix{width:100%; border-collapse:collapse; margin:18px 0 8px; font-size:13px;}
+  table.matrix th, table.matrix td{border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;}
+  table.matrix th{background:var(--card); font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--muted);}
+  table.matrix td.highlight{background:var(--accent-soft); font-weight:500;}
+  .matrix-wrap{overflow-x:auto;}
+
+  .callout{
+    border:1px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:var(--radius);
+    margin:28px 0; font-size:14.5px;
+  }
+  .callout .callout-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px;}
+
+  .quote-diff{
+    font-family:'Space Grotesk', sans-serif; font-size:19px; line-height:1.4; color:var(--ink);
+    padding:22px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:30px 0;
+  }
+  .quote-diff span{color:var(--muted);}
+
+  .journey-legend{display:flex; gap:22px; margin:18px 0 6px; font-size:12.5px; color:var(--muted);}
+  .journey-legend .lg{display:flex; align-items:center; gap:7px;}
+  .journey-legend .dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
+  .journey-legend .dot.mint{background:var(--mint);}
+  .journey-legend .dot.coral{background:var(--coral);}
+
+  .journey-rail{position:relative; margin-top:26px;}
+  .journey-rail::before{content:''; position:absolute; top:8px; left:12px; right:12px; height:2px; background:var(--line); z-index:0;}
+  .journey-scroll{overflow-x:auto; padding-bottom:6px; margin:0 -4px;}
+  .journey-row{display:flex; position:relative; z-index:1; min-width:920px;}
+  .jstage{flex:1; min-width:150px; padding:0 12px;}
+  .jdot{width:16px; height:16px; border-radius:50%; background:var(--card); border:2.5px solid var(--mint); margin:0 auto 16px; position:relative; z-index:2;}
+  .jstage.pain .jdot{border-color:var(--coral); background:var(--coral);}
+  .jstage.peak .jdot{width:20px; height:20px; margin-bottom:14px; box-shadow:0 0 0 4px var(--coral-soft);}
+  .jstage-num{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--muted); margin-bottom:4px;}
+  .jstage h4{font-family:'Space Grotesk', sans-serif; font-size:14.5px; margin-bottom:8px; line-height:1.25; min-height:36px;}
+  .jstage .jhace{font-size:12px; color:var(--ink); margin-bottom:6px; line-height:1.4;}
+  .jstage .jfeel{font-size:11.5px; color:var(--muted); font-style:italic; margin-bottom:8px; line-height:1.4;}
+  .jstage .jpain{font-size:11px; color:var(--coral); background:var(--coral-soft); padding:6px 8px; border-radius:4px; line-height:1.35;}
+  .jstage.peak .jpain{font-weight:600;}
+  .peak-flag{font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; color:var(--coral); text-align:center; margin-bottom:4px;}
+
+  .flow{display:flex; flex-direction:column; align-items:center; gap:0; margin:26px 0 8px;}
+  .flow-box{width:100%; max-width:480px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 22px; text-align:center;}
+  .flow-box .fnum{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--muted); margin-bottom:6px;}
+  .flow-box h4{font-family:'Space Grotesk', sans-serif; font-size:15.5px; margin-bottom:7px;}
+  .flow-box p{font-size:13px; color:var(--muted); line-height:1.5;}
+
+  .flow-arrow{width:2px; height:28px; background:var(--line); position:relative;}
+  .flow-arrow::after{content:''; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid var(--line);}
+  .flow-arrow.caption{height:40px; display:flex; align-items:center; justify-content:center;}
+  .flow-arrow.caption span{
+    background:var(--bg); font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--mint);
+    padding:2px 8px; margin-top:14px;
+  }
+
+  .flow-triggers{display:flex; gap:14px; max-width:480px; width:100%; margin:14px 0 4px;}
+  .flow-trigger{flex:1; border:1px dashed var(--line); border-radius:6px; padding:12px 14px; font-size:11.5px; color:var(--muted); text-align:center;}
+  .flow-trigger strong{display:block; color:var(--ink); font-size:12.5px; margin-bottom:4px; font-family:'IBM Plex Mono', monospace; text-transform:uppercase; font-weight:500;}
+  .flow-trigger em{font-style:normal; color:var(--accent); display:block; margin-top:5px; font-size:10.5px;}
+
+  .flow-decision{
+    width:168px; height:168px; background:var(--accent-soft); border:2px solid var(--accent);
+    transform:rotate(45deg); display:flex; align-items:center; justify-content:center; margin:8px 0;
+  }
+  .flow-decision span{transform:rotate(-45deg); text-align:center; font-family:'Space Grotesk', sans-serif; font-size:13.5px; font-weight:600; color:var(--accent); padding:0 18px; line-height:1.3;}
+
+  .flow-branches{display:grid; grid-template-columns:1fr 1fr; gap:18px; width:100%; max-width:620px; margin-top:8px;}
+  .flow-outcome{border-radius:var(--radius); padding:16px 18px; font-size:12.5px; line-height:1.45;}
+  .flow-outcome.neg{border:1px solid var(--coral); background:var(--coral-soft); color:var(--ink);}
+  .flow-outcome.pos{border:1px solid var(--mint); background:var(--mint-soft); color:var(--ink);}
+  .flow-outcome .fo-label{font-family:'IBM Plex Mono', monospace; font-size:10px; text-transform:uppercase; margin-bottom:6px; display:block; font-weight:600;}
+  .flow-outcome.neg .fo-label{color:var(--coral);}
+  .flow-outcome.pos .fo-label{color:var(--mint);}
+  @media (max-width:600px){.flow-branches, .flow-triggers{grid-template-columns:1fr; display:flex; flex-direction:column;}}
+
+  .miro-wrap{
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--card);
+    margin:26px 0 8px; aspect-ratio:768/640; max-width:600px;
+  }
+  .miro-wrap iframe{width:100%; height:100%; border:0; display:block;}
+  .miro-note{font-size:12.5px; color:var(--muted); font-style:italic; margin-top:10px;}
+
+  .roadmap{margin:24px 0 8px; border-left:2px solid var(--line); padding-left:24px;}
+  .rm-item{position:relative; padding-bottom:22px;}
+  .rm-item:last-child{padding-bottom:0;}
+  .rm-item::before{
+    content:''; position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--line);
+  }
+  .rm-item.done::before{border-color:var(--mint); background:var(--mint);}
+  .rm-item.active::before{border-color:var(--accent);}
+  .rm-item h4{font-family:'Space Grotesk', sans-serif; font-size:15.5px; margin-bottom:3px;}
+  .rm-item.done h4{color:var(--mint);}
+  .rm-item.active h4{color:var(--accent);}
+  .rm-item p{color:var(--muted); font-size:13.5px;}
+
+  .nextproj{
+    margin-top:70px; padding-top:28px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+  }
+  .nextproj a{text-decoration:none; color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="back" href="index.html">← Volver</a>
+  <span>Tatiana</span>
+</header>
+
+<main>
+  <span class="cs-tag">Case study · En construcción</span>
+  <h1 class="cs-title">Rediseño de Bumble: del match visual al match compartido</h1>
+  <p class="cs-sub">Rediseño completo del perfil, el match, el chat y la organización de la cita en Bumble, a partir de research directo con usuarios.</p>
+
+  <div class="meta-strip">
+    <span>Rol<strong>Product Designer</strong></span>
+    <span>Producto<strong>Bumble (rediseño no oficial)</strong></span>
+    <span>Herramientas<strong>Figma, Claude</strong></span>
+    <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
+  </div>
+
+  <h3 class="sub-h">Contexto</h3>
+  <p class="prose">Antes de decidirme por Bumble, exploré otra dirección con una entrevista sobre YouTube, pero la persona estaba satisfecha con el producto y no había una fricción real que justificara un rediseño. En cambio, una entrevista sobre citas online sacó a la luz un problema mucho más claro y con más capas, así que decidí centrar el case study ahí.</p>
+  <p class="prose">Hice tres entrevistas en total. En todas apareció el mismo patrón: las decisiones de match se basan casi por completo en la foto, y una vez hay match, la responsabilidad de proponer y organizar la cita recae en una sola persona.</p>
+
+  <h3 class="sub-h">El problema</h3>
+  <p class="prose">Los perfiles actuales reducen la decisión de dar like casi por completo al aspecto físico, nadie lee la bio a fondo. Y una vez hay match, organizar la cita se convierte en una carga unilateral, normalmente para el hombre, sin que haya ninguna forma compartida de decidir el plan.</p>
+
+  <div class="problem-statement">
+    "Los perfiles actuales reducen la decisión de dar like al aspecto físico, y una vez hay match, la responsabilidad de proponer y encontrar un plan recae por completo en una persona. ¿Cómo rediseñamos el perfil y el flujo post-match para que el match se base también en afinidad de planes, y la organización de la cita sea compartida?"
+  </div>
+
+  <h3 class="sub-h">Research</h3>
+  <p class="prose">Hice tres entrevistas, dos con hombres y una con una mujer, para poder contrastar el problema desde los dos lados.</p>
+
+  <div class="research-cards">
+    <div class="research-card">
+      <span class="rc-tag">Entrevista 1</span>
+      <p>Usa Bumble por soledad, encuentra match con poca frecuencia, y siempre espera que sea el hombre quien proponga la cita.</p>
+    </div>
+    <div class="research-card">
+      <span class="rc-tag">Entrevista 2 · Ronan</span>
+      <p>La foto decide el like, la bio casi no se lee. Elige el lugar de la cita pensando en poder "cortar" fácil, no en lo que prefiere la otra persona.</p>
+    </div>
+    <div class="research-card">
+      <span class="rc-tag">Entrevista 3</span>
+      <p>La bio funciona como filtro negativo, no como gancho. Si el lugar propuesto no le genera confianza, directamente no va, sin explicación.</p>
+    </div>
+  </div>
+
+  <a class="doc-link" href="empathy-map-bumble.pdf" target="_blank">
+    <span class="ic">PDF</span>
+    <span class="tx"><strong>Ver Empathy Map completo</strong><span>Dice, piensa, siente y hace, con la fuente de cada insight</span></span>
+  </a>
+
+  <h3 class="sub-h">Competitive analysis</h3>
+  <p class="prose">Miré Tinder y Hinge, especialmente Hinge, porque su propuesta de valor es "diseñada para ser borrada", con perfiles más ricos que solo fotos.</p>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr><th>Eje</th><th>Tinder</th><th>Hinge</th><th>Bumble actual</th><th>Propuesta</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Perfil</td>
+          <td>Bio libre + fotos + intereses</td>
+          <td>Prompts obligatorios</td>
+          <td>Bio + 3 prompts + fotos</td>
+          <td class="highlight">Perfil + ~3 planes destacados como elemento central</td>
+        </tr>
+        <tr>
+          <td>Señal de match</td>
+          <td>Mayormente visual</td>
+          <td>Like a foto o prompt</td>
+          <td>Visual + prompts</td>
+          <td class="highlight">Afinidad de planes compartidos</td>
+        </tr>
+        <tr>
+          <td>Organizar cita</td>
+          <td>Sin estructura</td>
+          <td>Date Ideas: uno elige plan antes del match</td>
+          <td>Sin estructura, solo presión de 24h</td>
+          <td class="highlight">Checkpoint de doble opt-in tras conexión en chat</td>
+        </tr>
+        <tr>
+          <td>Responsabilidad</td>
+          <td>100% en la conversación</td>
+          <td>Sigue recayendo en quien propone</td>
+          <td>Recae en quien inicia el chat</td>
+          <td class="highlight">Compartida, nadie propone unilateralmente</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="prose" style="font-size:13px; color:var(--muted); margin-top:10px;">Hinge lanzó en abril de 2026 la función Date Ideas, que ayuda a mostrar interés en quedar pronto, pero la organización real sigue en manos del chat.</p>
+
+  <h3 class="sub-h">Journey Map</h3>
+  <p class="prose">El recorrido actual, sin ningún cambio, desde que alguien descubre un perfil hasta que la cita ya ha pasado. Marco en coral los puntos de fricción que salieron en las entrevistas.</p>
+
+  <div class="journey-legend">
+    <div class="lg"><span class="dot mint"></span> Momento positivo</div>
+    <div class="lg"><span class="dot coral"></span> Punto de fricción</div>
+  </div>
+
+  <div class="journey-rail">
+    <div class="journey-scroll">
+      <div class="journey-row">
+
+        <div class="jstage pain">
+          <div class="jdot"></div>
+          <div class="jstage-num">01</div>
+          <h4>Descubrir perfil</h4>
+          <p class="jhace">Decide el like casi solo por la foto, la bio se lee poco o actúa como filtro negativo.</p>
+          <p class="jfeel">Decisión rápida, poco reflexiva.</p>
+          <div class="jpain">La decisión se reduce casi por completo al aspecto físico.</div>
+        </div>
+
+        <div class="jstage">
+          <div class="jdot"></div>
+          <div class="jstage-num">02</div>
+          <h4>Match</h4>
+          <p class="jhace">Match confirmado.</p>
+          <p class="jfeel">Momento positivo, pero breve.</p>
+        </div>
+
+        <div class="jstage pain">
+          <div class="jdot"></div>
+          <div class="jstage-num">03</div>
+          <h4>Chat inicial</h4>
+          <p class="jhace">Deja pasar tiempo "para ver cómo se comporta" la otra persona antes de proponer quedar.</p>
+          <p class="jfeel">Cansancio del mismo patrón, hola qué tal sin llegar a nada.</p>
+          <div class="jpain">No hay ninguna señal que ayude a saber cuándo pasar del chat a la cita.</div>
+        </div>
+
+        <div class="jstage pain peak">
+          <div class="peak-flag">Pico de fricción</div>
+          <div class="jdot"></div>
+          <div class="jstage-num">04</div>
+          <h4>Proponer y organizar la cita</h4>
+          <p class="jhace">El hombre casi siempre propone el plan, y elige el lugar según su propia comodidad, no la de la otra persona.</p>
+          <p class="jfeel">Presión social en quien propone. La otra persona a veces no va si el lugar no le genera confianza, sin explicarlo.</p>
+          <div class="jpain">La responsabilidad recae en una sola persona, sin consentimiento mutuo explícito.</div>
+        </div>
+
+        <div class="jstage pain">
+          <div class="jdot"></div>
+          <div class="jstage-num">05</div>
+          <h4>Cita presencial</h4>
+          <p class="jhace">Encuentro simple, sin necesidad de ser "elaborado".</p>
+          <p class="jfeel">La conexión se valora según cómo fluyó el chat antes.</p>
+          <div class="jpain">Desconexión entre el interés mostrado en el chat y el interés real en persona.</div>
+        </div>
+
+        <div class="jstage pain">
+          <div class="jdot"></div>
+          <div class="jstage-num">06</div>
+          <h4>Después de la cita</h4>
+          <p class="jhace">Si hay conexión, la segunda cita se planea con más cuidado. Si no, se abandona sin más.</p>
+          <p class="jfeel">Si falla, sensación de responsabilidad o fallo personal.</p>
+          <div class="jpain">No hay forma de entender qué pasó, solo se interpreta.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub-h">User Flow</h3>
+  <p class="prose">Cómo se conectan el perfil, los planes, el match, el chat y la cita, de principio a fin.</p>
+
+  <div class="miro-wrap">
+    <iframe width="768" height="640" src="https://miro.com/app/live-embed/uXjVH2TNmfo=/?focusWidget=3458764679656036636&embedMode=view_only_without_ui&embedId=658204961558" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+  </div>
+  <p class="miro-note">Diagrama construido en Miro, incrustado en directo.</p>
+
+  <h3 class="sub-h">Dirección de solución</h3>
+  <p class="prose"><strong>Planes como señal de match:</strong> cada persona destaca unos 3 tipos de plan que le gustan en su perfil. El match no se basa solo en fotos o bio, sino en si hay solape de planes entre ambos, es bidireccional desde el inicio, no es "propongo un plan y tú lo eliges", es "a los dos nos gustan estas cosas, por eso hicimos match".</p>
+  <p class="prose"><strong>Organizar la cita como checkpoint de doble opt-in:</strong> tras cierta interacción en el chat, Bumble pregunta a los dos por separado si quieren organizar una cita. Si ambos dicen que sí, se activa. Si alguno dice que no, no pasa nada, no hay rechazo explícito ni presión unilateral.</p>
+  <p class="prose">Descarté deliberadamente la idea de ayudar con IA a mejorar fotos o el perfil, porque reforzaría el problema real, juzgar solo por el físico, en vez de resolverlo.</p>
+
+  <div class="quote-diff">
+    Hinge resuelve qué proponer. <span>Nosotros resolvemos cómo evitar que proponer se sienta como una carga o una invasión.</span>
+  </div>
+
+  <div class="callout">
+    <span class="callout-label">Por qué encaja con Bumble</span>
+    Bumble ya tiene en su ADN la idea de dar control y seguridad, las mujeres escriben primero. Extender esa misma lógica de consentimiento mutuo a la fase de organizar la cita es coherente con la marca, no un añadido ajeno.
+  </div>
+
+  <h3 class="sub-h">Cómo sigue esto</h3>
+  <div class="roadmap">
+    <div class="rm-item done"><h4>User Interview</h4><p>3 entrevistas completadas, 2 hombres y 1 mujer.</p></div>
+    <div class="rm-item done"><h4>Empathy Map</h4><p>Construido con las 3 entrevistas.</p></div>
+    <div class="rm-item done"><h4>Competitive Analysis</h4><p>Tinder, Hinge y Bumble actual.</p></div>
+    <div class="rm-item done"><h4>Journey Map</h4><p>Recorrido actual completo, con el pico de fricción identificado entre el chat y la organización de la cita.</p></div>
+    <div class="rm-item done"><h4>User Flow</h4><p>Del onboarding con planes hasta la organización de la cita, con el checkpoint de doble opt-in resuelto.</p></div>
+    <div class="rm-item active"><h4>Wireframes</h4><p>Boceto de baja fidelidad.</p></div>
+    <div class="rm-item"><h4>Prototipo de alta fidelidad</h4><p>Posiblemente interactivo en HTML/JS, como en el case study de Magnettu.</p></div>
+    <div class="rm-item"><h4>Test de usabilidad</h4><p>Con 2-3 personas, para validar si se entiende el concepto del plan y si reduce la carga de organizar la cita.</p></div>
+  </div>
+
+  <div class="nextproj">
+    <a href="index.html">← Volver a proyectos</a>
+    <a href="autonomos.html">Siguiente proyecto →</a>
+  </div>
+</main>
+
+</body>
+</html>

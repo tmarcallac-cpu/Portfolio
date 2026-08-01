@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Product Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F5F5F7;
+    --dot: #DADAE2;
+    --ink: #17181C;
+    --muted: #6B6B76;
+    --line: #D8D8DE;
+    --accent: #4A5FE8;
+    --accent-soft: #E8EAFB;
+    --coral: #FF6B5C;
+    --card: #FFFFFF;
+    --radius: 2px;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(var(--dot) 1px, transparent 1px) 0 0/22px 22px,
+      var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  .frame{
+    position:relative;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  .frame-label{
+    position:absolute;
+    top: -13px;
+    left: 24px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  header.top{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 20px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+  header.top nav{display:flex; gap:20px;}
+  header.top nav a{text-decoration:none; color:var(--muted); transition: color .15s;}
+  header.top nav a:hover{color:var(--ink);}
+
+  /* HERO */
+  .hero h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 56px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    max-width: 11ch;
+  }
+  .hero .role-tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+  }
+  .hero p.lede{
+    margin-top: 22px;
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+  .hero .meta-row{
+    margin-top: 36px;
+    display:flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .hero .meta-row strong{color:var(--ink); font-weight:500;}
+
+  /* SECTION HEADERS */
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .section-head .idx{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .section-head h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  .section-sub{color:var(--muted); font-size:15px; margin-bottom:36px; max-width:60ch;}
+
+  /* IMAGE PLACEHOLDER */
+  .img-slot{
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--card);
+    padding: 48px 16px;
+    text-align:center;
+    color: var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    margin: 20px 0 32px;
+  }
+
+  /* PROJECT CARD (index list) */
+  .proj-card{
+    display:block;
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 16px;
+    background: var(--card);
+    text-decoration:none;
+    transition: border-color .15s, transform .15s;
+  }
+  .proj-card:hover{border-color:var(--accent); transform: translateX(2px);}
+  .proj-card .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent);
+    text-transform:uppercase;
+  }
+  .proj-card h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    margin: 6px 0 6px;
+  }
+  .proj-card p{color:var(--muted); font-size:14px;}
+  .proj-card.disabled{opacity:0.55;}
+
+  /* TIMELINE (versions) */
+  .timeline{margin: 28px 0 40px; border-left:2px solid var(--line); padding-left: 24px;}
+  .tl-item{position:relative; padding-bottom: 30px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:'';
+    position:absolute;
+    left:-29px;
+    top: 4px;
+    width:10px; height:10px;
+    border-radius:50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+  .tl-item.fail::before{border-color: var(--coral);}
+  .tl-version{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--accent);
+    margin-bottom:4px;
+  }
+  .tl-item.fail .tl-version{color:var(--coral);}
+  .tl-item h4{font-family:'Space Grotesk', sans-serif; font-size:17px; margin-bottom:6px;}
+  .tl-item p{color:var(--muted); font-size:14.5px; max-width:58ch;}
+  .tl-item .why{
+    margin-top:8px;
+    font-size:13.5px;
+    padding: 10px 12px;
+    background: var(--card);
+    border-left: 3px solid var(--coral);
+    color: var(--ink);
+  }
+  .tl-item .why b{color:var(--coral);}
+
+  .prose{max-width:64ch; font-size:15.5px; color:var(--ink);}
+  .prose + .prose{margin-top:14px;}
+  .prose strong{font-weight:600;}
+
+  .callout{
+    border:1px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    margin: 24px 0;
+    font-size: 14.5px;
+  }
+  .callout .callout-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:block;
+    margin-bottom:6px;
+  }
+
+  footer.contact{
+    text-align:center;
+    padding: 60px 24px 80px;
+  }
+  footer.contact h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 30px;
+    margin-bottom: 14px;
+  }
+  footer.contact a.mail{
+    display:inline-block;
+    margin-top: 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    color:var(--accent);
+    text-decoration:none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:18px; margin:28px 0 10px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span>Tatiana</span>
+  <nav>
+    <a href="#magneto">Magneto</a>
+    <a href="#rediseno">Rediseño</a>
+    <a href="#autonomos">Autónomos</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="frame hero">
+  <span class="frame-label">Frame / Hero</span>
+  <span class="role-tag">Product Designer</span>
+  <h1>Diseño productos y los pruebo antes de que existan.</h1>
+  <p class="lede">
+    [PLACEHOLDER — afinamos esta frase juntos] Product Designer con foco en research, prototipado
+    interactivo asistido por IA, y colaboración cercana con negocio y desarrollo. Actualmente en
+    Magneto.
+  </p>
+  <div class="meta-row">
+    <span>Basado en Barcelona</span>
+    <span><strong>2021</strong> — hoy</span>
+    <span>UI Designer → Product Designer</span>
+  </div>
+</section>
+
+<!-- INDEX -->
+<section class="frame">
+  <span class="frame-label">Frame / Proyectos</span>
+  <div class="section-head"><span class="idx">00</span><h2>Trabajo seleccionado</h2></div>
+  <p class="section-sub">Tres proyectos: uno en producción real, dos en construcción.</p>
+
+  <a class="proj-card" href="#magneto">
+    <span class="tag">Case study · En producción</span>
+    <h3>Magneto — Rediseño de creación de perfiles</h3>
+    <p>Cómo un modal confuso que nadie usaba se convirtió en un flujo guiado de 3 pasos, prototipado de forma interactiva con IA.</p>
+  </a>
+
+  <a class="proj-card disabled" href="#rediseno">
+    <span class="tag">Próximamente</span>
+    <h3>Rediseño — [Airbnb / por definir]</h3>
+    <p>Reimaginando una feature existente de un producto conocido.</p>
+  </a>
+
+  <a class="proj-card disabled" href="#autonomos">
+    <span class="tag">Próximamente</span>
+    <h3>0→1 — Herramienta de colaboración para autónomos</h3>
+    <p>Producto nuevo: cómo equipos de autónomos se coordinan bajo objetivos compartidos.</p>
+  </a>
+</section>
+
+<!-- MAGNETO CASE STUDY -->
+<section class="frame" id="magneto">
+  <span class="frame-label">Frame / Case study — Magneto</span>
+  <div class="section-head"><span class="idx">01</span><h2>De un modal confuso a un flujo guiado</h2></div>
+  <p class="section-sub">Rediseño de la creación de perfiles en Magneto, prototipado de forma interactiva con IA.</p>
+
+  <h3 class="sub-h">Contexto</h3>
+  <p class="prose">
+    Cuando entré en Magneto, la plataforma aún no tenía ningún apartado pensado para agencias.
+    Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar
+    <strong>perfiles, usuarios y grupos</strong> — algo que hasta entonces no existía como tal.
+  </p>
+  <p class="prose">
+    La primera solución (diseñada por otra diseñadora del equipo, sobre la que yo luego iteré) se
+    llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y
+    grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.
+  </p>
+
+  <div class="img-slot">[ IMAGEN — captura de "Grupos y Miembros" original, antes de separar ]</div>
+
+  <h3 class="sub-h">El problema</h3>
+  <p class="prose">
+    Decidimos separar los conceptos: por un lado <strong>Perfiles y Grupos</strong>, por otro
+    <strong>Marcas Personales</strong> (que agrupaba tanto marcas personales como de empresa). Para
+    entender bien qué necesitaba realmente una agencia, tuvimos varias sesiones de research directo
+    con una agencia real que usaba la herramienta — [PLACEHOLDER: cuéntame 1-2 cosas concretas que
+    salieron de esas reuniones, algo que os sorprendiera o cambiara vuestra idea inicial].
+  </p>
+
+  <h3 class="sub-h">Evolución del flujo — y por qué cada versión se quedaba corta</h3>
+  <p class="prose">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-version">V1</div>
+      <h4>Email + permisos</h4>
+      <p>La versión más simple posible: solo pedíamos email y permisos para crear el perfil.</p>
+      <div class="why"><b>Por qué no era suficiente:</b> [PLACEHOLDER — ¿os disteis cuenta de que faltaba info para poder analizar el contenido del perfil? Confírmame el motivo real por el que se quedó corta]</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">V2</div>
+      <h4>+ Conexión de LinkedIn (opcional)</h4>
+      <p>Se añadió la posibilidad de conectar LinkedIn, pensada para poder analizar el contenido publicado y adaptar el tono de la herramienta a la voz de cada perfil.</p>
+      <div class="why"><b>Por qué no era suficiente:</b> [PLACEHOLDER — ¿por qué se añadió después la opción de invitar usuarios? ¿qué necesidad de equipo lo motivó?]</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-version">V3</div>
+      <h4>+ Invitar nuevos usuarios</h4>
+      <p>Mismo flujo, con la opción añadida de invitar a otras personas del equipo al perfil.</p>
+      <div class="why"><b>Por qué no era suficiente:</b> [PLACEHOLDER — ¿qué llevó a comprimirlo todo en un único modal en la siguiente versión? ¿fue una decisión de velocidad/simplicidad?]</div>
+    </div>
+    <div class="tl-item fail">
+      <div class="tl-version">V4</div>
+      <h4>Todo en un solo modal</h4>
+      <p>Nombre del perfil, URL de LinkedIn, cómo se conectaría (acceso directo a Magneto o vía link) y permisos — todo en una sola pantalla, para agilizar el proceso.</p>
+      <div class="why"><b>Por qué falló:</b> la gente dejó de usarlo. Los managers acababan creando los perfiles ellos mismos porque los propietarios no entendían por qué se les pedía esa información — todo llegaba de golpe, sin contexto.</div>
+    </div>
+  </div>
+
+  <div class="img-slot">[ IMAGEN — comparativa de las 4 versiones del modal, o la V4 completa ]</div>
+
+  <h3 class="sub-h">Mi rediseño</h3>
+  <p class="prose">
+    Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo
+    contexto y explicación en cada uno — el objetivo era que la persona entendiera <em>por qué</em>
+    se le pedía cada dato, no solo qué dato rellenar.
+  </p>
+  <p class="prose">
+    El cambio más importante fue automatizar la conexión de LinkedIn. Antes, si un manager creaba
+    el perfil de otra persona, tenía que pedirle manualmente que conectara su cuenta. Ahora, si el
+    manager indica que quiere que sea el propio propietario quien conecte su LinkedIn, este recibe
+    un email automático para hacerlo — quitando un paso manual y frecuentemente olvidado del proceso.
+  </p>
+
+  <div class="img-slot">[ IMAGEN — nuevo flujo de 3 pasos, pantalla por pantalla ]</div>
+
+  <div class="callout">
+    <span class="callout-label">Cómo prototipé esto con IA</span>
+    Partí de capturas estáticas de Figma y las convertí en un prototipo interactivo usando Claude,
+    en lugar de maquetar pantalla por pantalla manualmente como en versiones anteriores. Le di a
+    Claude un brief detallado — contexto del producto, objetivo del flujo, restricciones — y a
+    partir de ahí iteramos juntos: testeaba el prototipo con usuarios reales, traía el feedback,
+    y ajustábamos el flujo en la siguiente ronda. Esto redujo drásticamente el tiempo de iteración
+    frente a maquetar cada pantalla a mano, y el feedback que obtuve de los usuarios fue mucho más
+    profundo — probaban un flujo real, con lógica real, no un mockup estático.
+  </div>
+
+  <h3 class="sub-h">Resultado</h3>
+  <p class="prose">
+    La versión final está actualmente en validación en producción. [PLACEHOLDER — cuando tengas
+    aunque sea un dato cualitativo o cuantitativo preliminar, lo añadimos aquí — incluso "aún sin
+    datos concluyentes, pero el feedback cualitativo inicial es positivo" es honesto y válido.]
+  </p>
+
+  <h3 class="sub-h">Aprendizajes</h3>
+  <p class="prose">
+    [PLACEHOLDER — 2-3 líneas tuyas: por ejemplo, qué aprendiste sobre pedir información al usuario
+    en contexto vs. de golpe, o qué te enseñó prototipar con IA sobre tu propio proceso de diseño.]
+  </p>
+</section>
+
+<!-- REDISEÑO PLACEHOLDER -->
+<section class="frame" id="rediseno">
+  <span class="frame-label">Frame / Case study — Rediseño</span>
+  <div class="section-head"><span class="idx">02</span><h2>Rediseño de [producto]</h2></div>
+  <p class="prose">En construcción — definimos el producto y el ángulo del rediseño en la siguiente sesión.</p>
+</section>
+
+<!-- AUTONOMOS PLACEHOLDER -->
+<section class="frame" id="autonomos">
+  <span class="frame-label">Frame / Case study — 0→1</span>
+  <div class="section-head"><span class="idx">03</span><h2>Herramienta de colaboración para autónomos</h2></div>
+  <p class="prose">En construcción — reconstruimos el concepto (problema, usuario, propuesta de valor) en la siguiente sesión.</p>
+</section>
+
+<!-- CONTACT -->
+<footer class="contact" id="contacto">
+  <h2>Hablemos.</h2>
+  <p style="color:var(--muted)">[PLACEHOLDER — una línea breve invitando a contactar]</p>
+  <a class="mail" href="mailto:tu@email.com">tu@email.com</a>
+</footer>
+
+</body>
+</html>
