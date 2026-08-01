@@ -574,11 +574,12 @@
   </div>
 
   <h3 class="sub-h">De Figma a código: el modal de invitación</h3>
-  <p class="prose">Para el modal del email de invitación, el que recibe el propietario cuando el manager decide que sea él quien conecte su LinkedIn, fui un paso más allá del prototipo de validación: diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en código, no solo como prototipo navegable, sino como HTML que el developer pudiera implementar prácticamente tal cual, añadiendo solo la lógica.</p>
-  <p class="prose">Para que ese traspaso funcionara de verdad, entré en el código de la app de Magnettu con ayuda de Claude Code y Cursor, para entender qué componentes ya existían y podían reutilizarse, cómo estaba estructurado el sistema, y qué roles de usuario existían, para saber a quién debía mostrarse cada cosa. Esto encajó especialmente bien porque en paralelo estábamos actualizando el design system de Magnettu, así que identificar y reutilizar componentes existentes tenía un valor doble.</p>
-  <p class="prose">El resultado, para este modal en concreto, el developer no partió de un diseño en Figma que tuviera que interpretar y traducir a código desde cero, sino de una base de código ya alineada con el sistema real de la app, sobre la que solo tuvo que construir la lógica.</p>
-
-  <p class="prose">Este mismo flujo de conexión de LinkedIn tiene, en realidad, dos versiones distintas. No porque cambie quién dio de alta el perfil, el manager o el propio propietario, sino según dónde vive el formulario en el momento en que la persona lo completa. Si el propietario llega desde el enlace del email de invitación sin sesión iniciada en Magnettu, ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde". Si en cambio ya está dentro de Magnettu con sesión activa, ve el mismo flujo como un modal flotando sobre el dashboard, con esa opción siempre disponible, y que se cierra solo al conectar o al posponer. El criterio para elegir una versión u otra es únicamente ese: dónde aparece el formulario, no quién creó el perfil.</p>
+  <p class="prose">Para el modal del email de invitación, fui un paso más allá del prototipo de validación: diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual. Para que el traspaso funcionara, entré en el código real con Claude Code y Cursor, reutilizando componentes ya existentes, en paralelo a una actualización del design system que estaba en curso.</p>
+  <p class="prose">Este flujo tiene, en realidad, dos versiones, según dónde vive el formulario cuando la persona lo completa, no según quién creó el perfil:</p>
+  <ul class="prose-list">
+    <li><strong>Contexto A · Por email.</strong> El propietario llega desde el enlace de invitación sin sesión iniciada en Magnettu. Ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde".</li>
+    <li><strong>Contexto B · Dentro de Magnettu.</strong> El propietario ya tiene sesión activa. Ve el mismo flujo como un modal flotando sobre el dashboard, con la opción de posponer siempre disponible, y que se cierra solo al conectar o al posponer.</li>
+  </ul>
 
   <div class="dualproto-wrap">
     <div class="proto-label">Prototipo interactivo — dos contextos</div>
@@ -713,7 +714,7 @@
       </div>
     </div>
 
-    <p class="proto-note">Nota: estas son las dos maneras en que la persona final completa la conexión de LinkedIn, según el contexto de acceso, desde el enlace del email sin sesión iniciada en Magnettu (Contexto A), o ya con sesión activa dentro de la plataforma (Contexto B). No son réplicas exactas al cien por cien del componente en producción.</p>
+    <p class="proto-note">Nota: representación del diseño, no réplica exacta del producto real.</p>
   </div>
 
   <style>
@@ -1061,8 +1062,6 @@
     });
   })();
   </script>
-
-  <div class="img-slot">[ IMAGEN — modal de invitación por email, diseño en Figma o resultado final ]</div>
 
   <h3 class="sub-h">Resultado</h3>
   <p class="prose">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
