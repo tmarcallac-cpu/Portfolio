@@ -578,6 +578,490 @@
   <p class="prose">Para que ese traspaso funcionara de verdad, entré en el código de la app de Magnettu con ayuda de Claude Code y Cursor, para entender qué componentes ya existían y podían reutilizarse, cómo estaba estructurado el sistema, y qué roles de usuario existían, para saber a quién debía mostrarse cada cosa. Esto encajó especialmente bien porque en paralelo estábamos actualizando el design system de Magnettu, así que identificar y reutilizar componentes existentes tenía un valor doble.</p>
   <p class="prose">El resultado, para este modal en concreto, el developer no partió de un diseño en Figma que tuviera que interpretar y traducir a código desde cero, sino de una base de código ya alineada con el sistema real de la app, sobre la que solo tuvo que construir la lógica.</p>
 
+  <p class="prose">Este mismo flujo de conexión de LinkedIn tiene, en realidad, dos versiones distintas. No porque cambie quién dio de alta el perfil, el manager o el propio propietario, sino según dónde vive el formulario en el momento en que la persona lo completa. Si el propietario llega desde el enlace del email de invitación sin sesión iniciada en Magnettu, ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde". Si en cambio ya está dentro de Magnettu con sesión activa, ve el mismo flujo como un modal flotando sobre el dashboard, con esa opción siempre disponible, y que se cierra solo al conectar o al posponer. El criterio para elegir una versión u otra es únicamente ese: dónde aparece el formulario, no quién creó el perfil.</p>
+
+  <div class="dualproto-wrap">
+    <div class="proto-label">Prototipo interactivo — dos contextos</div>
+    <div class="dualproto-tabs">
+      <button class="dualproto-tab active" id="dualprotoTabA">Contexto A · Email</button>
+      <button class="dualproto-tab" id="dualprotoTabB">Contexto B · Dentro de Magnettu</button>
+    </div>
+
+    <div class="dualproto-frame">
+      <div class="dualproto-panel" id="ctxA-root">
+        <div class="state-switcher">
+          <button class="active" data-state="empty">Vacío</button>
+          <button data-state="solo-conectar">Solo conectar (URL ya puesta)</button>
+          <button data-state="success">Pantalla de éxito</button>
+        </div>
+
+        <div class="page-wrap">
+          <div class="brand-header">
+            <div class="logo-circle">U</div>
+            <div class="logo-text">magnettu</div>
+          </div>
+
+          <div class="onboard-card" id="ctxA-card">
+            <div id="ctxA-form-content">
+              <h1>Hola, Mar Rojas</h1>
+              <p class="subtitle" id="ctxA-intro-text">Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.</p>
+
+              <div class="field-block" id="ctxA-url-block">
+                <label class="field-label">1. URL de tu perfil de LinkedIn</label>
+                <div class="url-row">
+                  <div class="input-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    <input id="ctxA-url-input" type="text" placeholder="https://linkedin.com/in/tu-perfil" />
+                  </div>
+                  <button class="btn-save-url disabled" id="ctxA-save-url-btn">Guardar</button>
+                </div>
+              </div>
+
+              <div class="field-block" id="ctxA-connect-block">
+                <label class="field-label" id="ctxA-connect-label">2. Conecta tu LinkedIn a tu perfil</label>
+                <button class="btn-linkedin" id="ctxA-connect-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  Conectar cuenta de LinkedIn
+                </button>
+                <div class="connected-card" id="ctxA-connected-card" style="display:none;">
+                  <div class="avatar">MR</div>
+                  <div class="name">Mar Rojas</div>
+                  <div class="status">
+                    Conectado
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="complete-block">
+                <button class="btn-complete disabled" id="ctxA-complete-btn">Completar registro</button>
+              </div>
+            </div>
+
+            <div class="success-screen" id="ctxA-success-content" style="display:none;">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke-width="2"/>
+              </svg>
+              <p>¡Estupendo! Todo ha sido conectado correctamente.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="dev-note">Mockup de validación — no es el componente final de producción</p>
+      </div>
+
+      <div class="dualproto-panel" id="ctxB-root" style="display:none;">
+        <div class="state-switcher">
+          <button class="active" data-state="empty">Vacío</button>
+          <button data-state="solo-conectar">Solo conectar (URL ya puesta)</button>
+        </div>
+
+        <div class="fake-dashboard">
+          <div class="fake-sidebar">
+            <div class="logo">magnettu</div>
+            <div class="item">Home</div>
+            <div class="item">Gestión de contenido</div>
+            <div class="item">Inspiración</div>
+            <div class="item">Planificación</div>
+            <div class="item">Rankings</div>
+          </div>
+          <div class="fake-main">
+            <div class="fake-topbar">Conecta tu cuenta de LinkedIn — Vincula LinkedIn para gestionar y publicar tus contenidos directamente desde magnettu.</div>
+            <div class="fake-card"></div>
+          </div>
+        </div>
+
+        <div class="overlay" id="ctxB-overlay">
+          <div class="modal">
+            <h1>Hola, Mar Rojas</h1>
+            <p class="subtitle" id="ctxB-intro-text">Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.</p>
+
+            <div class="field-block" id="ctxB-url-block">
+              <label class="field-label">1. URL de tu perfil de LinkedIn</label>
+              <div class="url-row">
+                <div class="input-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  <input id="ctxB-url-input" type="text" placeholder="https://linkedin.com/in/tu-perfil" />
+                </div>
+                <button class="btn-save-url disabled" id="ctxB-save-url-btn">Guardar</button>
+              </div>
+            </div>
+
+            <div class="field-block">
+              <label class="field-label" id="ctxB-connect-label">2. Conecta tu LinkedIn a tu perfil</label>
+              <button class="btn-linkedin" id="ctxB-connect-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                Conectar cuenta de LinkedIn
+              </button>
+              <div class="connected-card" id="ctxB-connected-card" style="display:none;">
+                <div class="avatar">MR</div>
+                <div class="name">Mar Rojas</div>
+                <div class="status">
+                  Conectado
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn-later" id="ctxB-later-btn">Hacerlo más tarde</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="reopen-btn" id="ctxB-reopen-btn" style="display:none;">Modal cerrado — click para volver a abrir</button>
+      </div>
+    </div>
+
+    <p class="proto-note">Nota: estas son las dos maneras en que la persona final completa la conexión de LinkedIn, según el contexto de acceso, desde el enlace del email sin sesión iniciada en Magnettu (Contexto A), o ya con sesión activa dentro de la plataforma (Contexto B). No son réplicas exactas al cien por cien del componente en producción.</p>
+  </div>
+
+  <style>
+    :root{
+      --deepblue-50:#f4f7fb; --deepblue-100:#e8edf6; --deepblue-300:#9fbbda;
+      --deepblue-700:#30527c; --deepblue-900:#273a53; --deepblue-A50:#1a2537;
+      --success-main:#16a34a; --bg-default:#F8F9FA; --bg-paper:#FFFFFF;
+      --text-primary:rgba(0,0,0,0.87); --text-secondary:rgba(0,0,0,0.6); --text-disabled:rgba(0,0,0,0.38);
+      --divider:rgba(0,0,0,0.12); --radius-xs:4px; --radius-md:8px;
+      --ctxA-radius-lg:10px; --ctxB-radius-lg:16px;
+      --font-family:'Raleway', Helvetica, Arial, sans-serif;
+    }
+
+    .dualproto-wrap{margin:24px 0 32px;}
+    .dualproto-tabs{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+    .dualproto-tab{
+      font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600;
+      padding:8px 16px; border-radius:100px; border:1px solid var(--line);
+      background:var(--card); color:var(--muted); cursor:pointer; transition:.15s;
+    }
+    .dualproto-tab:hover{color:var(--ink);}
+    .dualproto-tab.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+    .dualproto-frame{
+      border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff;
+      box-shadow:0 12px 30px -14px rgba(20,20,30,.18);
+    }
+
+    /* ===== Contexto A — página standalone ===== */
+    #ctxA-root{font-family:var(--font-family); background:var(--bg-default); color:var(--text-primary); padding:32px 16px;}
+    #ctxA-root .page-wrap{max-width:480px; margin:0 auto;}
+    #ctxA-root .brand-header{display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:32px;}
+    #ctxA-root .brand-header .logo-circle{width:28px; height:28px; border-radius:50%; background:var(--deepblue-900); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:14px;}
+    #ctxA-root .brand-header .logo-text{font-weight:700; font-size:18px; color:var(--deepblue-900);}
+    #ctxA-root .onboard-card{background:var(--bg-paper); border-radius:var(--ctxA-radius-lg); box-shadow:0 1px 8px rgba(0,0,0,0.12); border:1px solid var(--divider); padding:32px; min-height:360px;}
+    #ctxA-root .onboard-card h1{font-size:24px; font-weight:700; margin:0 0 8px;}
+    #ctxA-root .onboard-card .subtitle{font-size:14px; font-weight:500; line-height:1.43; color:var(--text-secondary); margin:0 0 24px;}
+    #ctxA-root .field-block{margin-bottom:20px;}
+    #ctxA-root .field-label{font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#6E7794;}
+    #ctxA-root .url-row{display:flex; gap:8px;}
+    #ctxA-root .input-wrap{flex:1; display:flex; align-items:center; gap:8px; border:1px solid var(--divider); border-radius:var(--radius-xs); padding:10px 12px; transition:border-color .15s ease; background:var(--bg-paper);}
+    #ctxA-root .input-wrap:focus-within{border-color:var(--deepblue-700);}
+    #ctxA-root .input-wrap svg{flex-shrink:0; color:var(--text-secondary);}
+    #ctxA-root .input-wrap input{border:none; outline:none; font-family:var(--font-family); font-size:14px; font-weight:500; color:var(--text-primary); width:100%; background:transparent;}
+    #ctxA-root .input-wrap input::placeholder{color:var(--text-disabled);}
+    #ctxA-root .btn-save-url{height:auto; padding:0 16px; border-radius:var(--radius-md); border:none; font-family:var(--font-family); font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px; transition:background .15s ease, color .15s ease;}
+    #ctxA-root .btn-save-url.active{background:var(--deepblue-900); color:#fff;}
+    #ctxA-root .btn-save-url.active:hover{background:var(--deepblue-A50);}
+    #ctxA-root .btn-save-url.disabled{background:#ECECEC; color:var(--text-disabled); cursor:not-allowed;}
+    #ctxA-root .spinner{width:12px; height:12px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:ctxA-spin .7s linear infinite;}
+    #ctxA-root .btn-linkedin{width:100%; display:flex; align-items:center; justify-content:center; gap:8px; height:38px; background:var(--deepblue-700); color:#fff; border:none; border-radius:var(--radius-md); font-family:var(--font-family); font-size:14px; font-weight:700; cursor:pointer; transition:background .15s ease;}
+    #ctxA-root .btn-linkedin:hover{background:var(--deepblue-A50);}
+    #ctxA-root .connected-card{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--divider); border-radius:var(--radius-xs);}
+    #ctxA-root .connected-card .avatar{width:32px; height:32px; border-radius:50%; background:var(--deepblue-300); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:500; font-size:13px; flex-shrink:0;}
+    #ctxA-root .connected-card .name{font-size:14px; font-weight:600; flex:1;}
+    #ctxA-root .connected-card .status{display:flex; align-items:center; gap:4px; font-size:12px; font-weight:600; color:var(--success-main);}
+    #ctxA-root .complete-block{margin-top:24px; padding-top:20px; border-top:1px solid var(--divider);}
+    #ctxA-root .btn-complete{width:100%; height:40px; border-radius:var(--radius-md); border:none; font-family:var(--font-family); font-size:14px; font-weight:700; cursor:pointer; transition:background .15s ease;}
+    #ctxA-root .btn-complete.enabled{background:var(--deepblue-900); color:#fff;}
+    #ctxA-root .btn-complete.enabled:hover{background:var(--deepblue-A50);}
+    #ctxA-root .btn-complete.disabled{background:#ECECEC; color:var(--text-disabled); cursor:not-allowed;}
+    #ctxA-root .success-screen{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; min-height:296px; text-align:center;}
+    #ctxA-root .success-screen svg{color:var(--success-main);}
+    #ctxA-root .success-screen p{font-size:17px; font-weight:700; margin:0; max-width:320px;}
+    #ctxA-root .state-switcher{max-width:480px; margin:0 auto 24px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+    #ctxA-root .state-switcher button{font-family:var(--font-family); font-size:12px; font-weight:600; padding:6px 14px; border-radius:999px; border:1px solid var(--divider); background:var(--bg-paper); color:var(--text-secondary); cursor:pointer;}
+    #ctxA-root .state-switcher button.active{background:var(--deepblue-900); color:#fff; border-color:var(--deepblue-900);}
+    #ctxA-root .dev-note{max-width:480px; margin:16px auto 0; font-size:11px; color:var(--text-disabled); text-align:center;}
+    @keyframes ctxA-spin{ to{ transform:rotate(360deg); } }
+
+    /* ===== Contexto B — modal dentro de Magnettu ===== */
+    #ctxB-root{font-family:var(--font-family); position:relative; height:560px; overflow:hidden; background:#ddd;}
+    #ctxB-root .fake-dashboard{display:flex; height:100%;}
+    #ctxB-root .fake-sidebar{width:200px; background:var(--deepblue-900); color:#fff; padding:20px 16px; flex-shrink:0;}
+    #ctxB-root .fake-sidebar .logo{font-weight:700; font-size:16px; margin-bottom:24px;}
+    #ctxB-root .fake-sidebar .item{font-size:13px; padding:8px 10px; border-radius:6px; margin-bottom:4px; opacity:.75;}
+    #ctxB-root .fake-main{flex:1; background:var(--bg-default); padding:24px; overflow:auto;}
+    #ctxB-root .fake-topbar{background:var(--bg-paper); border:1px solid var(--divider); border-radius:8px; padding:12px 16px; margin-bottom:16px; font-size:13px; color:var(--text-secondary);}
+    #ctxB-root .fake-card{background:var(--bg-paper); border:1px solid var(--divider); border-radius:8px; height:200px;}
+    #ctxB-root .overlay{position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:10;}
+    #ctxB-root .modal{background:var(--bg-paper); border-radius:var(--ctxB-radius-lg); box-shadow:0 3px 14px rgba(0,0,0,0.12), 0 8px 10px rgba(0,0,0,0.14), 0 5px 5px rgba(0,0,0,0.20); padding:32px; width:480px; max-width:90vw;}
+    #ctxB-root .modal h1{font-size:24px; font-weight:700; margin:0 0 8px;}
+    #ctxB-root .modal .subtitle{font-size:14px; font-weight:500; line-height:1.43; color:var(--text-secondary); margin:0 0 24px;}
+    #ctxB-root .field-block{margin-bottom:20px;}
+    #ctxB-root .field-label{font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#6E7794;}
+    #ctxB-root .url-row{display:flex; gap:8px;}
+    #ctxB-root .input-wrap{flex:1; display:flex; align-items:center; gap:8px; border:1px solid var(--divider); border-radius:var(--radius-xs); padding:10px 12px; background:var(--bg-paper);}
+    #ctxB-root .input-wrap:focus-within{border-color:var(--deepblue-700);}
+    #ctxB-root .input-wrap svg{flex-shrink:0; color:var(--text-secondary);}
+    #ctxB-root .input-wrap input{border:none; outline:none; font-family:var(--font-family); font-size:14px; font-weight:500; width:100%; background:transparent;}
+    #ctxB-root .input-wrap input::placeholder{color:var(--text-disabled);}
+    #ctxB-root .btn-save-url{padding:0 16px; border-radius:var(--radius-md); border:none; font-family:var(--font-family); font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px;}
+    #ctxB-root .btn-save-url.active{background:var(--deepblue-900); color:#fff;}
+    #ctxB-root .btn-save-url.active:hover{background:var(--deepblue-A50);}
+    #ctxB-root .btn-save-url.disabled{background:#ECECEC; color:var(--text-disabled); cursor:not-allowed;}
+    #ctxB-root .spinner{width:12px; height:12px; border:2px solid rgba(255,255,255,0.4); border-top-color:#fff; border-radius:50%; animation:ctxB-spin .7s linear infinite;}
+    #ctxB-root .btn-linkedin{width:100%; display:flex; align-items:center; justify-content:center; gap:8px; height:38px; background:var(--deepblue-700); color:#fff; border:none; border-radius:var(--radius-md); font-family:var(--font-family); font-size:14px; font-weight:700; cursor:pointer;}
+    #ctxB-root .btn-linkedin:hover{background:var(--deepblue-A50);}
+    #ctxB-root .connected-card{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--divider); border-radius:var(--radius-xs);}
+    #ctxB-root .connected-card .avatar{width:32px; height:32px; border-radius:50%; background:var(--deepblue-300); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:500; font-size:13px; flex-shrink:0;}
+    #ctxB-root .connected-card .name{font-size:14px; font-weight:600; flex:1;}
+    #ctxB-root .connected-card .status{display:flex; align-items:center; gap:4px; font-size:12px; font-weight:600; color:var(--success-main);}
+    #ctxB-root .modal-footer{display:flex; justify-content:flex-end; margin-top:24px; padding-top:20px; border-top:1px solid var(--divider);}
+    #ctxB-root .btn-later{background:none; border:none; color:#6E7794; font-family:var(--font-family); font-size:14px; font-weight:600; cursor:pointer; padding:8px 12px; border-radius:var(--radius-md); transition:color .15s ease;}
+    #ctxB-root .btn-later:hover{color:#4D5362;}
+    #ctxB-root .state-switcher{position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:20; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; max-width:90%;}
+    #ctxB-root .state-switcher button{font-family:var(--font-family); font-size:12px; font-weight:600; padding:6px 14px; border-radius:999px; border:1px solid var(--divider); background:var(--bg-paper); color:var(--text-secondary); cursor:pointer;}
+    #ctxB-root .state-switcher button.active{background:var(--deepblue-900); color:#fff; border-color:var(--deepblue-900);}
+    #ctxB-root .reopen-btn{position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:20; font-family:var(--font-family); font-size:12px; font-weight:600; padding:8px 16px; border-radius:999px; border:1px solid var(--divider); background:var(--bg-paper); cursor:pointer;}
+    @keyframes ctxB-spin{ to{ transform:rotate(360deg); } }
+
+    @media (max-width:560px){
+      #ctxB-root{height:520px;}
+      #ctxB-root .fake-sidebar{width:120px; padding:16px 10px;}
+      #ctxB-root .fake-sidebar .item{font-size:11px;}
+    }
+  </style>
+
+  <script>
+  (function(){
+    const ctxAUrlInput = document.getElementById('ctxA-url-input');
+    const ctxAUrlBlock = document.getElementById('ctxA-url-block');
+    const ctxASaveUrlBtn = document.getElementById('ctxA-save-url-btn');
+    const ctxAIntroText = document.getElementById('ctxA-intro-text');
+    const ctxAConnectLabel = document.getElementById('ctxA-connect-label');
+    const ctxAConnectBtn = document.getElementById('ctxA-connect-btn');
+    const ctxAConnectedCard = document.getElementById('ctxA-connected-card');
+    const ctxACompleteBtn = document.getElementById('ctxA-complete-btn');
+    const ctxAFormContent = document.getElementById('ctxA-form-content');
+    const ctxASuccessContent = document.getElementById('ctxA-success-content');
+    const ctxAStateButtons = document.querySelectorAll('#ctxA-root .state-switcher button');
+
+    const ctxAIntroFull = 'Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.';
+    const ctxAIntroSoloConectar = 'Has sido invitado a unirte a Magnettu. Solo falta un paso: conecta tu cuenta de LinkedIn.';
+
+    let ctxALastSavedUrl = '';
+    let ctxAIsConnected = false;
+    let ctxAShowUrlField = true;
+    let ctxASaveStatus = 'idle';
+
+    function ctxAUpdateSaveButton(){
+      const text = ctxAUrlInput.value.trim();
+      const hasUnsaved = text.length > 0 && text !== ctxALastSavedUrl;
+      const canSave = hasUnsaved && ctxASaveStatus !== 'saving';
+      ctxASaveUrlBtn.classList.toggle('active', canSave);
+      ctxASaveUrlBtn.classList.toggle('disabled', !canSave);
+      if (ctxASaveStatus === 'saving') {
+        ctxASaveUrlBtn.innerHTML = '<span class="spinner"></span> Guardando...';
+      } else if (ctxASaveStatus === 'saved') {
+        ctxASaveUrlBtn.textContent = 'Guardado';
+      } else {
+        ctxASaveUrlBtn.textContent = 'Guardar';
+      }
+    }
+
+    function ctxAUpdateCompleteButton(){
+      const urlStepDone = !ctxAShowUrlField || ctxALastSavedUrl.trim().length > 0;
+      const canComplete = urlStepDone && ctxAIsConnected;
+      ctxACompleteBtn.classList.toggle('enabled', canComplete);
+      ctxACompleteBtn.classList.toggle('disabled', !canComplete);
+    }
+
+    ctxAUrlInput.addEventListener('input', () => {
+      ctxASaveStatus = 'idle';
+      ctxAUpdateSaveButton();
+    });
+
+    ctxASaveUrlBtn.addEventListener('click', () => {
+      if (ctxASaveUrlBtn.classList.contains('disabled')) return;
+      ctxASaveStatus = 'saving';
+      ctxAUpdateSaveButton();
+      setTimeout(() => {
+        ctxALastSavedUrl = ctxAUrlInput.value.trim();
+        ctxASaveStatus = 'saved';
+        ctxAUpdateSaveButton();
+        ctxAUpdateCompleteButton();
+        setTimeout(() => {
+          ctxASaveStatus = 'idle';
+          ctxAUpdateSaveButton();
+        }, 1200);
+      }, 800);
+    });
+
+    ctxAConnectBtn.addEventListener('click', () => {
+      ctxAIsConnected = true;
+      ctxAConnectBtn.style.display = 'none';
+      ctxAConnectedCard.style.display = 'flex';
+      ctxAUpdateCompleteButton();
+    });
+
+    ctxACompleteBtn.addEventListener('click', () => {
+      if (ctxACompleteBtn.classList.contains('disabled')) return;
+      ctxAFormContent.style.display = 'none';
+      ctxASuccessContent.style.display = 'flex';
+    });
+
+    function ctxASetState(state){
+      ctxAFormContent.style.display = 'block';
+      ctxASuccessContent.style.display = 'none';
+
+      ctxAShowUrlField = state !== 'solo-conectar';
+      ctxAUrlBlock.style.display = ctxAShowUrlField ? 'block' : 'none';
+      ctxAConnectLabel.textContent = ctxAShowUrlField ? '2. Conecta tu LinkedIn a tu perfil' : 'Conecta tu LinkedIn a tu perfil';
+      ctxAIntroText.textContent = ctxAShowUrlField ? ctxAIntroFull : ctxAIntroSoloConectar;
+
+      ctxAUrlInput.value = '';
+      ctxALastSavedUrl = '';
+      ctxAIsConnected = false;
+      ctxASaveStatus = 'idle';
+      ctxAConnectBtn.style.display = 'flex';
+      ctxAConnectedCard.style.display = 'none';
+
+      if (state === 'success') {
+        ctxAFormContent.style.display = 'none';
+        ctxASuccessContent.style.display = 'flex';
+      }
+
+      ctxAUpdateSaveButton();
+      ctxAUpdateCompleteButton();
+      ctxAStateButtons.forEach(b => b.classList.toggle('active', b.dataset.state === state));
+    }
+
+    ctxAStateButtons.forEach(btn => {
+      btn.addEventListener('click', () => ctxASetState(btn.dataset.state));
+    });
+
+    ctxASetState('empty');
+  })();
+
+  (function(){
+    const ctxBUrlInput = document.getElementById('ctxB-url-input');
+    const ctxBUrlBlock = document.getElementById('ctxB-url-block');
+    const ctxBSaveUrlBtn = document.getElementById('ctxB-save-url-btn');
+    const ctxBIntroText = document.getElementById('ctxB-intro-text');
+    const ctxBConnectLabel = document.getElementById('ctxB-connect-label');
+    const ctxBConnectBtn = document.getElementById('ctxB-connect-btn');
+    const ctxBConnectedCard = document.getElementById('ctxB-connected-card');
+    const ctxBLaterBtn = document.getElementById('ctxB-later-btn');
+    const ctxBOverlay = document.getElementById('ctxB-overlay');
+    const ctxBReopenBtn = document.getElementById('ctxB-reopen-btn');
+    const ctxBStateButtons = document.querySelectorAll('#ctxB-root .state-switcher button');
+
+    const ctxBIntroFull = 'Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.';
+    const ctxBIntroSoloConectar = 'Has sido invitado a unirte a Magnettu. Solo falta un paso: conecta tu cuenta de LinkedIn.';
+
+    let ctxBLastSavedUrl = '';
+    let ctxBSaveStatus = 'idle';
+    let ctxBShowUrlField = true;
+
+    function ctxBUpdateSaveButton(){
+      const text = ctxBUrlInput.value.trim();
+      const hasUnsaved = text.length > 0 && text !== ctxBLastSavedUrl;
+      const canSave = hasUnsaved && ctxBSaveStatus !== 'saving';
+      ctxBSaveUrlBtn.classList.toggle('active', canSave);
+      ctxBSaveUrlBtn.classList.toggle('disabled', !canSave);
+      if (ctxBSaveStatus === 'saving') {
+        ctxBSaveUrlBtn.innerHTML = '<span class="spinner"></span> Guardando...';
+      } else if (ctxBSaveStatus === 'saved') {
+        ctxBSaveUrlBtn.textContent = 'Guardado';
+      } else {
+        ctxBSaveUrlBtn.textContent = 'Guardar';
+      }
+    }
+
+    ctxBUrlInput.addEventListener('input', () => {
+      ctxBSaveStatus = 'idle';
+      ctxBUpdateSaveButton();
+    });
+
+    ctxBSaveUrlBtn.addEventListener('click', () => {
+      if (ctxBSaveUrlBtn.classList.contains('disabled')) return;
+      ctxBSaveStatus = 'saving';
+      ctxBUpdateSaveButton();
+      setTimeout(() => {
+        ctxBLastSavedUrl = ctxBUrlInput.value.trim();
+        ctxBSaveStatus = 'saved';
+        ctxBUpdateSaveButton();
+        setTimeout(() => {
+          ctxBSaveStatus = 'idle';
+          ctxBUpdateSaveButton();
+        }, 1200);
+      }, 800);
+    });
+
+    function ctxBCloseModal(){
+      ctxBOverlay.style.display = 'none';
+      ctxBReopenBtn.style.display = 'block';
+    }
+
+    ctxBConnectBtn.addEventListener('click', () => {
+      ctxBCloseModal();
+    });
+
+    ctxBLaterBtn.addEventListener('click', () => {
+      ctxBCloseModal();
+    });
+
+    ctxBReopenBtn.addEventListener('click', () => {
+      ctxBOverlay.style.display = 'flex';
+      ctxBReopenBtn.style.display = 'none';
+    });
+
+    function ctxBSetState(state){
+      ctxBShowUrlField = state !== 'solo-conectar';
+      ctxBUrlBlock.style.display = ctxBShowUrlField ? 'block' : 'none';
+      ctxBConnectLabel.textContent = ctxBShowUrlField ? '2. Conecta tu LinkedIn a tu perfil' : 'Conecta tu LinkedIn a tu perfil';
+      ctxBIntroText.textContent = ctxBShowUrlField ? ctxBIntroFull : ctxBIntroSoloConectar;
+
+      ctxBUrlInput.value = '';
+      ctxBLastSavedUrl = '';
+      ctxBSaveStatus = 'idle';
+      ctxBConnectBtn.style.display = 'flex';
+      ctxBConnectedCard.style.display = 'none';
+      ctxBOverlay.style.display = 'flex';
+      ctxBReopenBtn.style.display = 'none';
+
+      ctxBUpdateSaveButton();
+      ctxBStateButtons.forEach(b => b.classList.toggle('active', b.dataset.state === state));
+    }
+
+    ctxBStateButtons.forEach(btn => {
+      btn.addEventListener('click', () => ctxBSetState(btn.dataset.state));
+    });
+
+    ctxBSetState('empty');
+  })();
+
+  (function(){
+    const tabA = document.getElementById('dualprotoTabA');
+    const tabB = document.getElementById('dualprotoTabB');
+    const panelA = document.getElementById('ctxA-root');
+    const panelB = document.getElementById('ctxB-root');
+
+    tabA.addEventListener('click', () => {
+      panelA.style.display = 'block';
+      panelB.style.display = 'none';
+      tabA.classList.add('active');
+      tabB.classList.remove('active');
+    });
+
+    tabB.addEventListener('click', () => {
+      panelB.style.display = 'block';
+      panelA.style.display = 'none';
+      tabB.classList.add('active');
+      tabA.classList.remove('active');
+    });
+  })();
+  </script>
+
   <div class="img-slot">[ IMAGEN — modal de invitación por email, diseño en Figma o resultado final ]</div>
 
   <h3 class="sub-h">Resultado</h3>
