@@ -28,10 +28,14 @@
     display:flex; justify-content:space-between; align-items:center;
     font-family:'IBM Plex Mono', monospace; font-size:13px;
   }
-  header.top nav{display:flex; gap:22px;}
+  header.top nav{display:flex; gap:22px; align-items:center;}
   header.top nav a{text-decoration:none; color:var(--muted); transition:.15s;}
   header.top nav a:hover{color:var(--ink);}
-  .btn-solid{background:var(--accent); color:#fff; border-radius:100px; padding:7px 18px; text-decoration:none;}
+  .btn-solid{background:var(--accent); color:#fff; border-radius:100px; padding:7px 18px; text-decoration:none; line-height:1.4;}
+  header.top nav a.btn-solid,
+  header.top nav a.btn-solid:hover,
+  header.top nav a.btn-solid:focus,
+  header.top nav a.btn-solid:visited{color:#fff;}
 
   section{max-width:var(--maxw); margin:0 auto; padding:56px 24px;}
 
