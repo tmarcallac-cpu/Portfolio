@@ -121,7 +121,7 @@
   <p class="prose prose-wide">Cuando entré en Magnettu, la plataforma aún no tenía ningún apartado pensado para agencias. Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar <strong>perfiles, usuarios y grupos</strong>, algo que hasta entonces no existía como tal.</p>
   <p class="prose prose-wide">La primera solución, diseñada por otra diseñadora del equipo sobre la que yo luego iteré, se llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.</p>
 
-  <div class="img-slot">[ IMAGEN — captura de "Grupos y Miembros" original, antes de separar ]</div>
+  <p class="prose-wide" style="font-style:italic; color:var(--muted);">(No conservamos una captura de esta versión original, por eso no hay imagen aquí)</p>
 
   <h3 class="sub-h">El problema</h3>
   <p class="prose prose-wide">El primer paso no fue separar del todo, sino consolidar: agrupamos todo bajo <strong>Marcas Personales</strong>, que en la práctica seguía mezclando perfiles personales, perfiles de empresa y grupos, solo que ahora bajo un nombre y espacio común. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
@@ -173,7 +173,7 @@
     <div class="decision-img"><img src="paso%207.png" alt="Flujo completo de creación de un único perfil, los 5 pasos"></div>
     <div class="decision-txt">
       <span class="decision-tag">Decisión</span>
-      <p class="prose">Cuando se crea <strong>un único perfil</strong>, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento. <em class="ph">[placeholder: confírmame si el motivo real es este o hay otro]</em></p>
+      <p class="prose">Cuando se crea <strong>un único perfil</strong>, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento.</p>
     </div>
   </div>
 
@@ -181,7 +181,7 @@
     <div class="decision-img"><img src="paso%209.png" alt="Flujo de creación de varios perfiles a la vez, terminando en permisos, 3 pasos"></div>
     <div class="decision-txt">
       <span class="decision-tag">Decisión</span>
-      <p class="prose">Cuando se crean <strong>varios perfiles a la vez</strong>, el flujo se detiene en permisos. Repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante. <em class="ph">[placeholder: confírmame si el motivo real es este o hay otro]</em></p>
+      <p class="prose">Cuando se crean <strong>varios perfiles a la vez</strong>, el flujo se detiene en permisos. Repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante.</p>
     </div>
   </div>
 
@@ -575,7 +575,12 @@
 
   <div class="callout">
     <span class="callout-label">Cómo prototipé el flujo con IA</span>
-    Partí de capturas estáticas de Figma y las convertí en un prototipo interactivo usando Claude, en lugar de maquetar pantalla por pantalla manualmente como en versiones anteriores. Le di a Claude un brief detallado, contexto del producto, objetivo del flujo, restricciones, y a partir de ahí iteramos juntos, testeaba el prototipo con usuarios reales, traía el feedback, y ajustábamos el flujo en la siguiente ronda. Esto redujo drásticamente el tiempo de iteración frente a maquetar cada pantalla a mano, y el feedback que obtuve de los usuarios fue mucho más profundo, probaban un flujo real, con lógica real, no un mockup estático.
+    <ul class="prose-list prose-wide">
+      <li>Partí de capturas estáticas de Figma y las convertí en un prototipo interactivo usando Claude, en lugar de maquetar pantalla por pantalla manualmente como en versiones anteriores.</li>
+      <li>Le di a Claude un brief detallado: contexto del producto, objetivo del flujo y restricciones.</li>
+      <li>A partir de ahí iteramos juntos: testeaba el prototipo con usuarios reales, traía el feedback, y ajustábamos el flujo en la siguiente ronda.</li>
+      <li>Resultado: esto redujo drásticamente el tiempo de iteración frente a maquetar cada pantalla a mano, y el feedback que obtuve de los usuarios fue mucho más profundo, probaban un flujo real, con lógica real, no un mockup estático.</li>
+    </ul>
   </div>
 
   <h3 class="sub-h">De Figma a código: el modal de invitación</h3>
