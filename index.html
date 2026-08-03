@@ -443,43 +443,43 @@
   var dotsNav = document.querySelector('.scroll-dots');
   if(!dotsNav) return;
 
-  var labels = {hero:'Hero', proyectos:'Mis proyectos', 'sobre-mi':'Sobre mí', contacto:'Contacto'};
-  var scrollOrder = ['hero', 'sobre-mi', 'proyectos', 'contacto'];
+  var labels = {hero:'Hero', 'sobre-mi':'Sobre mí', proyectos:'Mis proyectos', trayectoria:'Mi trayectoria', contacto:'Contacto'};
+  var navOrder = ['hero', 'sobre-mi', 'proyectos', 'trayectoria', 'contacto'];
+  var scrollableKeys = ['hero', 'sobre-mi', 'proyectos', 'contacto'];
   var sectionEls = {};
-  scrollOrder.forEach(function(key){ sectionEls[key] = document.getElementById(key); });
+  scrollableKeys.forEach(function(key){ sectionEls[key] = document.getElementById(key); });
 
-  var trackableDots = dotsNav.querySelectorAll('.dot[data-key]');
+  var allDots = dotsNav.querySelectorAll('.dot[data-key]');
   var prevBtn = document.getElementById('scrollPrevBtn');
   var nextBtn = document.getElementById('scrollNextBtn');
   var label = document.getElementById('scrollDotsLabel');
 
-  var activeKey = 'hero';
-  function setActiveKey(key){
-    if(key === activeKey) return;
-    activeKey = key;
-    trackableDots.forEach(function(d){ d.classList.toggle('active', d.dataset.key === key); });
+  var cursorIndex = 0;
+  function setCursor(index){
+    cursorIndex = Math.max(0, Math.min(index, navOrder.length - 1));
+    var key = navOrder[cursorIndex];
+    allDots.forEach(function(d){ d.classList.toggle('active', d.dataset.key === key); });
     updateArrows();
   }
 
   function updateArrows(){
-    var idx = scrollOrder.indexOf(activeKey);
-    if(prevBtn) prevBtn.hidden = idx <= 0;
-    if(nextBtn) nextBtn.hidden = idx >= scrollOrder.length - 1;
+    if(prevBtn) prevBtn.hidden = cursorIndex <= 0;
+    if(nextBtn) nextBtn.hidden = cursorIndex >= navOrder.length - 1;
   }
 
-  trackableDots.forEach(function(d){ d.classList.toggle('active', d.dataset.key === activeKey); });
-  updateArrows();
+  setCursor(0);
 
   if('IntersectionObserver' in window){
     var observer = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(entry.isIntersecting){
-          var key = scrollOrder.filter(function(k){ return sectionEls[k] === entry.target; })[0];
-          if(key) setActiveKey(key);
+          var key = scrollableKeys.filter(function(k){ return sectionEls[k] === entry.target; })[0];
+          var idx = navOrder.indexOf(key);
+          if(idx > -1) setCursor(idx);
         }
       });
     }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
-    scrollOrder.forEach(function(key){ if(sectionEls[key]) observer.observe(sectionEls[key]); });
+    scrollableKeys.forEach(function(key){ if(sectionEls[key]) observer.observe(sectionEls[key]); });
   }
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -489,8 +489,12 @@
     section.scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'});
   }
 
-  trackableDots.forEach(function(dot){
-    dot.addEventListener('click', function(){ goTo(dot.dataset.key); });
+  allDots.forEach(function(dot){
+    if(!scrollableKeys.includes(dot.dataset.key)) return;
+    dot.addEventListener('click', function(){
+      goTo(dot.dataset.key);
+      setCursor(navOrder.indexOf(dot.dataset.key));
+    });
   });
 
   var labelTimer;
@@ -504,17 +508,19 @@
 
   if(prevBtn){
     prevBtn.addEventListener('click', function(){
-      var idx = scrollOrder.indexOf(activeKey);
-      var targetKey = scrollOrder[Math.max(idx - 1, 0)];
-      goTo(targetKey);
+      var newIndex = Math.max(cursorIndex - 1, 0);
+      var targetKey = navOrder[newIndex];
+      if(scrollableKeys.includes(targetKey)) goTo(targetKey);
+      setCursor(newIndex);
       showLabel(targetKey);
     });
   }
   if(nextBtn){
     nextBtn.addEventListener('click', function(){
-      var idx = scrollOrder.indexOf(activeKey);
-      var targetKey = scrollOrder[Math.min(idx + 1, scrollOrder.length - 1)];
-      goTo(targetKey);
+      var newIndex = Math.min(cursorIndex + 1, navOrder.length - 1);
+      var targetKey = navOrder[newIndex];
+      if(scrollableKeys.includes(targetKey)) goTo(targetKey);
+      setCursor(newIndex);
       showLabel(targetKey);
     });
   }
