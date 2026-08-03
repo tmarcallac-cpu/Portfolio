@@ -121,17 +121,17 @@
   <p class="prose prose-wide">Cuando entré en Magnettu, la plataforma aún no tenía ningún apartado pensado para agencias. Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar <strong>perfiles, usuarios y grupos</strong>, algo que hasta entonces no existía como tal.</p>
   <p class="prose prose-wide">La primera solución, diseñada por otra diseñadora del equipo sobre la que yo luego iteré, se llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.</p>
 
-  <p class="prose-wide" style="font-style:italic; color:var(--muted);">(No conservamos una captura de esta versión original, por eso no hay imagen aquí)</p>
+  <p class="prose-wide" style="font-style:italic; color:var(--muted);">(No conservé una captura de esta versión original, por eso no hay imagen aquí)</p>
 
   <h3 class="sub-h">El problema</h3>
-  <p class="prose prose-wide">El primer paso no fue separar del todo, sino consolidar: agrupamos todo bajo <strong>Marcas Personales</strong>, que en la práctica seguía mezclando perfiles personales, perfiles de empresa y grupos, solo que ahora bajo un nombre y espacio común. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
+  <p class="prose prose-wide">El primer paso no fue separar del todo, sino consolidar: agrupé todo bajo <strong>Marcas Personales</strong>, que en la práctica seguía mezclando perfiles personales, perfiles de empresa y grupos, solo que ahora bajo un nombre y espacio común. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
   <p class="prose prose-wide">El reto de fondo:</p>
   <ul class="prose-list prose-wide">
     <li>Magnettu servía tanto a <strong>agencias</strong> (colaboración con clientes) como a <strong>departamentos de marketing</strong> con programas de employee advocacy.</li>
     <li>Para una agencia, el email del propietario era imprescindible. Para advocacy interno, pedirlo como obligatorio no tenía sentido.</li>
     <li>Intentar simplificar el flujo para ambos casos generó fricción constante con cada caso de uso nuevo.</li>
   </ul>
-  <p class="prose prose-wide">Fue más adelante, en V2, cuando finalmente separamos perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
+  <p class="prose prose-wide">Fue más adelante, en V2, cuando finalmente separé perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
 
   <h3 class="sub-h">Evolución del flujo, y por qué cada versión se quedaba corta</h3>
   <p class="prose prose-wide">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
@@ -164,9 +164,9 @@
   <h3 class="sub-h">Mi rediseño</h3>
   <p class="prose prose-wide">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
   <p class="prose prose-wide">El cambio más importante fue una pregunta completamente nueva en el paso 2, que no existía en ninguna versión anterior: <strong>¿quién va a conectar LinkedIn?</strong>, con dos opciones, "lo conecto yo" o "lo conecta el propietario".</p>
-  <p class="prose prose-wide">Esto resolvía un problema muy concreto que veíamos una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
+  <p class="prose prose-wide">Esto resolvía un problema muy concreto que veía una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
 
-  <h3 class="sub-h">Decisiones que tomamos</h3>
+  <h3 class="sub-h">Decisiones que tomé</h3>
   <p class="prose prose-wide">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
 
   <div class="decision-block">
@@ -578,7 +578,7 @@
     <ul class="prose-list prose-wide">
       <li>Partí de capturas estáticas de Figma y las convertí en un prototipo interactivo usando Claude, en lugar de maquetar pantalla por pantalla manualmente como en versiones anteriores.</li>
       <li>Le di a Claude un brief detallado: contexto del producto, objetivo del flujo y restricciones.</li>
-      <li>A partir de ahí iteramos juntos: testeaba el prototipo con usuarios reales, traía el feedback, y ajustábamos el flujo en la siguiente ronda.</li>
+      <li>A partir de ahí iteraba con Claude: testeaba el prototipo con usuarios reales, traía el feedback, y ajustaba el flujo en la siguiente ronda.</li>
       <li>Resultado: esto redujo drásticamente el tiempo de iteración frente a maquetar cada pantalla a mano, y el feedback que obtuve de los usuarios fue mucho más profundo, probaban un flujo real, con lógica real, no un mockup estático.</li>
     </ul>
   </div>
@@ -1080,7 +1080,7 @@
     <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos, y en llamadas de venta con agencias ya no surgían tantas dudas sobre este paso.</li>
     <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
     <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba en la V3.</li>
-    <li><strong>Detectamos un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
+    <li><strong>Detecté un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
   </ul>
 
   <h3 class="sub-h">Aprendizajes</h3>
