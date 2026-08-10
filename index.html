@@ -116,15 +116,21 @@
   }
   .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--mint); animation:pulse 1.6s infinite;}
   .hero h1{
-    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(34px,5vw,54px);
-    line-height:1.08; letter-spacing:-0.01em;
+    font-family:'Space Grotesk', sans-serif; font-weight:400;
+    line-height:1.18; letter-spacing:-0.01em; margin-bottom:26px;
   }
-  .hero h1 span{display:block; overflow:hidden;}
+  .hero h1 > span{display:block; overflow:hidden;}
   .hero h1 span em{font-style:normal; display:block; transform:translateY(110%); animation:reveal .6s cubic-bezier(.2,.8,.2,1) forwards;}
   .hero h1 span:nth-child(1) em{animation-delay:.15s;}
-  .hero h1 span:nth-child(2) em{animation-delay:.28s; color:var(--accent);}
+  .hero h1 span:nth-child(2) em{animation-delay:.28s;}
   .hero h1 span:nth-child(3) em{animation-delay:.41s;}
-  .hero p.lede{margin-top:22px; font-size:17px; color:var(--muted); max-width:48ch; opacity:0; animation:fadeUp .5s ease .6s forwards;}
+  .hero h1 .hl-small{font-size:clamp(18px,2.2vw,22px); font-weight:400;}
+  .hero h1 .hl-large{font-size:clamp(34px,5vw,54px); font-weight:400;}
+  .hero h1 .hl-large strong{font-weight:700;}
+  .hero h1 .accent{color:var(--accent);}
+  .hero-sub{font-size:clamp(20px,2.8vw,28px); font-weight:400; color:var(--ink); font-family:'Space Grotesk', sans-serif;}
+  .hero-divider{border:none; border-top:1px solid var(--line); margin:28px 0;}
+  .hero p.lede{margin-top:0; font-size:17px; color:var(--muted); max-width:48ch; opacity:0; animation:fadeUp .5s ease .6s forwards;}
   .hero-tags{margin-top:26px; display:flex; gap:10px; flex-wrap:wrap; opacity:0; animation:fadeUp .5s ease .75s forwards;}
   .hero-tags span{font-family:'IBM Plex Mono', monospace; font-size:11.5px; padding:5px 11px; border-radius:100px;}
   .hero-tags span:nth-child(1){background:var(--accent-soft); color:var(--accent);}
@@ -156,6 +162,19 @@
   .photo .pin.p1{top:20px; right:-30px;}
   .photo .pin.p2{bottom:34px; left:-24px; animation-delay:1.3s;}
 
+  @media (max-width:820px){
+    .photo{order:-1; width:150px; height:150px; margin:0 auto 32px;}
+    .photo .block{display:none;}
+    .photo .pin{display:none;}
+    .photo .frame{width:150px; height:150px; aspect-ratio:1/1; border-radius:50%;}
+    .photo .frame img{object-fit:cover; object-position:center 18%;}
+
+    .hero-grid > div:first-child{text-align:center;}
+    .eyebrow{margin-left:auto; margin-right:auto;}
+    .hero p.lede{margin-left:auto; margin-right:auto;}
+    .hero-tags{justify-content:center;}
+  }
+
   @keyframes reveal{to{transform:translateY(0);}}
   @keyframes fadeUp{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
   @keyframes popIn{from{opacity:0; transform:scale(.8);} to{opacity:1; transform:scale(1);}}
@@ -173,55 +192,71 @@
   .section-sub{color:var(--muted); font-size:15px; margin-bottom:32px;}
 
   /* PROJECT CARDS */
-  .proj-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
-  @media (max-width:820px){.proj-grid{grid-template-columns:1fr;}}
+  .proj-grid{display:flex; flex-direction:column; gap:24px;}
   .proj-card{
-    display:block; border:1px solid var(--line); border-radius:10px;
-    background:var(--card); text-decoration:none; transition:border-color .15s, transform .15s, opacity .4s ease;
+    display:grid; grid-template-columns:1.15fr .85fr; align-items:stretch;
+    border:1px solid var(--line); border-radius:12px;
+    background:linear-gradient(to right, #FFFFFF, #F5F0E8);
+    text-decoration:none; transition:border-color .15s, transform .15s, opacity .4s ease;
     overflow:hidden;
   }
+  @media (max-width:820px){.proj-card{grid-template-columns:1fr;}}
   .proj-card:hover{border-color:var(--accent); transform:translateY(-2px);}
-  .proj-media{position:relative;}
-  .proj-banner{
-    aspect-ratio:4/3; overflow:hidden; background:var(--accent-soft);
-    display:flex; align-items:center; justify-content:center;
+
+  .proj-text{padding:36px 38px; display:flex; flex-direction:column;}
+  .proj-status{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.03em;}
+  .proj-card h3{font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(24px,3vw,34px); line-height:1.15; margin-top:14px;}
+  .proj-subtitle{font-family:'IBM Plex Mono', monospace; font-size:12px; color:#ABABB6; margin-top:8px;}
+  .proj-desc{color:var(--muted); font-size:14.5px; line-height:1.55; margin-top:16px; max-width:46ch;}
+  .proj-problem{margin-top:18px; font-size:13.5px; color:var(--ink); line-height:1.5;}
+  .proj-problem-label{display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); letter-spacing:.04em; margin-bottom:4px;}
+  .proj-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
+  .proj-tags span{font-family:'IBM Plex Mono', monospace; font-size:11.5px; border:1px solid var(--line); border-radius:100px; padding:5px 12px; color:var(--ink); background:#fff;}
+
+  .proj-media{
+    position:relative; min-height:280px; padding:14px; align-self:center;
+    display:flex; align-items:center; justify-content:center; background:transparent;
+  }
+  .proj-media img{width:100%; height:auto; max-height:100%; object-fit:contain; display:block; transition:transform .4s ease;}
+  .proj-card:hover .proj-media img{transform:scale(1.05);}
+  .proj-placeholder{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
     color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px; text-align:center;
   }
-  .proj-card.tone-coral .proj-banner{background:var(--coral-soft);}
-  .proj-card.tone-mint .proj-banner{background:var(--mint-soft);}
-  .proj-banner img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s ease;}
-  .proj-card:hover .proj-banner img{transform:scale(1.05);}
   .proj-badge{
-    position:absolute; right:16px; bottom:-16px; width:40px; height:40px; border-radius:50%;
+    position:absolute; right:16px; bottom:16px; width:40px; height:40px; border-radius:50%;
     color:#fff; display:flex; align-items:center; justify-content:center;
     font-size:17px; border:3px solid var(--card); box-shadow:0 2px 6px rgba(0,0,0,.15); overflow:hidden;
   }
   .proj-badge img{width:100%; height:100%; object-fit:cover; display:block;}
   .proj-card.tone-mint .proj-badge{background:var(--mint);}
-  .proj-body{padding:24px 24px 22px;}
-  .proj-card .tag{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent); text-transform:uppercase;}
-  .proj-chips{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px;}
-  .proj-chips span{
-    display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono', monospace; font-size:11.5px;
-    color:var(--ink); border:1px solid var(--line); border-radius:100px; padding:5px 11px; background:var(--bg);
-  }
-  .proj-chips img{width:14px; height:14px; object-fit:contain;}
-  .proj-card h3{font-family:'Space Grotesk', sans-serif; font-size:18px; margin:10px 0 6px;}
-  .proj-card p{color:var(--muted); font-size:14px;}
   .proj-card.disabled{opacity:.55; pointer-events:none;}
-  .proj-card.disabled .tag{color:var(--muted);}
+  .proj-card.disabled .proj-status{color:var(--muted);}
 
   /* ABOUT TIMELINE */
-  .timeline{margin:24px 0 8px; border-left:2px solid var(--line); padding-left:24px;}
-  .tl-item{position:relative; padding-bottom:26px;}
-  .tl-item:last-child{padding-bottom:0;}
+  .timeline-wrap{position:relative;}
+  .timeline-wrap::after{
+    content:''; position:absolute; top:0; right:0; bottom:12px; width:40px;
+    background:linear-gradient(to right, transparent, var(--bg)); pointer-events:none;
+  }
+  .timeline{
+    display:flex; gap:24px; overflow-x:auto; margin:24px 0 8px; padding:4px 4px 12px;
+    scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+  }
+  .timeline::-webkit-scrollbar{height:6px;}
+  .timeline::-webkit-scrollbar-thumb{background:var(--line); border-radius:100px;}
+  .tl-item{
+    position:relative; flex:0 0 300px; scroll-snap-align:start;
+    border-left:2px solid var(--line); padding:4px 0 4px 24px;
+  }
   .tl-item::before{
-    content:''; position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%;
+    content:''; position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%;
     background:var(--bg); border:2px solid var(--accent);
   }
   .tl-date{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); margin-bottom:4px;}
   .tl-item h4{font-family:'Space Grotesk', sans-serif; font-size:16.5px; margin-bottom:5px;}
-  .tl-item p{color:var(--muted); font-size:14.5px; max-width:60ch;}
+  .tl-item p{color:var(--muted); font-size:14.5px;}
 
   .tools-row{margin-top:32px; display:flex; gap:10px; flex-wrap:wrap;}
   .tools-row span{
@@ -259,8 +294,8 @@
   <button class="arrow arrow-up" id="scrollPrevBtn" aria-label="Ir a la sección anterior" hidden>↑</button>
   <div class="scroll-dots-list">
     <button class="dot" data-key="hero" aria-label="Ir a Hero"></button>
-    <button class="dot" data-key="sobre-mi" aria-label="Ir a Sobre mí"></button>
     <button class="dot" data-key="proyectos" aria-label="Ir a Mis proyectos"></button>
+    <button class="dot" data-key="sobre-mi" aria-label="Ir a Sobre mí"></button>
     <a class="dot" href="about.html" aria-label="Ir a Mi trayectoria"></a>
     <button class="dot" data-key="contacto" aria-label="Ir a Contacto"></button>
   </div>
@@ -274,10 +309,11 @@
     <div>
       <div class="eyebrow"><span class="dot"></span> Disponible para nuevos proyectos</div>
       <h1>
-        <span><em>Diseño productos</em></span>
-        <span><em>y los pruebo</em></span>
-        <span><em>antes de existir.</em></span>
+        <span class="hl-small"><em>¡Hola!</em></span>
+        <span class="hl-large"><em>Soy <span class="accent">Tatiana</span>, <strong>Product Designer</strong></em></span>
       </h1>
+      <p class="hero-sub">Basada en Barcelona</p>
+      <hr class="hero-divider">
       <p class="lede">Product Designer con foco en research, prototipado interactivo con IA y colaboración cercana con negocio y desarrollo.</p>
       <div class="hero-tags"><span>Product Design</span><span>AI Prototyping</span><span>Research</span></div>
     </div>
@@ -290,77 +326,69 @@
   </div>
 </section>
 
-<!-- SOBRE MÍ INTRO -->
-<section id="sobre-mi">
-  <div class="intro-card scroll-reveal">
-    <div class="section-head"><span class="idx">00</span><h2>Sobre mí</h2></div>
-    <div class="intro-card-text">
-      <p>¡Hola! Soy Tatiana, Product Designer con 3 años de experiencia diseñando productos digitales de principio a fin, desde research hasta el traspaso a desarrollo. Ahora mismo estoy en búsqueda activa de nuevas oportunidades, con muchas ganas de sumarme a un equipo donde pueda seguir creciendo.</p>
-      <p>Aparte del trabajo también tengo vida fuera de la pantalla. Me gusta viajar, salir a caminar, perderme en un videojuego de vez en cuando, leer, y quedar con amigos cuando toca desconectar del todo. Todo esto también forma parte de quién soy.</p>
-    </div>
-    <div class="skills-grid">
-      <span>🎮 Videojuegos</span><span>🏋️ Gimnasio</span><span>🥾 Senderismo</span>
-      <span>✈️ Viajar</span><span>📚 Leer</span><span>🍻 Planes con amigos</span>
-    </div>
-  </div>
-</section>
-
 <!-- PROJECTS -->
 <section id="proyectos">
-  <div class="section-head"><span class="idx">01</span><h2>Mis proyectos</h2></div>
+  <div class="section-head"><span class="idx">00</span><h2>Mis proyectos</h2></div>
   <p class="section-sub">Un proyecto en producción real, dos en construcción.</p>
 
   <div class="proj-grid">
 
   <a class="proj-card scroll-reveal" href="magnettu.html">
-    <div class="proj-media">
-      <div class="proj-banner"><img src="magnettu-proyecto.png" alt="Magnettu — Rediseño de creación de perfiles"></div>
-      <span class="proj-badge"><img src="logo-magnettu.png" alt="Magnettu"></span>
-    </div>
-    <div class="proj-body">
-      <span class="tag">Case study · En producción</span>
-      <div class="proj-chips">
-        <span><img src="reloj.png" alt="">3 semanas</span>
-        <span><img src="herramientas.png" alt="">Figma, IA, code</span>
-      </div>
+    <div class="proj-text">
+      <span class="proj-status">Case study · En producción</span>
       <h3>Magnettu :  Rediseño de creación de perfiles</h3>
-      <p>Cómo un modal confuso que nadie usaba se convirtió en un flujo guiado de 3 pasos, prototipado de forma interactiva con IA.</p>
+      <div class="proj-subtitle">/rediseño de creación de perfiles</div>
+      <p class="proj-desc">Cómo un modal confuso que nadie usaba se convirtió en un flujo guiado de 3 pasos, prototipado de forma interactiva con IA.</p>
+      <div class="proj-problem"><span class="proj-problem-label">Problema</span>El flujo pedía datos sin explicar por qué, y la gente abandonaba a medio camino.</div>
+      <div class="proj-tags"><span>3 semanas</span><span>Figma</span><span>IA</span><span>Code</span></div>
+    </div>
+    <div class="proj-media">
+      <img src="magnettu-proyecto.png" alt="Magnettu — Rediseño de creación de perfiles">
+      <span class="proj-badge"><img src="logo-magnettu.png" alt="Magnettu"></span>
     </div>
   </a>
 
   <a class="proj-card tone-coral scroll-reveal" href="rediseno.html">
-    <div class="proj-media">
-      <div class="proj-banner"><img src="bumble-framework.png" alt="Rediseño de Bumble"></div>
-      <span class="proj-badge"><img src="bumble-logo.png" alt="Bumble"></span>
-    </div>
-    <div class="proj-body">
-      <span class="tag">Case study · En construcción</span>
-      <div class="proj-chips">
-        <span><img src="reloj.png" alt="">1 semana y media</span>
-        <span><img src="herramientas.png" alt="">Miro, Figma, IA</span>
-      </div>
+    <div class="proj-text">
+      <span class="proj-status">Case study · En construcción</span>
       <h3>Nueva funcionalidad</h3>
-      <p>Del match visual al match compartido: rediseño de perfil, match, chat y organización de la cita, a partir de research directo con usuarios.</p>
+      <div class="proj-subtitle">/rediseño de Bumble</div>
+      <p class="proj-desc">Del match visual al match compartido: rediseño de perfil, match, chat y organización de la cita, a partir de research directo con usuarios.</p>
+      <div class="proj-problem"><span class="proj-problem-label">Problema</span>Al decidir el match solo por la foto, se pierde la oportunidad de conectar por gustos e intereses compartidos.</div>
+      <div class="proj-tags"><span>1 semana y media</span><span>Miro</span><span>Figma</span><span>IA</span></div>
+    </div>
+    <div class="proj-media">
+      <img src="bumble-framework.png" alt="Rediseño de Bumble">
+      <span class="proj-badge"><img src="bumble-logo.png" alt="Bumble"></span>
     </div>
   </a>
 
   <a class="proj-card tone-mint disabled scroll-reveal" href="autonomos.html">
-    <div class="proj-media">
-      <div class="proj-banner">Proyecto en curso</div>
-      <span class="proj-badge">🧑‍💻</span>
-    </div>
-    <div class="proj-body">
-      <span class="tag">Próximamente</span>
-      <div class="proj-chips">
-        <span><img src="research.png" alt="">Research</span>
-      </div>
+    <div class="proj-text">
+      <span class="proj-status">Próximamente</span>
       <h3>0→1: Herramienta de colaboración para autónomos</h3>
-      <p>Producto nuevo: cómo equipos de autónomos se coordinan bajo objetivos compartidos.</p>
+      <div class="proj-subtitle">/colaboración para autónomos</div>
+      <p class="proj-desc">Producto nuevo: cómo equipos de autónomos se coordinan bajo objetivos compartidos.</p>
+      <div class="proj-tags"><span>Research</span></div>
+    </div>
+    <div class="proj-media">
+      <div class="proj-placeholder">Proyecto en curso</div>
+      <span class="proj-badge">🧑‍💻</span>
     </div>
   </a>
 
   </div>
   </a>
+</section>
+
+<!-- SOBRE MÍ INTRO -->
+<section id="sobre-mi">
+  <div class="intro-card scroll-reveal">
+    <div class="section-head"><span class="idx">01</span><h2>Sobre mí</h2></div>
+    <div class="intro-card-text">
+      <p>¡Hola! Soy Tatiana, Product Designer con 3 años de experiencia diseñando productos digitales de principio a fin, desde research hasta el traspaso a desarrollo. Ahora mismo estoy en búsqueda activa de nuevas oportunidades, con muchas ganas de sumarme a un equipo donde pueda seguir creciendo.</p>
+    </div>
+  </div>
 </section>
 
 <!-- ABOUT -->
@@ -368,26 +396,28 @@
   <div class="section-head"><span class="idx">02</span><h2>Mi trayectoria</h2><a class="see-more" href="about.html">Ver historia completa →</a></div>
   <p class="section-sub">Cómo llegué hasta aquí.</p>
 
-  <div class="timeline scroll-reveal">
-    <div class="tl-item">
-      <div class="tl-date">2022 — Ironhack, Barcelona</div>
-      <h4>Bootcamp intensivo de UX/UI</h4>
-      <p>Tiempo completo, proyectos de complejidad creciente cada semana, research con usuarios reales, presentación de decisiones frente a un equipo.</p>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">2023 — UI Designer en Magnettu</div>
-      <h4>Primeros pasos en producto real</h4>
-      <p>Magnettu aún buscaba su propósito, diseño rápido para poder probar ideas constantemente, iteración continua durante el primer año.</p>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">Evolución</div>
-      <h4>De UX/UI Designer a Product Designer</h4>
-      <p>Magnettu encuentra su enfoque en colaboración con agencias, paso a tomar decisiones de producto junto al PM, hablar directamente con clientes, liderar research, handoff con desarrollo, seguimiento post lanzamiento, responsable del design system en tokens y librería de componentes.</p>
-    </div>
-    <div class="tl-item">
-      <div class="tl-date">Hoy</div>
-      <h4>Product Designer, AI-assisted</h4>
-      <p>Prototipado interactivo con IA para validar ideas más rápido, uso de Claude Code para resolver bugs directamente en la plataforma sin depender siempre de desarrollo.</p>
+  <div class="timeline-wrap">
+    <div class="timeline scroll-reveal" id="timelineScroll">
+      <div class="tl-item">
+        <div class="tl-date">2022 — Ironhack, Barcelona</div>
+        <h4>Bootcamp intensivo de UX/UI</h4>
+        <p>Tiempo completo, proyectos de complejidad creciente cada semana, research con usuarios reales, presentación de decisiones frente a un equipo.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2023 — UX/UI Designer en Magnettu</div>
+        <h4>Primeros pasos en producto real</h4>
+        <p>Magnettu aún buscaba su propósito, diseño rápido para poder probar ideas constantemente, iteración continua durante el primer año.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2023 – 2026 · Evolución</div>
+        <h4>De UX/UI Designer a Product Designer</h4>
+        <p>Magnettu encuentra su enfoque en colaboración con agencias, paso a tomar decisiones de producto junto al PM, hablar directamente con clientes, liderar research, handoff con desarrollo, seguimiento post lanzamiento, responsable del design system en tokens y librería de componentes.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Hoy — En búsqueda activa</div>
+        <h4>Product Designer, AI-assisted</h4>
+        <p>Sigo perfeccionando mi forma de prototipar con IA para validar ideas más rápido, y en búsqueda activa de un equipo donde aportar todo lo aprendido en estos años.</p>
+      </div>
     </div>
   </div>
 
@@ -443,9 +473,9 @@
   var dotsNav = document.querySelector('.scroll-dots');
   if(!dotsNav) return;
 
-  var labels = {hero:'Hero', 'sobre-mi':'Sobre mí', proyectos:'Mis proyectos', trayectoria:'Mi trayectoria', contacto:'Contacto'};
-  var navOrder = ['hero', 'sobre-mi', 'proyectos', 'trayectoria', 'contacto'];
-  var scrollableKeys = ['hero', 'sobre-mi', 'proyectos', 'contacto'];
+  var labels = {hero:'Hero', proyectos:'Mis proyectos', 'sobre-mi':'Sobre mí', trayectoria:'Mi trayectoria', contacto:'Contacto'};
+  var navOrder = ['hero', 'proyectos', 'sobre-mi', 'trayectoria', 'contacto'];
+  var scrollableKeys = ['hero', 'proyectos', 'sobre-mi', 'contacto'];
   var sectionEls = {};
   scrollableKeys.forEach(function(key){ sectionEls[key] = document.getElementById(key); });
 

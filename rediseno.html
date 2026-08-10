@@ -65,6 +65,16 @@
   .research-card .rc-tag{font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:block;}
   .research-card p{font-size:13.5px; color:var(--muted);}
 
+  .insights-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:20px 0 8px;}
+  @media (max-width:700px){.insights-grid{grid-template-columns:1fr;}}
+  .insight-title{font-family:'Space Grotesk', sans-serif; font-size:15px; font-weight:600; margin-bottom:12px;}
+  .insight-title.coral{color:var(--coral);}
+  .insight-title.mint{color:var(--mint);}
+  .insight-list{list-style:none; display:flex; flex-direction:column; gap:10px;}
+  .insight-list li{padding:12px 14px; border-radius:8px; font-size:13.5px; line-height:1.45;}
+  .insight-list li.chip-coral{background:var(--coral-soft); color:var(--coral);}
+  .insight-list li.chip-mint{background:var(--mint-soft); color:var(--mint);}
+
   .doc-link{
     display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:var(--radius);
     padding:16px 18px; margin:18px 0; text-decoration:none; background:var(--card); transition:border-color .15s;
@@ -204,6 +214,28 @@
 
   <div class="problem-statement">
     "Los perfiles actuales reducen la decisión de dar like al aspecto físico, y una vez hay match, la responsabilidad de proponer y encontrar un plan recae por completo en una persona. ¿Cómo rediseñamos el perfil y el flujo post-match para que el match se base también en afinidad de planes, y la organización de la cita sea compartida?"
+  </div>
+
+  <h3 class="sub-h">Insights</h3>
+  <p class="prose prose-wide">De ahí salen dos lecturas: qué está fallando hoy y qué necesita resolver el diseño.</p>
+
+  <div class="insights-grid">
+    <div class="insight-col">
+      <h4 class="insight-title coral">Pain points</h4>
+      <ul class="insight-list">
+        <li class="chip-coral">El like se decide casi solo por las fotos, la bio no se lee</li>
+        <li class="chip-coral">Toda la responsabilidad de proponer y organizar la cita recae en una sola persona</li>
+        <li class="chip-coral">Hay conexión en el chat que luego no se sostiene en persona</li>
+      </ul>
+    </div>
+    <div class="insight-col">
+      <h4 class="insight-title mint">Necesidades de diseño</h4>
+      <ul class="insight-list">
+        <li class="chip-mint">El perfil debe comunicar algo más que apariencia física</li>
+        <li class="chip-mint">La organización de la cita debe sentirse compartida desde el match</li>
+        <li class="chip-mint">El match debe anticipar afinidad real, no solo interés inicial</li>
+      </ul>
+    </div>
   </div>
 
   <h3 class="sub-h">Research</h3>
