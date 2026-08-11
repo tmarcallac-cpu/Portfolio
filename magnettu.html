@@ -91,7 +91,7 @@
   .evo-timeline::-webkit-scrollbar{height:6px;}
   .evo-timeline::-webkit-scrollbar-thumb{background:var(--line); border-radius:100px;}
   .evo-item{
-    position:relative; flex:0 0 340px; scroll-snap-align:start;
+    position:relative; flex:1 1 0; min-width:280px; scroll-snap-align:start;
     border-left:2px solid var(--line); padding:4px 0 4px 24px;
   }
   .evo-item::before{
@@ -112,9 +112,40 @@
   .why.positive{border-left-color:var(--mint);}
   .why.positive b{color:var(--mint);}
 
+  .redesign-row{display:flex; gap:40px; align-items:center; margin-top:4px;}
+  .redesign-text{flex:1; min-width:280px;}
+  .redesign-img{flex:0 1 400px; width:100%; max-width:420px;}
+  .redesign-img img{width:100%; height:auto; object-fit:contain; display:block; border-radius:8px;}
+  @media (max-width:700px){
+    .redesign-row{flex-direction:column; gap:24px;}
+    .redesign-img{max-width:none;}
+  }
+
+  .result-row{display:flex; gap:40px; align-items:flex-start; margin-top:4px;}
+  .result-text{flex:1; min-width:280px;}
+  .result-compare{
+    flex:0 1 380px; width:100%; max-width:420px;
+    background:var(--card); padding:20px; border-radius:var(--radius);
+  }
+  .result-arrows{display:flex; gap:24px; text-align:center;}
+  .result-col{flex:1; display:flex; flex-direction:column; align-items:center;}
+  .result-arrow{font-size:40px; line-height:1; font-weight:700;}
+  .result-arrow.down{color:var(--coral);}
+  .result-arrow.up{color:var(--mint);}
+  .result-title{margin-top:10px; font-weight:600; font-size:15px; color:var(--ink);}
+  .result-sub{margin-top:4px; font-size:13px; color:var(--muted); max-width:28ch;}
+  .result-note{margin-top:12px; font-style:italic; font-size:11.5px; color:#ABABB6; text-align:center;}
+  @media (max-width:700px){
+    .result-row{flex-direction:column; gap:24px;}
+    .result-compare{max-width:420px;}
+  }
+
   .problem-row{display:flex; gap:40px; align-items:flex-start; margin-top:4px;}
   .problem-text{flex:1; min-width:280px;}
-  .problem-stats{flex:0 1 380px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:20px;}
+  .problem-stats{
+    flex:0 1 380px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:20px;
+    background:var(--card); padding:20px; border-radius:var(--radius);
+  }
   .stat-number{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:32px; color:var(--ink); line-height:1.1;}
   .stat-caption{margin-top:6px; font-size:13px; color:var(--muted);}
   .funnel{display:flex; flex-direction:column; gap:8px;}
@@ -236,19 +267,20 @@
           </ul>
         </div>
       </div>
-      <div class="evo-item">
-        <div class="v-version">V3 · Actual</div>
-        <h4>Flujo guiado en 3 pasos</h4>
-        <p>La versión vigente, con más preguntas pero mejor explicadas y contextualizadas, pensada para ser coherente tanto para agencias como para programas de advocacy.</p>
-        <div class="why positive"><b>Estado:</b> lanzada hace una semana, aún en validación. Estamos revisando resultados cada 2 semanas antes de sacar conclusiones.</div>
-      </div>
     </div>
   </div>
 
+  <p class="prose prose-wide">Después de tres intentos que no terminaban de resolver el problema de fondo, rediseñé el flujo desde cero.</p>
+
   <h3 class="sub-h">Mi rediseño</h3>
-  <p class="prose prose-wide">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
-  <p class="prose prose-wide">El cambio más importante fue una pregunta completamente nueva en el paso 2, que no existía en ninguna versión anterior: <strong>¿quién va a conectar LinkedIn?</strong>, con dos opciones, "lo conecto yo" o "lo conecta el propietario".</p>
-  <p class="prose prose-wide">Esto resolvía un problema muy concreto que veía una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
+  <div class="redesign-row">
+    <div class="redesign-text">
+      <p class="prose prose-wide">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
+      <p class="prose prose-wide">El cambio más importante fue una pregunta completamente nueva en el paso 2, que no existía en ninguna versión anterior: <strong>¿quién va a conectar LinkedIn?</strong>, con dos opciones, "lo conecto yo" o "lo conecta el propietario".</p>
+      <p class="prose prose-wide">Esto resolvía un problema muy concreto que veía una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
+    </div>
+    <div class="redesign-img"><img src="mi-rediseño.png" alt="Mi rediseño — flujo en 3 pasos separados"></div>
+  </div>
 
   <h3 class="sub-h">Cómo fue evolucionando</h3>
   <p class="prose prose-wide">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
@@ -732,8 +764,13 @@
     </ul>
   </div>
 
-  <h3 class="sub-h">De Figma a código: el modal de invitación</h3>
-  <p class="prose prose-wide">Para el modal del email de invitación, fui un paso más allá del prototipo de validación: diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual. Para que el traspaso funcionara, entré en el código real con Claude Code y Cursor, reutilizando componentes ya existentes, en paralelo a una actualización del design system que estaba en curso.</p>
+  <h3 class="sub-h">Un detalle del rediseño: el modal de invitación</h3>
+  <p class="prose prose-wide">Cuando el manager elige que sea el propietario quien conecte LinkedIn, este recibe un modal de invitación. Fue la pieza que llevé un paso más allá del prototipo, directamente a código.</p>
+  <ul class="prose-list prose-wide">
+    <li>Diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual.</li>
+    <li>Para que el traspaso funcionara, entré en el código real de la app con Claude Code y Cursor, reutilizando componentes ya existentes.</li>
+    <li>Todo esto ocurrió en paralelo a una actualización del design system que estaba en curso, así que el desarrollador recibió un componente ya alineado con los patrones nuevos, listo para integrar sin retrabajo.</li>
+  </ul>
   <p class="prose prose-wide">Este flujo tiene, en realidad, dos versiones, según dónde vive el formulario cuando la persona lo completa, no según quién creó el perfil:</p>
   <ul class="prose-list prose-wide">
     <li><strong>Contexto A · Por email.</strong> El propietario llega desde el enlace de invitación sin sesión iniciada en Magnettu. Ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde".</li>
@@ -1223,14 +1260,33 @@
   </script>
 
   <h3 class="sub-h">Resultado</h3>
-  <p class="prose prose-wide">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
-  <p class="prose prose-wide">Lo que se observó:</p>
-  <ul class="prose-list prose-wide">
-    <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos, y en llamadas de venta con agencias ya no surgían tantas dudas sobre este paso.</li>
-    <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
-    <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba en la V3.</li>
-    <li><strong>Detecté un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
-  </ul>
+  <div class="result-row">
+    <div class="result-text">
+      <p class="prose prose-wide">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
+      <p class="prose prose-wide">Lo que se observó:</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos, y en llamadas de venta con agencias ya no surgían tantas dudas sobre este paso.</li>
+        <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
+        <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba en la V3.</li>
+        <li><strong>Detecté un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
+      </ul>
+    </div>
+    <div class="result-compare">
+      <div class="result-arrows">
+        <div class="result-col">
+          <div class="result-arrow down">↓</div>
+          <div class="result-title">Peticiones de "créamelo tú"</div>
+          <div class="result-sub">Managers pidiendo que el equipo creara el perfil por ellos</div>
+        </div>
+        <div class="result-col">
+          <div class="result-arrow up">↑</div>
+          <div class="result-title">Perfiles completados sin ayuda</div>
+          <div class="result-sub">Managers que terminan el flujo por su cuenta, sin intervención manual</div>
+        </div>
+      </div>
+      <p class="result-note">Patrón observado desde el lanzamiento. Representación ilustrativa, sin cifras exactas disponibles.</p>
+    </div>
+  </div>
 
   <h3 class="sub-h">Aprendizajes</h3>
   <ul class="prose-list prose-wide">
