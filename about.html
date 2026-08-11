@@ -7,12 +7,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
+  :root, [data-theme="light"]{
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
     --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
-    --card:#FFFFFF; --radius:6px; --maxw:1040px;
+    --card:#FFFFFF; color-scheme:light;
   }
+  [data-theme="dark"]{
+    --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4;
+    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
+    --card:#1D1A24; color-scheme:dark;
+  }
+  :root{--radius:6px; --maxw:1040px;}
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     background:radial-gradient(var(--dot) 1px, transparent 1px) 0 0/24px 24px, var(--bg);
@@ -30,11 +37,23 @@
   header.top nav a{text-decoration:none; color:var(--muted); transition:.15s;}
   header.top nav a:hover, header.top nav a.active{color:var(--ink);}
   .btn-ghost{border:1px solid var(--line); border-radius:100px; padding:7px 16px; text-decoration:none; color:var(--ink);}
-  .btn-solid{background:var(--accent); color:#fff; border-radius:100px; padding:7px 18px; text-decoration:none; line-height:1.4;}
+  .btn-solid{background:var(--accent); color:var(--bg); border-radius:100px; padding:7px 18px; text-decoration:none; line-height:1.4;}
   header.top nav a.btn-solid,
   header.top nav a.btn-solid:hover,
   header.top nav a.btn-solid:focus,
-  header.top nav a.btn-solid:visited{color:#fff;}
+  header.top nav a.btn-solid:visited{color:var(--bg);}
+
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; transition:.2s ease; padding:0;
+  }
+  .theme-toggle:hover{border-color:var(--accent); color:var(--accent);}
+  .theme-toggle svg{display:block;}
+  .theme-toggle .icon-sun{display:none;}
+  .theme-toggle .icon-moon{display:none;}
+  [data-theme="dark"] .theme-toggle .icon-sun{display:block;}
+  [data-theme="light"] .theme-toggle .icon-moon{display:block;}
 
   .nav-toggle{
     display:none; flex-direction:column; justify-content:center; gap:5px;
@@ -58,6 +77,7 @@
     header.top nav a.btn-ghost, header.top nav a.btn-solid{
       border-bottom:none; text-align:center; margin-top:8px;
     }
+    header.top nav .theme-toggle{align-self:center; margin-top:8px;}
   }
 
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
@@ -102,6 +122,12 @@
 
   .footer-copy{margin:0; padding:32px 24px 40px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted); opacity:.7;}
 </style>
+<script>
+  (function(){
+    var saved = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+  })();
+</script>
 </head>
 <body>
 
@@ -117,6 +143,15 @@
     <a href="index.html#contacto">Contacto</a>
     <a class="btn-ghost" href="https://www.linkedin.com/in/tatianamarcallaconza/" target="_blank" rel="noopener">LinkedIn</a>
     <a class="btn-solid" href="CV-Tatiana-Marcalla.pdf" target="_blank">Descargar CV</a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
+      <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+      <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
   </nav>
 </header>
 
@@ -204,6 +239,21 @@
       btn.classList.remove('active');
       btn.setAttribute('aria-expanded', 'false');
     });
+  });
+})();
+
+(function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    toggle.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    localStorage.setItem('theme', theme);
+  }
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
   });
 })();
 </script>

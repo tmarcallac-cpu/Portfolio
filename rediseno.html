@@ -7,12 +7,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
+  :root, [data-theme="light"]{
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
     --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
-    --card:#FFFFFF; --radius:5px; --maxw:820px;
+    --card:#FFFFFF; color-scheme:light;
   }
+  [data-theme="dark"]{
+    --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4;
+    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
+    --card:#1D1A24; color-scheme:dark;
+  }
+  :root{--radius:5px; --maxw:820px;}
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -29,6 +36,18 @@
   }
   header.top a.back{color:var(--muted); text-decoration:none;}
   header.top a.back:hover{color:var(--ink);}
+  .header-right{display:flex; align-items:center; gap:16px;}
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; transition:.2s ease; padding:0;
+  }
+  .theme-toggle:hover{border-color:var(--accent); color:var(--accent);}
+  .theme-toggle svg{display:block;}
+  .theme-toggle .icon-sun{display:none;}
+  .theme-toggle .icon-moon{display:none;}
+  [data-theme="dark"] .theme-toggle .icon-sun{display:block;}
+  [data-theme="light"] .theme-toggle .icon-moon{display:block;}
 
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
 
@@ -185,12 +204,29 @@
   }
   .nextproj a{text-decoration:none; color:var(--accent);}
 </style>
+<script>
+  (function(){
+    var saved = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+  })();
+</script>
 </head>
 <body>
 
 <header class="top">
   <a class="back" href="index.html">← Volver</a>
-  <span>Tatiana</span>
+  <div class="header-right">
+    <span>Tatiana</span>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
+      <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+      </svg>
+      <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
 </header>
 
 <main>
@@ -410,6 +446,23 @@
     <a href="autonomos.html">Siguiente proyecto →</a>
   </div>
 </main>
+
+<script>
+(function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    toggle.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    localStorage.setItem('theme', theme);
+  }
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+})();
+</script>
 
 </body>
 </html>
