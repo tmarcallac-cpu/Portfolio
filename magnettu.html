@@ -11,7 +11,7 @@
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
     --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
-    --card:#FFFFFF; --radius:5px; --maxw:820px;
+    --card:#FFFFFF; --radius:5px; --maxw:1000px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -31,6 +31,16 @@
   header.top a.back:hover{color:var(--ink);}
 
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
+
+  .cs-cover{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:stretch;
+    background:var(--bg); padding:40px 40px 40px 0; margin-top:8px;
+  }
+  .cs-cover-img{display:flex; align-items:center; justify-content:center;}
+  .cs-cover-img img{width:100%; height:100%; object-fit:contain; display:block;}
+  @media (max-width:760px){
+    .cs-cover{grid-template-columns:1fr; padding:28px 24px 28px 0; gap:24px;}
+  }
 
   .cs-tag{
     display:inline-flex; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
@@ -68,23 +78,57 @@
   .img-slot.filled{border-style:solid; padding:0; overflow:hidden;}
   .img-slot.filled img{width:100%; height:auto; display:block;}
 
-  .timeline{margin:28px 0 8px; border-left:2px solid var(--line); padding-left:24px;}
-  .tl-item{position:relative; padding-bottom:28px;}
-  .tl-item:last-child{padding-bottom:0;}
-  .tl-item::before{
-    content:''; position:absolute; left:-29px; top:4px; width:10px; height:10px; border-radius:50%;
+  .evo-wrap{position:relative;}
+  .evo-wrap::after{
+    content:''; position:absolute; top:0; right:0; bottom:12px; width:40px;
+    background:linear-gradient(to right, transparent, var(--bg)); pointer-events:none;
+  }
+  .evo-timeline{
+    display:flex; gap:20px; overflow-x:auto; margin:24px 0 8px; padding:4px 4px 12px;
+    scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+  }
+  .evo-timeline::-webkit-scrollbar{height:6px;}
+  .evo-timeline::-webkit-scrollbar-thumb{background:var(--line); border-radius:100px;}
+  .evo-item{
+    position:relative; flex:0 0 340px; scroll-snap-align:start;
+    border-left:2px solid var(--line); padding:4px 0 4px 24px;
+  }
+  .evo-item::before{
+    content:''; position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%;
     background:var(--bg); border:2px solid var(--accent);
   }
-  .tl-item.fail::before{border-color:var(--coral);}
-  .tl-version{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); margin-bottom:4px;}
-  .tl-item.fail .tl-version{color:var(--coral);}
-  .tl-item h4{font-family:'Space Grotesk', sans-serif; font-size:16.5px; margin-bottom:6px;}
-  .tl-item p{color:var(--muted); font-size:14.5px; max-width:58ch;}
-  .tl-item:has(.img-slot) p{max-width:none;}
-  .tl-item .why{margin-top:9px; font-size:13.5px; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--coral); border-radius:0 4px 4px 0;}
-  .tl-item .why b{color:var(--coral);}
-  .tl-item .why.positive{border-left-color:var(--mint);}
-  .tl-item .why.positive b{color:var(--mint);}
+  .evo-item:has(.v-version.fail)::before{border-color:var(--coral);}
+  .evo-item h4{font-family:'Space Grotesk', sans-serif; font-size:16.5px; margin-bottom:6px;}
+  .evo-item p{color:var(--muted); font-size:14.5px;}
+  .v-version{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); margin-bottom:4px;}
+  .v-version.fail{color:var(--coral);}
+
+  .why{margin-top:9px; font-size:13.5px; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--coral); border-radius:0 4px 4px 0;}
+  .why-list{margin:6px 0 0; padding-left:18px; list-style:disc;}
+  .why-list li{margin-bottom:4px;}
+  .why-list li:last-child{margin-bottom:0;}
+  .why b{color:var(--coral);}
+  .why.positive{border-left-color:var(--mint);}
+  .why.positive b{color:var(--mint);}
+
+  .problem-row{display:flex; gap:40px; align-items:flex-start; margin-top:4px;}
+  .problem-text{flex:1; min-width:280px;}
+  .problem-stats{flex:0 1 380px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:20px;}
+  .stat-number{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:32px; color:var(--ink); line-height:1.1;}
+  .stat-caption{margin-top:6px; font-size:13px; color:var(--muted);}
+  .funnel{display:flex; flex-direction:column; gap:8px;}
+  .funnel-row{display:flex; flex-direction:column; gap:6px;}
+  .funnel-label{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted);}
+  .funnel-bar{height:34px; border-radius:5px;}
+  .funnel-bar.b1{width:100%; background:var(--accent);}
+  .funnel-bar.b2{width:62%; background:var(--accent); opacity:.75;}
+  .funnel-bar.b3{width:34%; background:var(--coral);}
+  .stat-note{font-style:italic; font-size:11.5px; color:#ABABB6; margin:0;}
+  @media (max-width:700px){
+    .problem-row{flex-direction:column; gap:24px;}
+    .problem-stats{max-width:420px;}
+  }
 
   .callout{
     border:1px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:var(--radius);
@@ -107,14 +151,18 @@
 </header>
 
 <main>
-  <span class="cs-tag">Case study · En producción</span>
-  <h1 class="cs-title">De un modal confuso a un flujo guiado</h1>
-  <p class="cs-sub">Rediseño de la creación de perfiles en Magnettu, prototipado de forma interactiva con IA.</p>
-
-  <div class="meta-strip">
-    <span>Rol<strong>Product Designer</strong></span>
-    <span>Empresa<strong>Magnettu</strong></span>
-    <span>Herramientas<strong>Figma, Claude</strong></span>
+  <div class="cs-cover">
+    <div class="cs-cover-text">
+      <span class="cs-tag">Case study · En producción</span>
+      <h1 class="cs-title">De un modal confuso a un flujo guiado</h1>
+      <p class="cs-sub">Rediseño de la creación de perfiles en Magnettu, prototipado de forma interactiva con IA.</p>
+      <div class="meta-strip">
+        <span>Rol<strong>Product Designer</strong></span>
+        <span>Empresa<strong>Magnettu</strong></span>
+        <span>Herramientas<strong>Figma, Claude</strong></span>
+      </div>
+    </div>
+    <div class="cs-cover-img"><img src="imagen-proyecto.png" alt="Imagen de portada — Magnettu"></div>
   </div>
 
   <h3 class="sub-h">Contexto</h3>
@@ -124,76 +172,177 @@
   <p class="prose-wide" style="font-style:italic; color:var(--muted);">(No conservé una captura de esta versión original, por eso no hay imagen aquí)</p>
 
   <h3 class="sub-h">El problema</h3>
-  <p class="prose prose-wide">El primer paso no fue separar del todo, sino consolidar: agrupé todo bajo <strong>Marcas Personales</strong>, que en la práctica seguía mezclando perfiles personales, perfiles de empresa y grupos, solo que ahora bajo un nombre y espacio común. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
-  <p class="prose prose-wide">El reto de fondo:</p>
-  <ul class="prose-list prose-wide">
-    <li>Magnettu servía tanto a <strong>agencias</strong> (colaboración con clientes) como a <strong>departamentos de marketing</strong> con programas de employee advocacy.</li>
-    <li>Para una agencia, el email del propietario era imprescindible. Para advocacy interno, pedirlo como obligatorio no tenía sentido.</li>
-    <li>Intentar simplificar el flujo para ambos casos generó fricción constante con cada caso de uso nuevo.</li>
-  </ul>
-  <p class="prose prose-wide">Fue más adelante, en V2, cuando finalmente separé perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
+  <div class="problem-row">
+    <div class="problem-text">
+      <p class="prose prose-wide">El primer paso no fue separar, sino consolidar: agrupé todo bajo <strong>Marcas Personales</strong>, un nombre y espacio común, aunque seguía mezclando perfiles personales, de empresa y grupos. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
+      <p class="prose prose-wide">El reto de fondo:</p>
+      <ul class="prose-list prose-wide">
+        <li>Magnettu servía tanto a <strong>agencias</strong> (colaboración con clientes) como a <strong>departamentos de marketing</strong> con programas de employee advocacy.</li>
+        <li>Para una agencia, el email del propietario era imprescindible. Para advocacy interno, pedirlo como obligatorio no tenía sentido.</li>
+        <li>Intentar simplificar el flujo para ambos casos generó fricción constante con cada caso de uso nuevo.</li>
+      </ul>
+      <p class="prose prose-wide">Fue más adelante, en V2, cuando finalmente separé perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
+    </div>
+    <div class="problem-stats">
+      <div>
+        <div class="stat-number">+1.000</div>
+        <div class="stat-caption">clientes activos, entre agencias y programas de employee advocacy</div>
+      </div>
+      <div class="funnel">
+        <div class="funnel-row">
+          <span class="funnel-label">Empiezan a crear perfiles</span>
+          <div class="funnel-bar b1"></div>
+        </div>
+        <div class="funnel-row">
+          <span class="funnel-label">Llegan al paso de LinkedIn</span>
+          <div class="funnel-bar b2"></div>
+        </div>
+        <div class="funnel-row">
+          <span class="funnel-label">Completan el flujo</span>
+          <div class="funnel-bar b3"></div>
+        </div>
+      </div>
+      <p class="stat-note">Patrón observado en Datadog durante el uso del flujo anterior. Representación ilustrativa, sin cifras exactas disponibles.</p>
+    </div>
+  </div>
 
   <h3 class="sub-h">Evolución del flujo, y por qué cada versión se quedaba corta</h3>
   <p class="prose prose-wide">A partir de ese research, el flujo de creación de perfiles pasó por varias versiones:</p>
 
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-version">V1</div>
-      <h4>4 tabs: nombre, objetivos, LinkedIn y permisos</h4>
-      <p>El flujo pedía nombre de la marca, objetivos, conectar LinkedIn (opcional) e invitar usuarios con permisos, todo dividido en 4 pestañas.</p>
-      <div class="why"><b>Por qué no era suficiente:</b> no se entendía cuándo había que meter el email del propietario de la marca. Muchos managers decían "lo haré después" y se olvidaban, dejando el perfil a medio configurar.</div>
-      <div class="img-slot filled"><img src="v1.png" alt="Captura de la V1 del modal de creación de perfiles"></div>
-    </div>
-    <div class="tl-item fail">
-      <div class="tl-version">V2</div>
-      <h4>Todo en un solo modal, con reorganización de fondo</h4>
-      <p>Nombre del perfil, URL de LinkedIn obligatoria, cómo se conectaría y permisos, todo en una sola pantalla. Esta versión también reorganizó la estructura: "marcas" pasó a llamarse "perfiles personales", los grupos se separaron en su propia sección, y perfiles personales y perfiles de empresa quedaron cada uno en su propio apartado para que no se confundieran entre sí.</p>
-      <div class="why"><b>Por qué falló:</b> seguía sin entenderse por qué pedíamos cierta información. Algunos no querían añadir 50 marcas de golpe, y al ser la URL de LinkedIn obligatoria, muchos managers acababan pidiéndonos a nosotros mismos que creáramos los perfiles.</div>
-      <div class="img-slot filled"><img src="v2.png" alt="Captura de la V2 del modal de creación de perfiles"></div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-version">V3 · Actual</div>
-      <h4>Flujo guiado en 3 pasos</h4>
-      <p>La versión vigente, con más preguntas pero mejor explicadas y contextualizadas, pensada para ser coherente tanto para agencias como para programas de advocacy.</p>
-      <div class="why positive"><b>Estado:</b> lanzada hace una semana, aún en validación. Estamos revisando resultados cada 2 semanas antes de sacar conclusiones.</div>
+  <div class="evo-wrap">
+    <div class="evo-timeline">
+      <div class="evo-item">
+        <div class="v-version">V1</div>
+        <h4>4 tabs: nombre, objetivos, LinkedIn y permisos</h4>
+        <p>El flujo pedía nombre de la marca, objetivos, conectar LinkedIn (opcional) e invitar usuarios con permisos, todo dividido en 4 pestañas.</p>
+        <div class="why">
+          <b>Por qué no era suficiente:</b>
+          <ul class="why-list">
+            <li>No se entendía cuándo había que meter el email del propietario de la marca.</li>
+            <li>Muchos managers decían "lo haré después" y se olvidaban, dejando el perfil a medio configurar.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="evo-item">
+        <div class="v-version fail">V2</div>
+        <h4>Todo en un solo modal, con reorganización de fondo</h4>
+        <p>Nombre del perfil, URL de LinkedIn obligatoria, cómo se conectaría y permisos, todo en una sola pantalla. Esta versión también reorganizó la estructura: "marcas" pasó a llamarse "perfiles personales", los grupos se separaron en su propia sección, y perfiles personales y perfiles de empresa quedaron cada uno en su propio apartado para que no se confundieran entre sí.</p>
+        <div class="why">
+          <b>Por qué falló:</b>
+          <ul class="why-list">
+            <li>Seguía sin entenderse por qué pedíamos cierta información.</li>
+            <li>Algunos no querían añadir 50 marcas de golpe.</li>
+            <li>Al ser la URL de LinkedIn obligatoria, muchos managers acababan pidiéndonos a nosotros mismos que creáramos los perfiles.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="evo-item">
+        <div class="v-version">V3 · Actual</div>
+        <h4>Flujo guiado en 3 pasos</h4>
+        <p>La versión vigente, con más preguntas pero mejor explicadas y contextualizadas, pensada para ser coherente tanto para agencias como para programas de advocacy.</p>
+        <div class="why positive"><b>Estado:</b> lanzada hace una semana, aún en validación. Estamos revisando resultados cada 2 semanas antes de sacar conclusiones.</div>
+      </div>
     </div>
   </div>
-
-  <div class="img-slot filled"><img src="paso%201.png" alt="Flujo guiado V3 — paso 1"></div>
 
   <h3 class="sub-h">Mi rediseño</h3>
   <p class="prose prose-wide">Rediseñé el flujo en <strong>3 pasos separados</strong> en lugar de un único modal, añadiendo contexto y explicación en cada uno, el objetivo era que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
   <p class="prose prose-wide">El cambio más importante fue una pregunta completamente nueva en el paso 2, que no existía en ninguna versión anterior: <strong>¿quién va a conectar LinkedIn?</strong>, con dos opciones, "lo conecto yo" o "lo conecta el propietario".</p>
   <p class="prose prose-wide">Esto resolvía un problema muy concreto que veía una y otra vez: los brand managers pedían a los propietarios que conectaran su cuenta de LinkedIn manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "lo conecta el propietario", este recibe automáticamente un email de invitación explicando que se ha creado una marca a su nombre y pidiéndole que conecte su cuenta, quitando ese paso manual del medio.</p>
 
-  <h3 class="sub-h">Decisiones que tomé</h3>
+  <h3 class="sub-h">Cómo fue evolucionando</h3>
   <p class="prose prose-wide">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
 
-  <div class="decision-block">
-    <div class="decision-img"><img src="paso%207.png" alt="Flujo completo de creación de un único perfil, los 5 pasos"></div>
+  <div class="decision-block stacked">
     <div class="decision-txt">
-      <span class="decision-tag">Decisión</span>
-      <p class="prose">Cuando se crea <strong>un único perfil</strong>, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento.</p>
+      <span class="decision-tag">De 5 pasos a uno solo</span>
+      <p class="prose prose-wide">El primer paso del rediseño no fue añadir algo nuevo, sino quitar fricción de lo que ya existía.</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Primera versión:</strong> el flujo tenía 5 pasos, empezando por el nombre de la marca y el objetivo, separados sin una prioridad real de qué información pedir antes.</li>
+        <li><strong>Versión final:</strong> unifiqué esos pasos en uno solo.</li>
+      </ul>
+      <p class="prose prose-wide">Al no ver toda la información de golpe, muchas personas decían "ya lo haré más tarde" y ese paso quedaba sin completar para siempre. Unificarlo resolvió justo eso.</p>
     </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion1.png" alt="Decisión 1 — unificación de los pasos iniciales del flujo"></div>
   </div>
 
-  <div class="decision-block reverse">
-    <div class="decision-img"><img src="paso%209.png" alt="Flujo de creación de varios perfiles a la vez, terminando en permisos, 3 pasos"></div>
+  <div class="decision-block stacked">
     <div class="decision-txt">
-      <span class="decision-tag">Decisión</span>
-      <p class="prose">Cuando se crean <strong>varios perfiles a la vez</strong>, el flujo se detiene en permisos. Repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante.</p>
+      <span class="decision-tag">Crear varios perfiles a la vez</span>
+      <p class="prose prose-wide">Esta decisión no siempre se nota a simple vista, pero fue clave para el día a día de los managers que gestionaban muchos perfiles a la vez.</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Primera versión:</strong> solo se podía crear un perfil a la vez.</li>
+        <li><strong>Segunda versión:</strong> se añadió la opción de crear varios perfiles de golpe, con el copy "Añadir otro".</li>
+        <li><strong>Versión final:</strong> se mantuvo la opción, con el copy actualizado a "Añadir más perfiles".</li>
+      </ul>
+      <p class="prose prose-wide">Aunque el copy cambió poco entre versiones, la funcionalidad se volvió indispensable a medida que crecían los clientes con equipos grandes.</p>
     </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion2.png" alt="Decisión 2 — crear varios perfiles a la vez"></div>
+  </div>
+
+  <div class="decision-block stacked">
+    <div class="decision-txt">
+      <span class="decision-tag">Información del perfil y quién conecta LinkedIn</span>
+      <p class="prose prose-wide">Esta fue de las decisiones más delicadas del rediseño, porque tocaba directamente el problema de fondo: quién debía conectar LinkedIn y cuándo pedir cada dato.</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Primera versión:</strong> pedía nombre de perfil y objetivo. Se quitó el objetivo porque muchas personas no tenían uno claro, solo querían crear el perfil.</li>
+        <li><strong>Segunda versión:</strong> se añadió la URL de LinkedIn, el método de acceso y el email, este último condicionado al método elegido.</li>
+        <li><strong>Versión final:</strong> se mantuvo el nombre de perfil sin poder editarlo en este paso, se añadió la pregunta "¿quién va a conectar la cuenta?" (con tres opciones: la conecto yo, la conecta el propietario, o aún sin definir), y un botón para aplicar la configuración de la primera fila a todos los perfiles creados a la vez.</li>
+      </ul>
+      <p class="prose prose-wide">La pregunta sobre quién conecta la cuenta terminó siendo el cambio más importante de todo el flujo, resolvía el motivo real por el que los propietarios nunca conectaban su LinkedIn.</p>
+    </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion3.png" alt="Decisión 3 — información del perfil y quién conecta LinkedIn"></div>
+  </div>
+
+  <div class="decision-block stacked">
+    <div class="decision-txt">
+      <span class="decision-tag">Permisos</span>
+      <p class="prose prose-wide">Los permisos parecen un detalle técnico, pero fue una de las partes donde más iteramos, porque afectaba directamente a si alguien podía entrar a trabajar en su perfil o no.</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Primera versión:</strong> colaboradores y permisos eran pasos separados. Muchos creían que colaboradores era opcional, lo dejaban para después y se olvidaban.</li>
+        <li><strong>Segunda versión:</strong> se unificó todo en una sola línea, más visible, manteniendo los checkboxes por ser rápidos de leer.</li>
+        <li><strong>Versión final:</strong> permisos pasó a ser el último paso, se mantuvieron los checkboxes, se ocultan (con un guion) los permisos que no aplican si el perfil no tiene acceso a Magnettu, y se añadieron tooltips explicando qué incluye cada permiso.</li>
+      </ul>
+      <p class="prose prose-wide">Los tooltips fueron una solución simple para un problema real: la gente no siempre entiende qué significa cada permiso, y preferimos explicarlo ahí mismo antes que en documentación aparte.</p>
+    </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion4.png" alt="Decisión 4 — permisos"></div>
+  </div>
+
+  <div class="decision-block stacked">
+    <div class="decision-txt">
+      <span class="decision-tag">Notificación al crear el perfil</span>
+      <p class="prose prose-wide">Esta decisión fue casi lo contrario a las demás: en vez de añadir más control, decidimos quitarlo.</p>
+      <ul class="prose-list prose-wide">
+        <li><strong>Versión anterior:</strong> al terminar de crear un perfil aparecía un desplegable con dos opciones, enviar con notificación o sin ella.</li>
+        <li><strong>Versión final:</strong> se eliminó esa decisión explícita porque generaba dudas. Se compensó con un tooltip explicativo secundario, en vez del texto primario de antes.</li>
+      </ul>
+      <p class="prose prose-wide">A veces menos opciones generan más confianza que más opciones, aquí funcionó así.</p>
+    </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion5.png" alt="Decisión 5 — notificación al crear el perfil"></div>
+  </div>
+
+  <div class="decision-block stacked">
+    <div class="decision-txt">
+      <span class="decision-tag">Un flujo distinto según cuántos perfiles creas</span>
+      <p class="prose prose-wide">El flujo no se comporta igual según cuántos perfiles estés creando, y esa diferencia fue intencional.</p>
+      <p class="prose prose-wide">Cuando se crea un único perfil, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento. Cuando se crean varios perfiles a la vez, en cambio, el flujo se detiene en permisos, repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante.</p>
+      <p class="prose prose-wide">Es una decisión pensada para no forzar el mismo nivel de detalle cuando el contexto de uso es completamente distinto.</p>
+    </div>
+    <div class="decision-img"><img src="imagen-magnettu-desicion6.png" alt="Decisión 6 — flujo distinto según cuántos perfiles creas"></div>
   </div>
 
   <style>
     .decision-block{display:flex; gap:28px; align-items:center; margin:24px 0;}
     .decision-block.reverse{flex-direction:row-reverse;}
+    .decision-block.stacked{flex-direction:column; align-items:stretch; gap:16px;}
+    .decision-block.stacked .decision-img, .decision-block.stacked .decision-txt{flex:none;}
+    .decision-block.stacked .decision-img img{border-radius:8px; object-fit:contain;}
     .decision-img{flex:1; margin:0;}
     .decision-img img{width:100%; height:auto; display:block; border-radius:var(--radius);}
     .decision-txt{flex:1;}
     .decision-tag{
-      display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase;
-      color:var(--accent); background:var(--accent-soft); padding:4px 10px; border-radius:100px; margin-bottom:10px;
+      display:block; font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16.5px;
+      color:var(--ink); margin-bottom:12px;
     }
     @media (max-width:700px){
       .decision-block, .decision-block.reverse{flex-direction:column; align-items:stretch;}
@@ -201,7 +350,7 @@
   </style>
 
   <div class="proto-wrap">
-    <div class="proto-label">Prototipo interactivo — pruébalo tú misma</div>
+    <h3 class="sub-h">Prueba el flujo completo</h3>
     <div class="mnt-demo">
       <div class="mnt-demobar">
         <span>Prototipo — flujo de creación de perfiles</span>
