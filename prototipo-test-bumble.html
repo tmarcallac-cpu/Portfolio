@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo — Rediseño de Bumble</title>
+<style>
+  :root{
+    --ink:#141414; --muted:#6b6b6b; --line:#141414; --line-soft:#d9d9d9;
+    --gray-fill:#e2e2e2; --gray-row:#f2f2f2; --chrome:#f4f4f4; --white:#fff;
+    --warn:#c0392b; --ok:#1a7a4c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background:#eceae6; color:var(--ink); min-height:100vh;
+  }
+  button{font-family:inherit; cursor:pointer;}
+
+  /* ===== TOOL CHROME ===== */
+  .chrome{
+    background:var(--chrome); border-bottom:1px solid var(--line-soft);
+    padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px; position:sticky; top:0; z-index:50;
+  }
+  .chrome-left{font-size:13px; color:var(--muted);}
+  .chrome-left strong{color:var(--ink); display:block; font-size:14px; margin-bottom:2px;}
+  .chrome-right{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .btn-chrome{
+    border:1px solid var(--line); background:#fff; color:var(--ink); padding:8px 16px;
+    border-radius:100px; font-size:12.5px; font-weight:600;
+  }
+  .btn-chrome:hover{background:var(--ink); color:#fff;}
+  .btn-chrome:disabled{opacity:.4; cursor:not-allowed; pointer-events:none;}
+
+  /* ===== STAGE ===== */
+  .stage{display:flex; justify-content:center; padding:40px 16px 90px;}
+  .device{
+    width:100%; max-width:360px; background:#fff; border:1.5px solid var(--line);
+    border-radius:26px; height:680px; position:relative; overflow-y:auto; overflow-x:hidden;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.25);
+  }
+  .screen{padding:24px 20px 20px; min-height:680px; position:relative; box-sizing:border-box;}
+  .scr-center{padding-top:110px; text-align:center;}
+  .has-bottom-bar{padding-bottom:86px;}
+
+  /* ===== GENERIC UI ===== */
+  .topbar{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+  .topbar .back{font-size:22px; line-height:1; padding:4px 8px; border-radius:6px;}
+  .topbar .back:hover{background:var(--gray-row);}
+  .topbar h2{font-size:19px; font-weight:700;}
+
+  .avatar-lg{
+    width:150px; height:150px; border-radius:50%; background:var(--gray-fill); margin:0 auto 18px;
+    position:relative;
+  }
+  .avatar-lg::after{
+    content:''; position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+    width:110%; height:52%; background:var(--gray-fill); border-radius:50% 50% 0 0/60% 60% 0 0;
+  }
+  .avatar-lg::before{
+    content:''; position:absolute; top:22%; left:50%; transform:translateX(-50%);
+    width:46%; height:46%; border-radius:50%; background:#cfcfcf;
+  }
+
+  .btn-black{
+    width:100%; background:var(--ink); color:#fff; border:none; padding:16px; border-radius:10px;
+    font-size:15.5px; font-weight:600; text-align:center;
+  }
+  .btn-black:hover{opacity:.9;}
+  .btn-text-link{
+    display:block; text-align:center; margin-top:16px; font-size:14px; color:var(--ink); background:none; border:none;
+  }
+
+  .field-box{border:1.5px solid var(--line); border-radius:12px; padding:16px; margin-bottom:18px;}
+  .field-box h4{font-size:14.5px; font-weight:600; margin-bottom:4px;}
+  .field-box .hint{font-size:12.5px; color:var(--muted); margin-bottom:12px;}
+  .field-row{
+    background:var(--gray-row); border-radius:8px; padding:12px 14px; font-size:14px; margin-bottom:8px;
+  }
+  .field-row:last-child{margin-bottom:0;}
+  .field-row.empty{color:var(--muted); font-style:italic; display:flex; align-items:center; justify-content:space-between;}
+
+  .plan-checklist{margin:16px 0;}
+  .plan-item{
+    border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14.5px;
+  }
+  .plan-item.selected{background:var(--ink); color:#fff;}
+  .checkbox{
+    width:24px; height:24px; border-radius:7px; border:1.5px solid var(--line); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  .plan-item.selected .checkbox{background:#fff; color:var(--ink); border-color:#fff;}
+  .plan-item.special{border-style:dashed;}
+
+  .continue-fab{
+    width:56px; height:56px; border-radius:50%; background:var(--gray-fill); border:none;
+    display:flex; align-items:center; justify-content:center; font-size:20px; margin-left:auto; margin-top:12px;
+  }
+  .continue-fab.active{background:var(--ink); color:#fff;}
+  .continue-fab:disabled{cursor:not-allowed;}
+
+  /* ===== DISCOVER / PERFIL SCREEN ===== */
+  .header-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .header-row .logo{font-size:26px; font-weight:800;}
+  .filter-icon{width:26px; height:26px; opacity:.7;}
+  .card-outer{border:1.5px solid var(--line); border-radius:14px; padding:20px; margin-bottom:18px;}
+  .match-banner{background:var(--gray-row); border-radius:10px; padding:14px 16px; margin-bottom:18px;}
+  .match-banner .lbl{font-size:14px; margin-bottom:4px;}
+  .match-banner .val{font-size:14.5px; font-style:italic;}
+  .card-photo{
+    width:190px; height:190px; border-radius:50%; background:var(--gray-fill); margin:0 auto 22px; position:relative;
+  }
+  .card-photo::before{
+    content:''; position:absolute; top:24%; left:50%; transform:translateX(-50%);
+    width:42%; height:42%; border-radius:50%; background:#cfcfcf;
+  }
+  .card-photo::after{
+    content:''; position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+    width:100%; height:48%; background:var(--gray-fill); border-radius:50% 50% 0 0/60% 60% 0 0;
+  }
+  .name-row{display:flex; justify-content:space-between; align-items:center;}
+  .name-row .name{font-size:24px; font-weight:700;}
+  .star-sm{
+    width:34px; height:34px; border-radius:50%; border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  .star-lg{
+    width:70px; height:70px; border-radius:50%; border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:30px; background:#fff;
+  }
+  .star-lg:hover{background:var(--gray-row);}
+
+  .bio-box{margin-top:18px;}
+  .bio-box h4{font-weight:700; font-size:15px; margin-bottom:8px;}
+  .bio-box p{font-size:14.5px; margin-bottom:12px;}
+  .bio-box hr{border:none; border-top:1px solid var(--line-soft); margin:12px 0;}
+  .signal-row{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted);}
+
+  /* ===== PROFILE: PLAIN SECTIONS, TAGS, EXTRA PHOTOS ===== */
+  .plain-section{margin:0 0 22px;}
+  .plain-section h4{font-weight:700; font-size:15.5px; margin-bottom:10px;}
+  .tags-row{display:flex; flex-wrap:wrap; gap:9px;}
+  .tag-pill{
+    background:var(--gray-row); border-radius:100px; padding:8px 14px; font-size:13px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .block-photo{
+    border:1.5px solid var(--line); border-radius:14px; padding:26px; margin-bottom:22px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .block-photo .card-photo{margin:0;}
+
+  /* ===== SWIPE CARD ===== */
+  .swipe-card{position:relative; touch-action:pan-y; user-select:none;}
+  .swipe-flag{
+    position:absolute; top:26px; z-index:5; border:3px solid; border-radius:8px; padding:6px 14px;
+    font-weight:800; font-size:18px; letter-spacing:.05em; text-transform:uppercase; opacity:0; transform:rotate(-12deg);
+    pointer-events:none;
+  }
+  .swipe-flag.like{left:20px; color:var(--ok); border-color:var(--ok);}
+  .swipe-flag.dislike{right:20px; color:var(--warn); border-color:var(--warn); transform:rotate(12deg);}
+
+  .decide-row{display:flex; flex-direction:column; align-items:center; gap:18px; margin:14px 0 6px;}
+  .decide-row .action-row{display:flex; gap:26px;}
+  .action-btn{
+    width:58px; height:58px; border-radius:50%; border:1.5px solid var(--line); background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+  }
+  .action-btn:hover{background:var(--gray-row);}
+  .action-btn.like-btn{width:64px; height:64px; font-size:26px;}
+  .link-row{text-align:center; margin-top:16px; font-size:13.5px;}
+  .link-row .block-link{display:block; color:var(--muted); margin-bottom:8px; background:none; border:none; font-size:13.5px;}
+  .link-row .report-link{color:var(--warn); background:none; border:none; font-size:13.5px;}
+
+  /* ===== BOTTOM NAV ===== */
+  .bottom-nav{
+    position:absolute; left:0; right:0; bottom:0; border-top:1.5px solid var(--line); background:#fff;
+    display:flex; justify-content:space-around; padding:14px 8px 16px;
+  }
+  .nav-item{display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--muted); background:none; border:none;}
+  .nav-item .dot{width:32px; height:32px; border-radius:50%; background:var(--gray-fill);}
+  .nav-item.active{color:var(--ink); font-weight:700;}
+  .nav-item.active .dot{background:var(--ink);}
+
+  /* ===== MATCH SCREEN ===== */
+  .match-x{font-size:22px; margin-bottom:40px; display:inline-block;}
+  .match-cards{position:relative; height:170px; display:flex; align-items:center; justify-content:center; margin-bottom:26px;}
+  .match-card{
+    width:120px; height:120px; border:2px solid var(--line); border-radius:14px; background:#fff;
+    display:flex; align-items:center; justify-content:center; position:absolute;
+  }
+  .match-card .ph-circ{width:52px; height:52px; border-radius:50%; background:var(--gray-fill); position:relative;}
+  .match-card .ph-circ::after{content:'';position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);width:70px;height:34px;background:var(--gray-fill);border-radius:50% 50% 0 0/70% 70% 0 0;}
+  .match-card.left{transform:rotate(-8deg); left:calc(50% - 110px);}
+  .match-card.right{transform:rotate(8deg); left:calc(50% - 10px);}
+  .match-star{
+    width:76px; height:76px; border-radius:50%; border:1.5px solid var(--line-soft); background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:32px; color:#cfcfcf; z-index:2;
+  }
+  .match-msg{font-size:15px; margin-bottom:24px;}
+
+  /* ===== CHAT SCREEN ===== */
+  .persp-toggle{display:flex; gap:8px; margin-bottom:18px;}
+  .persp-btn{
+    flex:1; border:1.5px solid var(--line); background:#fff; padding:9px; border-radius:8px; font-size:12.5px; font-weight:600;
+  }
+  .persp-btn.active{background:var(--ink); color:#fff;}
+  .persp-btn.pablo.active{background:#4A5FE8; border-color:#4A5FE8;}
+  .persp-btn.sara.active{background:#FF6B5C; border-color:#FF6B5C;}
+  .chat-banner{border:1.5px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:22px;}
+  .chat-banner .top-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .chat-banner .b-title{font-weight:700; font-size:14.5px; margin-bottom:4px;}
+  .chat-banner .b-sub{font-size:13px; color:var(--muted);}
+  .chat-banner .b-cta{font-weight:700; font-size:13.5px; white-space:nowrap; background:none; border:none; flex-shrink:0;}
+  .chat-banner.celebrate{background:var(--gray-row);}
+  .convo-bubble{
+    border:1.5px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; max-width:78%;
+    color:var(--muted); font-size:13px;
+  }
+  .convo-bubble.right{margin-left:auto;}
+  .chat-inputbar{
+    display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:100px;
+    padding:8px 10px; position:absolute; left:20px; right:20px; bottom:20px; background:#fff;
+  }
+  .chat-inputbar .circ{width:34px; height:34px; border-radius:50%; background:var(--gray-fill); flex-shrink:0;}
+  .chat-inputbar input{flex:1; border:none; outline:none; font-size:14px; font-family:inherit; background:none;}
+
+  /* radio-style single select (plan picker) */
+  .plan-item.radio .checkbox{border-radius:50%;}
+  .plan-item.radio.selected .checkbox{background:#fff; border-color:var(--line); color:var(--ink);}
+  .plan-item.radio .checkbox .dotfill{width:11px; height:11px; border-radius:50%; background:var(--line);}
+
+  /* simple confirmation modal */
+  .confirm-icon-box{background:var(--gray-row); border-radius:10px; padding:24px 18px; text-align:center; margin:16px 0 20px;}
+  .confirm-icon-box .circ{width:56px; height:56px; border-radius:50%; background:var(--gray-fill); margin:0 auto 14px;}
+  .confirm-icon-box p{font-size:14.5px; line-height:1.5;}
+
+
+  .modal-backdrop{
+    position:absolute; inset:0; background:rgba(20,20,20,.55); z-index:40; display:flex; align-items:flex-end;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .modal-backdrop.open{opacity:1; pointer-events:auto;}
+  .modal-sheet{
+    background:#fff; width:100%; border-radius:20px 20px 0 0; padding:24px 22px 26px;
+    max-height:88%; overflow-y:auto; transform:translateY(100%); transition:transform .28s cubic-bezier(.2,.8,.2,1);
+  }
+  .modal-backdrop.open .modal-sheet{transform:translateY(0);}
+  .modal-sheet h3{font-size:18px; font-weight:700; margin-bottom:4px;}
+  .modal-sheet .hint{font-size:13px; color:var(--muted); margin-bottom:16px;}
+
+  /* ===== TOAST ===== */
+  .toast{
+    position:absolute; left:50%; bottom:100px; transform:translate(-50%,10px); background:var(--ink); color:#fff;
+    padding:12px 18px; border-radius:100px; font-size:13.5px; opacity:0; pointer-events:none; z-index:60;
+    transition:all .25s ease; text-align:center; white-space:nowrap; max-width:88%;
+  }
+  .toast.show{opacity:1; transform:translate(-50%,0);}
+
+  /* ===== GATE ===== */
+  .panel{max-width:520px; margin:0 auto; background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:34px 30px;}
+  .panel h2{font-size:22px; font-weight:700; margin-bottom:10px;}
+  .panel p{font-size:14.5px; color:var(--muted); margin-bottom:18px; line-height:1.5;}
+  .panel input{
+    width:100%; border:1.5px solid var(--line); border-radius:8px; padding:12px 14px; font-size:14.5px; margin-bottom:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="chrome-left" id="chromeLeft">
+    <strong>Prototipo — Rediseño de Bumble</strong>
+    <span id="chromeSub">Sin test activo</span>
+  </div>
+  <div class="chrome-right">
+    <button class="btn-chrome" id="btnReset" style="display:none;">&#8635; Reiniciar</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="device" id="device">
+    <div class="screen" id="screen"></div>
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div class="modal-sheet" id="modalSheet"></div>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var PLAN_OPTIONS = [
+    "Tomar algo (café o copas)",
+    "Dar un paseo",
+    "Plan al aire libre (parque, playa, naturaleza)",
+    "Plan cultural (museo, expo, cine)",
+    "Comer o cenar juntos",
+    "Plan activo (deporte, clase, actividad física)",
+    "Concierto o evento en directo",
+    "Juegos o algo random (bolera, arcade, escape room)"
+  ];
+  var SPECIAL = "Aún no lo sé, sorpréndeme";
+  var SARA_PLANS = ["Dar un paseo", "Tomar algo (café o copas)"];
+
+  var state = {
+    view: "gate",           // gate | app
+    screen: "persona",       // persona | inicio | onboarding | perfilSelf | editarPerfil | discover | match | chat
+    plans: [],
+    modal: null,             // null | "editPlans" | "confirmIntent" | "pickPlan" | "proposedConfirm" | "saraResponse" | "saraPickPlan" | "saraConfirmYes" | "saraCounterConfirm" | "saraDeclineConfirm" | "pabloCounterResponse"
+    modalDraft: [],
+    discoverDecided: false,
+    perspective: "pablo",     // pablo | sara
+    proposedPlan: null,
+    saraHasProposal: false,
+    saraDecision: null,       // null | "yes" | "counter" | "no"
+    lastCounterOffer: null,
+    mutualConfirmed: false,
+    pabloDeclinedCounter: false,
+    pickPlanChoice: null,
+    saraPickChoice: null
+  };
+  var suppressNextClick = false;
+
+  var session = null;       // active session object
+
+  // ---------- UTIL ----------
+  function el(html){
+    var t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+  function joinEs(arr){
+    if(arr.length === 0) return "";
+    if(arr.length === 1) return arr[0];
+    if(arr.length === 2) return arr[0] + " y " + arr[1];
+    return arr.slice(0,-1).join(", ") + " y " + arr[arr.length-1];
+  }
+
+  // ---------- SESSION / TRACKING ----------
+  function startSession(tester){
+    session = {
+      tester: tester && tester.trim() ? tester.trim() : "Anónimo",
+      startTime: Date.now(),
+      events: []
+    };
+    state.view = "app";
+    state.screen = "persona";
+    state.plans = [];
+    logEvent('nav', {label:'Inicio de test'});
+    render();
+    document.getElementById('btnReset').style.display = 'inline-block';
+  }
+
+  function logEvent(type, detail){
+    if(!session) return;
+    session.events.push({
+      t: Date.now() - session.startTime,
+      type: type,
+      screen: state.screen,
+      detail: detail || {}
+    });
+  }
+
+  function changeScreen(newScreen){
+    logEvent('nav', {label:'Pantalla: ' + screenLabel(newScreen)});
+    state.screen = newScreen;
+    render();
+  }
+
+  function screenLabel(s){
+    return {
+      persona:"Presentación", inicio:"Inicio", onboarding:"Onboarding (planes)", perfilSelf:"Mi perfil",
+      editarPerfil:"Editar perfil", discover:"Descubrir gente", match:"Match", chat:"Chat"
+    }[s] || s;
+  }
+
+  // ---------- TOAST ----------
+  var toastTimeout;
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+  }
+
+  // ---------- CLICK TRACKING (delegated) ----------
+  document.getElementById('device').addEventListener('click', function(e){
+    if(state.view !== 'app') return;
+    if(suppressNextClick){ suppressNextClick = false; return; }
+    var trackEl = e.target.closest('[data-track]');
+    var rect = document.getElementById('device').getBoundingClientRect();
+    var x = Math.round(e.clientX - rect.left);
+    var y = Math.round(e.clientY - rect.top);
+
+    if(trackEl){
+      var isInert = trackEl.getAttribute('data-inert') === 'true';
+      logEvent(isInert ? 'inert' : 'action', {label: trackEl.getAttribute('data-track'), x:x, y:y});
+    } else {
+      logEvent('dead', {x:x, y:y});
+    }
+  }, true);
+
+  // ---------- RENDER: GATE ----------
+  function renderGate(){
+    document.getElementById('chromeSub').textContent = "Prototipo listo para probar";
+    var s = document.getElementById('screen');
+    s.innerHTML = "";
+    s.appendChild(el(
+      '<div class="panel" style="margin-top:60px;">' +
+        '<h2>Prototipo interactivo</h2>' +
+        '<p>Prueba el flujo completo, desde el registro hasta descubrir el primer perfil compatible por plan.</p>' +
+        '<input type="text" id="testerInput" placeholder="Tu nombre (opcional)">' +
+        '<button class="btn-black" id="startBtn">Empezar</button>' +
+      '</div>'
+    ));
+    document.getElementById('startBtn').onclick = function(){
+      var name = document.getElementById('testerInput').value;
+      startSession(name);
+    };
+  }
+
+  // ---------- RENDER: APP SCREENS ----------
+  function renderApp(){
+    document.getElementById('chromeSub').textContent = session.tester + " · " + screenLabel(state.screen);
+    var s = document.getElementById('screen');
+    s.innerHTML = "";
+    if(state.screen === 'persona') s.appendChild(renderPersonaIntro());
+    else if(state.screen === 'inicio') s.appendChild(renderInicio());
+    else if(state.screen === 'onboarding') s.appendChild(renderOnboarding());
+    else if(state.screen === 'perfilSelf') s.appendChild(renderPerfilSelf());
+    else if(state.screen === 'editarPerfil') s.appendChild(renderEditarPerfil());
+    else if(state.screen === 'discover') s.appendChild(renderDiscover());
+    else if(state.screen === 'match') s.appendChild(renderMatch());
+    else if(state.screen === 'chat') s.appendChild(renderChat());
+    renderModal();
+  }
+
+  function renderInicio(){
+    var wrap = el('<div class="scr-center"></div>');
+    wrap.appendChild(el(
+      '<div style="width:130px;height:130px;border-radius:50%;background:var(--gray-fill);margin:0 auto 40px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);">Logo</div>'
+    ));
+    var btnWrap = el('<div style="width:100%;"></div>');
+    var createBtn = el('<button class="btn-black" data-track="inicio:crear_cuenta">Crear cuenta</button>');
+    createBtn.onclick = function(){ changeScreen('onboarding'); };
+    var haveBtn = el('<button class="btn-text-link" data-track="inicio:ya_tengo_cuenta">Ya tengo una cuenta</button>');
+    haveBtn.onclick = function(){ showToast("Esta opción es para quien ya tiene cuenta, fuera del alcance de este prototipo"); };
+    btnWrap.appendChild(createBtn);
+    btnWrap.appendChild(haveBtn);
+    wrap.appendChild(btnWrap);
+    return wrap;
+  }
+
+  function renderPersonaIntro(){
+    var wrap = el('<div class="scr-center"></div>');
+    wrap.appendChild(el(
+      '<div style="width:110px;height:110px;border-radius:50%;background:var(--gray-fill);margin:0 auto 26px;"></div>'
+    ));
+    wrap.appendChild(el('<h2 style="font-size:22px;font-weight:800;margin-bottom:14px;">Eres Pablo, 24</h2>'));
+    wrap.appendChild(el(
+      '<p style="color:var(--muted);font-size:14.5px;margin-bottom:34px;line-height:1.55;">' +
+      'Vas a usar este prototipo como Pablo, que se acaba de descargar Bumble para conocer gente. ' +
+      'Sigue su recorrido tal y como lo haría él, desde el registro hasta encontrar un plan en común con alguien.' +
+      '</p>'
+    ));
+    var goBtn = el('<button class="btn-black" data-track="persona:empezar" style="width:100%;">Empezar como Pablo</button>');
+    goBtn.onclick = function(){ changeScreen('inicio'); };
+    wrap.appendChild(goBtn);
+    return wrap;
+  }
+
+  function renderOnboarding(){
+    var wrap = el('<div></div>');
+    wrap.appendChild(el(
+      '<div>' +
+      '<h2 style="font-size:25px;font-weight:800;line-height:1.15;margin-bottom:10px;">¿Qué te apetece hacer en tu primer plan?</h2>' +
+      '<p style="color:var(--muted);font-size:14.5px;margin-bottom:20px;">Elige hasta 3 planes.</p>' +
+      '</div>'
+    ));
+    var list = el('<div class="plan-checklist"></div>');
+    PLAN_OPTIONS.forEach(function(plan){
+      list.appendChild(planItem(plan, state.plans, function(){ toggleOnboardingPlan(plan); }, 'onboarding'));
+    });
+    list.appendChild(planItem(SPECIAL, state.plans, function(){ toggleOnboardingPlan(SPECIAL); }, 'onboarding', true));
+    wrap.appendChild(list);
+
+    var canContinue = state.plans.length > 0;
+    var fab = el('<button class="continue-fab' + (canContinue ? ' active':'') + '" data-track="onboarding:continuar">&#8594;</button>');
+    if(!canContinue) fab.disabled = true;
+    fab.onclick = function(){ if(canContinue) changeScreen('perfilSelf'); };
+    wrap.appendChild(fab);
+    return wrap;
+  }
+
+  function toggleOnboardingPlan(plan){
+    if(plan === SPECIAL){
+      state.plans = (state.plans.indexOf(SPECIAL) > -1) ? [] : [SPECIAL];
+    } else {
+      state.plans = state.plans.filter(function(p){ return p !== SPECIAL; });
+      var idx = state.plans.indexOf(plan);
+      if(idx > -1){ state.plans.splice(idx,1); }
+      else if(state.plans.length < 3){ state.plans.push(plan); }
+      else { showToast("Ya has elegido 3 planes"); }
+    }
+    render();
+  }
+
+  function planItem(label, selectedArr, onClick, screenName, isSpecial){
+    var isSel = selectedArr.indexOf(label) > -1;
+    var item = el(
+      '<div class="plan-item' + (isSel?' selected':'') + (isSpecial?' special':'') + '" data-track="' + screenName + ':plan:' + encodeURIComponent(label) + '">' +
+        '<span>' + label + '</span>' +
+        '<span class="checkbox">' + (isSel ? '&#10003;' : '') + '</span>' +
+      '</div>'
+    );
+    item.onclick = onClick;
+    return item;
+  }
+
+  function renderPerfilSelf(){
+    var wrap = el('<div class="has-bottom-bar"></div>');
+    wrap.appendChild(el(
+      '<div class="topbar">' +
+        '<span class="back" data-track="perfilSelf:volver" data-inert="true">&#8592;</span>' +
+        '<h2>Pablo, 24</h2>' +
+      '</div>'
+    ));
+    wrap.appendChild(el('<div class="avatar-lg"></div>'));
+    wrap.appendChild(el('<div style="text-align:center;font-size:20px;font-weight:700;margin-bottom:26px;">PABLO, 24</div>'));
+
+    if(state.plans.length){
+      wrap.appendChild(el(
+        '<div class="field-row" style="text-align:center;margin-bottom:22px;">Tus planes: <i>' + joinEs(state.plans) + '</i></div>'
+      ));
+    }
+
+    var editBtn = el('<button class="btn-black" data-track="perfilSelf:editar_perfil">Editar perfil</button>');
+    editBtn.onclick = function(){ changeScreen('editarPerfil'); };
+    wrap.appendChild(editBtn);
+
+    wrap.appendChild(bottomNav('perfilSelf'));
+    return wrap;
+  }
+
+  function renderEditarPerfil(){
+    var wrap = el('<div></div>');
+    wrap.appendChild(el(
+      '<div class="topbar">' +
+        '<span class="back" data-track="editar:volver">&#8592;</span>' +
+        '<h2>Bumble date</h2>' +
+      '</div>'
+    ));
+    wrap.querySelector('.back').onclick = function(){ changeScreen('perfilSelf'); };
+
+    wrap.appendChild(el(
+      '<div class="field-box" data-track="editar:estado_perfil" data-inert="true">' +
+        '<h4>Estado del perfil</h4>' +
+        '<div class="field-row">49% completado</div>' +
+      '</div>'
+    ));
+
+    wrap.appendChild(el(
+      '<div class="field-box" data-track="editar:fotos" data-inert="true">' +
+        '<h4>Fotos y vídeos</h4>' +
+        '<div class="hint">Escoge fotos que te representen</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">' +
+          '<div style="aspect-ratio:1;background:var(--gray-fill);border-radius:8px;"></div>' +
+          '<div style="aspect-ratio:1;background:var(--gray-fill);border-radius:8px;"></div>' +
+          '<div style="aspect-ratio:1;border:1.5px dashed var(--line-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);">+</div>' +
+          '<div style="aspect-ratio:1;border:1.5px dashed var(--line-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);">+</div>' +
+        '</div>' +
+      '</div>'
+    ));
+
+    var plansBox = el('<div class="field-box" data-track="editar:tus_planes" style="cursor:pointer;"></div>');
+    plansBox.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+        '<div><h4>Tus planes</h4><div class="hint">Haz saber qué planes te gustan</div></div>' +
+        '<span style="font-size:18px;color:var(--muted);">&#8250;</span>' +
+      '</div>';
+    if(state.plans.length){
+      state.plans.forEach(function(p){
+        plansBox.appendChild(el('<div class="field-row">' + p + '</div>'));
+      });
+    } else {
+      plansBox.appendChild(el('<div class="field-row empty">Aún no has añadido ningún plan <span>+</span></div>'));
+    }
+    plansBox.onclick = function(){ openPlansModal(); };
+    wrap.appendChild(plansBox);
+
+    wrap.appendChild(el(
+      '<div class="field-box" data-track="editar:intereses" data-inert="true">' +
+        '<h4>Intereses</h4>' +
+        '<div class="hint">Especifica qué cosas te apasionan</div>' +
+        '<div class="field-row">Sushi · Diseño · Mindfulness · Terror</div>' +
+      '</div>'
+    ));
+
+    wrap.appendChild(el(
+      '<div class="field-box" data-track="editar:entrantes" data-inert="true">' +
+        '<h4>Entrantes</h4>' +
+        '<div class="hint">Que la gente sepa cómo es salir contigo</div>' +
+        '<div class="field-row">Espero que tú... te guste el sushi :)</div>' +
+      '</div>'
+    ));
+
+    wrap.appendChild(el(
+      '<div class="field-box" data-track="editar:bio" data-inert="true">' +
+        '<h4>Bío</h4>' +
+        '<div class="hint">Escribe una presentación divertida y original</div>' +
+        '<div class="field-row empty">Cuéntanos algo de ti...</div>' +
+      '</div>'
+    ));
+
+    return wrap;
+  }
+
+  function openPlansModal(){
+    state.modal = 'editPlans';
+    state.modalDraft = state.plans.slice();
+    logEvent('action', {label:'editar:tus_planes:abrir_modal'});
+    renderModal();
+  }
+  function closePlansModal(save){
+    if(save){
+      state.plans = state.modalDraft.slice();
+      logEvent('action', {label:'modal:guardar'});
+    } else {
+      logEvent('action', {label:'modal:cerrar_sin_guardar'});
+    }
+    state.modal = null;
+    renderModal();
+    var s = document.getElementById('screen');
+    s.innerHTML = "";
+    s.appendChild(renderEditarPerfil());
+  }
+
+  function renderModal(){
+    var backdrop = document.getElementById('modalBackdrop');
+    var sheet = document.getElementById('modalSheet');
+    if(!state.modal){
+      backdrop.classList.remove('open');
+      sheet.innerHTML = "";
+      return;
+    }
+    backdrop.classList.add('open');
+    sheet.innerHTML = "";
+
+    var builders = {
+      editPlans: buildEditPlansModal,
+      confirmIntent: buildConfirmIntentModal,
+      pickPlan: buildPickPlanModal,
+      proposedConfirm: buildProposedConfirmModal,
+      saraResponse: buildSaraResponseModal,
+      saraPickPlan: buildSaraPickPlanModal,
+      saraConfirmYes: buildSaraConfirmYesModal,
+      saraCounterConfirm: buildSaraCounterConfirmModal,
+      saraDeclineConfirm: buildSaraDeclineConfirmModal,
+      pabloCounterResponse: buildPabloCounterResponseModal
+    };
+    var fn = builders[state.modal];
+    if(fn) fn(sheet);
+
+    backdrop.onclick = function(e){
+      if(e.target === backdrop){
+        logEvent('action', {label:'modal:cerrar_fondo:' + state.modal});
+        if(state.modal === 'editPlans') closePlansModal(false);
+        else closeModal();
+      }
+    };
+  }
+
+  function buildEditPlansModal(sheet){
+    sheet.appendChild(el(
+      '<div><h3>Tus planes</h3><div class="hint">Elige hasta 3. Puedes cambiarlos cuando quieras.</div></div>'
+    ));
+    var list = el('<div class="plan-checklist"></div>');
+    PLAN_OPTIONS.forEach(function(plan){
+      list.appendChild(planItem(plan, state.modalDraft, function(){ toggleModalPlan(plan); }, 'modal'));
+    });
+    list.appendChild(planItem(SPECIAL, state.modalDraft, function(){ toggleModalPlan(SPECIAL); }, 'modal', true));
+    sheet.appendChild(list);
+
+    var saveBtn = el('<button class="btn-black" data-track="modal:guardar" style="margin-top:8px;">Guardar</button>');
+    saveBtn.onclick = function(){ closePlansModal(true); };
+    sheet.appendChild(saveBtn);
+
+    var cancelBtn = el('<button class="btn-text-link" data-track="modal:cancelar">Cancelar</button>');
+    cancelBtn.onclick = function(){ closePlansModal(false); };
+    sheet.appendChild(cancelBtn);
+  }
+
+  function buildConfirmIntentModal(sheet){
+    sheet.appendChild(el('<h3>¿Quieres proponerle un plan a Sara?</h3>'));
+    sheet.appendChild(el(
+      '<div class="confirm-icon-box"><div class="circ"></div>' +
+      '<p>Solo os avisaremos a los dos si también quiere. Si no, aquí no ha pasado nada.</p></div>'
+    ));
+    var row = el('<div style="display:flex;justify-content:space-between;align-items:center;"></div>');
+    var no = el('<button class="btn-text-link" data-track="modal:ahora_no" style="margin:0;">Ahora no</button>');
+    no.onclick = function(){ logEvent('action',{label:'modal:confirmIntent:ahora_no'}); closeModal(); };
+    var yes = el('<button class="btn-black" data-track="modal:si_quiero" style="width:auto;padding:14px 26px;">Sí, quiero</button>');
+    yes.onclick = function(){
+      var overlap = getOverlap();
+      if(overlap.length > 1){ openModal('pickPlan'); }
+      else{ state.proposedPlan = overlap[0] || "un plan"; openModal('proposedConfirm'); }
+    };
+    row.appendChild(no); row.appendChild(yes);
+    sheet.appendChild(row);
+  }
+
+  function buildPickPlanModal(sheet){
+    sheet.appendChild(el('<div><h3>¿Con cuál empezamos?</h3><div class="hint">Elige el plan que más te apetezca proponer primero.</div></div>'));
+    var overlap = getOverlap();
+    var list = el('<div class="plan-checklist"></div>');
+    overlap.forEach(function(plan){
+      var isSel = state.pickPlanChoice === plan;
+      var item = el(
+        '<div class="plan-item radio' + (isSel?' selected':'') + '" data-track="modal:pick:' + encodeURIComponent(plan) + '">' +
+          '<span>' + plan + '</span><span class="checkbox">' + (isSel ? '<span class="dotfill"></span>' : '') + '</span>' +
+        '</div>'
+      );
+      item.onclick = function(){ state.pickPlanChoice = plan; renderModal(); };
+      list.appendChild(item);
+    });
+    sheet.appendChild(list);
+
+    var row = el('<div style="display:flex;justify-content:space-between;align-items:center;"></div>');
+    var back = el('<button class="btn-text-link" data-track="modal:atras" style="margin:0;">Atrás</button>');
+    back.onclick = function(){ state.pickPlanChoice = null; openModal('confirmIntent'); };
+    var go = el('<button class="btn-black" data-track="modal:proponer_este_plan" style="width:auto;padding:14px 22px;"' + (!state.pickPlanChoice?' disabled':'') + '>Proponer este plan</button>');
+    go.onclick = function(){
+      if(!state.pickPlanChoice) return;
+      state.proposedPlan = state.pickPlanChoice;
+      state.pickPlanChoice = null;
+      openModal('proposedConfirm');
+    };
+    row.appendChild(back); row.appendChild(go);
+    sheet.appendChild(row);
+  }
+
+  function buildProposedConfirmModal(sheet){
+    sheet.appendChild(el('<h3>Avisado &#10003;</h3>'));
+    sheet.appendChild(el(
+      '<div class="confirm-icon-box"><div class="circ"></div>' +
+      '<p>Te lo diremos si <b>Sara</b> también quiere.</p></div>'
+    ));
+    var ok = el('<button class="btn-black" data-track="modal:aceptar" style="width:auto;padding:14px 26px;float:right;">Aceptar</button>');
+    ok.onclick = function(){
+      state.saraHasProposal = true;
+      closeModal();
+      refreshChatScreen();
+    };
+    sheet.appendChild(ok);
+  }
+
+  function buildSaraResponseModal(sheet){
+    sheet.appendChild(el(
+      '<div><h3>Pablo ha propuesto un plan:</h3><div class="hint" style="font-size:15px;color:var(--ink);margin-bottom:18px;">' + state.proposedPlan + '</div></div>'
+    ));
+    var meApunto = el('<button class="btn-black" data-track="modal:me_apunto" style="margin-bottom:10px;">Me apunto!</button>');
+    meApunto.onclick = function(){ openModal('saraConfirmYes'); };
+
+    var remaining = getOverlap().filter(function(p){ return p !== state.proposedPlan; });
+    var otro = el('<button class="btn-chrome" data-track="modal:prefiero_otro_plan" style="width:100%;margin-bottom:10px;">Prefiero otro plan</button>');
+    otro.onclick = function(){
+      if(remaining.length === 0){ showToast("No tenéis otro plan en común"); return; }
+      openModal('saraPickPlan');
+    };
+
+    var ahoraNo = el('<button class="btn-chrome" data-track="modal:ahora_no_sara" style="width:100%;">Ahora no</button>');
+    ahoraNo.onclick = function(){ openModal('saraDeclineConfirm'); };
+
+    sheet.appendChild(meApunto); sheet.appendChild(otro); sheet.appendChild(ahoraNo);
+  }
+
+  function buildSaraPickPlanModal(sheet){
+    sheet.appendChild(el('<div><h3>¿Cuál prefieres tú?</h3><div class="hint">Elige otro plan de los que tenéis en común.</div></div>'));
+    var remaining = getOverlap().filter(function(p){ return p !== state.proposedPlan; });
+    var list = el('<div class="plan-checklist"></div>');
+    remaining.forEach(function(plan){
+      var isSel = state.saraPickChoice === plan;
+      var item = el(
+        '<div class="plan-item radio' + (isSel?' selected':'') + '" data-track="modal:sarapick:' + encodeURIComponent(plan) + '">' +
+          '<span>' + plan + '</span><span class="checkbox">' + (isSel ? '<span class="dotfill"></span>' : '') + '</span>' +
+        '</div>'
+      );
+      item.onclick = function(){ state.saraPickChoice = plan; renderModal(); };
+      list.appendChild(item);
+    });
+    sheet.appendChild(list);
+
+    var row = el('<div style="display:flex;justify-content:space-between;align-items:center;"></div>');
+    var back = el('<button class="btn-text-link" data-track="modal:atras_sara" style="margin:0;">Atrás</button>');
+    back.onclick = function(){ state.saraPickChoice = null; openModal('saraResponse'); };
+    var go = el('<button class="btn-black" data-track="modal:sara_proponer_este_plan" style="width:auto;padding:14px 22px;"' + (!state.saraPickChoice?' disabled':'') + '>Proponer este plan</button>');
+    go.onclick = function(){
+      if(!state.saraPickChoice) return;
+      state.lastCounterOffer = state.saraPickChoice;
+      state.saraDecision = 'counter';
+      state.saraPickChoice = null;
+      openModal('saraCounterConfirm');
+    };
+    row.appendChild(back); row.appendChild(go);
+    sheet.appendChild(row);
+  }
+
+  function buildSaraConfirmYesModal(sheet){
+    sheet.appendChild(el('<h3>Genial, ¡avisamos a Pablo!</h3>'));
+    sheet.appendChild(el(
+      '<div class="confirm-icon-box"><div class="circ"></div>' +
+      '<p>Cuando lo vea, podréis acordar el día y la hora por chat.</p></div>'
+    ));
+    var ok = el('<button class="btn-black" data-track="modal:aceptar_sara_si" style="width:auto;padding:14px 26px;float:right;">Aceptar</button>');
+    ok.onclick = function(){
+      state.saraDecision = 'yes';
+      state.mutualConfirmed = true;
+      closeModal();
+      refreshChatScreen();
+    };
+    sheet.appendChild(ok);
+  }
+
+  function buildSaraCounterConfirmModal(sheet){
+    sheet.appendChild(el('<h3>Avisado &#10003;</h3>'));
+    sheet.appendChild(el(
+      '<div class="confirm-icon-box"><div class="circ"></div>' +
+      '<p>Le diremos a <b>Pablo</b> que prefieres: ' + state.lastCounterOffer + '.</p></div>'
+    ));
+    var ok = el('<button class="btn-black" data-track="modal:aceptar_sara_counter" style="width:auto;padding:14px 26px;float:right;">Aceptar</button>');
+    ok.onclick = function(){ closeModal(); refreshChatScreen(); };
+    sheet.appendChild(ok);
+  }
+
+  function buildSaraDeclineConfirmModal(sheet){
+    sheet.appendChild(el(
+      '<div class="confirm-icon-box"><div class="circ"></div>' +
+      '<p>Esto queda entre nosotros, <b>Pablo</b> no lo verá.</p></div>'
+    ));
+    var ok = el('<button class="btn-black" data-track="modal:aceptar_sara_no" style="width:auto;padding:14px 26px;float:right;">Aceptar</button>');
+    ok.onclick = function(){
+      state.saraDecision = 'no';
+      closeModal();
+      refreshChatScreen();
+    };
+    sheet.appendChild(ok);
+  }
+
+  function buildPabloCounterResponseModal(sheet){
+    sheet.appendChild(el('<h3>Sara prefiere: ' + state.lastCounterOffer + '. ¿Te apuntas?</h3>'));
+    var row = el('<div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;"></div>');
+    var no = el('<button class="btn-text-link" data-track="modal:pablo_counter_no" style="margin:0;">Ahora no</button>');
+    no.onclick = function(){
+      logEvent('action', {label:'modal:pablo_counter_no'});
+      state.pabloDeclinedCounter = true;
+      closeModal();
+      refreshChatScreen();
+    };
+    var yes = el('<button class="btn-black" data-track="modal:pablo_counter_si" style="width:auto;padding:14px 22px;">Me apunto</button>');
+    yes.onclick = function(){
+      state.mutualConfirmed = true;
+      closeModal();
+      refreshChatScreen();
+    };
+    row.appendChild(no); row.appendChild(yes);
+    sheet.appendChild(row);
+  }
+
+  function toggleModalPlan(plan){
+    if(plan === SPECIAL){
+      state.modalDraft = (state.modalDraft.indexOf(SPECIAL) > -1) ? [] : [SPECIAL];
+    } else {
+      state.modalDraft = state.modalDraft.filter(function(p){ return p !== SPECIAL; });
+      var idx = state.modalDraft.indexOf(plan);
+      if(idx > -1){ state.modalDraft.splice(idx,1); }
+      else if(state.modalDraft.length < 3){ state.modalDraft.push(plan); }
+      else { showToast("Ya has elegido 3 planes"); }
+    }
+    renderModal();
+  }
+
+  function tagsRow(items, trackPrefix){
+    var row = el('<div class="tags-row"></div>');
+    items.forEach(function(it){
+      row.appendChild(el(
+        '<span class="tag-pill" data-track="' + trackPrefix + ':' + encodeURIComponent(it) + '" data-inert="true">' + it + '</span>'
+      ));
+    });
+    return row;
+  }
+
+  function renderDiscover(){
+    var wrap = el('<div class="has-bottom-bar"></div>');
+    wrap.appendChild(el(
+      '<div class="header-row">' +
+        '<span class="logo">Bumble</span>' +
+        '<span class="filter-icon" data-track="discover:icono_filtros" data-inert="true">&#9881;</span>' +
+      '</div>'
+    ));
+
+    if(state.discoverDecided){
+      wrap.appendChild(el(
+        '<div style="text-align:center;padding:70px 10px;color:var(--muted);">' +
+          '<div style="font-size:15px;margin-bottom:16px;">No hay más perfiles por ahora.</div>' +
+        '</div>'
+      ));
+      var again = el('<button class="btn-chrome" data-track="discover:ver_otra_vez" style="display:block;margin:0 auto;">Ver el perfil de nuevo</button>');
+      again.onclick = function(){ state.discoverDecided = false; changeScreenInPlace(); };
+      wrap.appendChild(again);
+      wrap.appendChild(bottomNav('discover'));
+      return wrap;
+    }
+
+    var overlap = getOverlap();
+
+    var swipe = el('<div class="swipe-card"></div>');
+    swipe.appendChild(el('<div class="swipe-flag like">Like</div>'));
+    swipe.appendChild(el('<div class="swipe-flag dislike">Paso</div>'));
+
+    var card = el('<div class="card-outer"></div>');
+    if(overlap.length > 0){
+      card.appendChild(el(
+        '<div class="match-banner" data-track="discover:banner_match" data-inert="true">' +
+          '<div class="lbl">Match de plan:</div>' +
+          '<div class="val">' + joinEs(overlap) + '</div>' +
+        '</div>'
+      ));
+    } else {
+      var yourPlansTxt = state.plans.length ? joinEs(state.plans) : "aún no has elegido ninguno";
+      card.appendChild(el(
+        '<div class="match-banner" data-track="discover:banner_sin_match" data-inert="true">' +
+          '<div class="lbl">Le gusta:</div>' +
+          '<div class="val">' + SARA_PLANS[0] + '</div>' +
+          '<div class="lbl" style="margin-top:10px;">Tus planes:</div>' +
+          '<div class="val">' + yourPlansTxt + '</div>' +
+        '</div>'
+      ));
+    }
+
+    card.appendChild(el('<div class="card-photo"></div>'));
+    card.appendChild(el(
+      '<div class="name-row">' +
+        '<div><span class="name">SARA, 24</span> <span data-track="discover:like_small" style="font-size:13px;cursor:pointer;">&#9733;</span></div>' +
+        '<span class="star-lg" data-track="discover:like_top">&#9733;</span>' +
+      '</div>'
+    ));
+    card.querySelector('[data-track="discover:like_top"]').onclick = function(){ handleDecision('like'); };
+    card.querySelector('[data-track="discover:like_small"]').onclick = function(){ handleDecision('like'); };
+
+    card.appendChild(el(
+      '<div class="bio-box">' +
+        '<h4>Mi bío</h4>' +
+        '<p>Los gatos son mis animales favoritos, ¿y el tuyo?</p>' +
+        '<hr>' +
+        '<div class="signal-row" data-track="discover:senal" data-inert="true"><span>&#9733;</span> Señal</div>' +
+      '</div>'
+    ));
+    swipe.appendChild(card);
+
+    var sobreMi = el('<div class="plain-section"></div>');
+    sobreMi.appendChild(el('<h4>Sobre mí</h4>'));
+    sobreMi.appendChild(tagsRow(["📏 173 cm","🚬 A menudo","♊ Géminis","🎓 Licenciatura o grado","🍷 Rara vez"], 'discover:tag_sobre_mi'));
+    swipe.appendChild(sobreMi);
+
+    var busco = el('<div class="plain-section"></div>');
+    busco.appendChild(el('<h4>Busco</h4>'));
+    busco.appendChild(tagsRow(["🔍 Algo casual","Humor","Receptividad","Optimismo"], 'discover:tag_busco'));
+    swipe.appendChild(busco);
+
+    swipe.appendChild(el('<div class="block-photo" data-track="discover:foto_2" data-inert="true"><div class="card-photo"></div></div>'));
+
+    var intereses = el('<div class="plain-section"></div>');
+    intereses.appendChild(el('<h4>Mis intereses</h4>'));
+    intereses.appendChild(tagsRow(["🏋️ Gimnasio","⚽ Fútbol","🎮 Anime","🍺 Cerveza","🍔 Foodie"], 'discover:tag_intereses'));
+    swipe.appendChild(intereses);
+
+    var idiomas = el('<div class="plain-section"></div>');
+    idiomas.appendChild(el('<h4>Idiomas</h4>'));
+    idiomas.appendChild(tagsRow(["💬 Catalán","💬 Español","💬 Inglés"], 'discover:tag_idiomas'));
+    swipe.appendChild(idiomas);
+
+    swipe.appendChild(el('<div class="block-photo" data-track="discover:foto_3" data-inert="true"><div class="card-photo"></div></div>'));
+
+    wrap.appendChild(swipe);
+    attachSwipeHandlers(swipe);
+
+    var decide = el('<div class="decide-row"></div>');
+    var likeBtn = el('<button class="action-btn like-btn" data-track="discover:like_bottom">&#9733;</button>');
+    likeBtn.onclick = function(){ handleDecision('like'); };
+    decide.appendChild(likeBtn);
+
+    var row2 = el('<div class="action-row"></div>');
+    var dislikeBtn = el('<button class="action-btn" data-track="discover:dislike">&#10005;</button>');
+    dislikeBtn.onclick = function(){ handleDecision('dislike'); };
+    var superBtn = el('<button class="action-btn" data-track="discover:superswipe" data-inert="true">&#9830;</button>');
+    superBtn.onclick = function(){ showToast("Función premium, no incluida en este test"); };
+    row2.appendChild(dislikeBtn); row2.appendChild(superBtn);
+    decide.appendChild(row2);
+    wrap.appendChild(decide);
+
+    wrap.appendChild(el(
+      '<div class="link-row">' +
+        '<button class="block-link" data-track="discover:bloquear" data-inert="true">Bloquear</button>' +
+        '<button class="report-link" data-track="discover:denunciar" data-inert="true">Denunciar</button>' +
+      '</div>'
+    ));
+
+    wrap.appendChild(bottomNav('discover'));
+    return wrap;
+  }
+
+  function changeScreenInPlace(){
+    var s = document.getElementById('screen');
+    s.innerHTML = "";
+    s.appendChild(renderDiscover());
+  }
+
+  function renderMatch(){
+    var wrap = el('<div></div>');
+    var closeBtn = el('<span class="match-x" data-track="match:cerrar" data-inert="true">&#10005;</span>');
+    wrap.appendChild(closeBtn);
+
+    wrap.appendChild(el(
+      '<div class="match-cards">' +
+        '<div class="match-card left"><div class="ph-circ"></div></div>' +
+        '<div class="match-card right"><div class="ph-circ"></div></div>' +
+        '<div class="match-star">&#9733;</div>' +
+      '</div>'
+    ));
+
+    var overlap = getOverlap();
+    if(overlap.length > 0){
+      wrap.appendChild(el(
+        '<div class="field-box"><h4>Habéis hecho match en esto también...</h4>' +
+        overlap.map(function(p){ return '<div class="field-row">' + p + '</div>'; }).join('') +
+        '</div>'
+      ));
+    } else {
+      wrap.appendChild(el(
+        '<div>' +
+          '<p class="match-msg" style="color:var(--muted);">Todavía no coincidís en ningún plan, pero habéis hecho match.</p>' +
+          '<div class="field-box"><h4>Tus planes</h4>' +
+          (state.plans.length ? state.plans.map(function(p){ return '<div class="field-row">' + p + '</div>'; }).join('') : '<div class="field-row empty">Aún no has elegido ninguno</div>') +
+          '</div>' +
+        '</div>'
+      ));
+    }
+
+    var sendBtn = el('<button class="btn-black" data-track="match:enviar_mensaje" style="margin-top:22px;">Enviar un mensaje</button>');
+    sendBtn.onclick = function(){ state.perspective = 'pablo'; changeScreen('chat'); };
+    wrap.appendChild(sendBtn);
+    return wrap;
+  }
+
+  function renderChat(){
+    var wrap = el('<div class="has-bottom-bar"></div>');
+    var isPablo = state.perspective === 'pablo';
+    var contact = isPablo ? 'Sara' : 'Pablo';
+    var overlap = getOverlap();
+
+    var toggle = el('<div class="persp-toggle"></div>');
+    var btnP = el('<button class="persp-btn pablo' + (isPablo?' active':'') + '" data-track="chat:ver_como_pablo">Ver como Pablo</button>');
+    var btnS = el('<button class="persp-btn sara' + (!isPablo?' active':'') + '" data-track="chat:ver_como_sara">Ver como Sara</button>');
+    btnP.onclick = function(){ state.perspective = 'pablo'; changeScreen('chat'); };
+    btnS.onclick = function(){ state.perspective = 'sara'; changeScreen('chat'); };
+    toggle.appendChild(btnP); toggle.appendChild(btnS);
+    wrap.appendChild(toggle);
+
+    var contactColor = isPablo ? '#FF6B5C' : '#4A5FE8';
+    wrap.appendChild(el(
+      '<div class="topbar"><span class="back" data-track="chat:volver">&#8592;</span>' +
+      '<span class="avatar-lg" style="width:36px;height:36px;margin:0;background:' + contactColor + '22;"></span>' +
+      '<h2>' + contact + '</h2></div>'
+    ));
+    wrap.querySelector('.back').onclick = function(){ changeScreen('discover'); };
+
+    var bannerEl = renderChatBanner(isPablo, overlap);
+    bannerEl.style.borderLeft = '4px solid ' + contactColor;
+    wrap.appendChild(bannerEl);
+
+    ["left","right","left"].forEach(function(side){
+      wrap.appendChild(el('<div class="convo-bubble ' + side + '" data-track="chat:burbuja" data-inert="true">Conversación</div>'));
+    });
+
+    wrap.appendChild(el(
+      '<div class="chat-inputbar" data-track="chat:input" data-inert="true">' +
+        '<div class="circ"></div><input placeholder="Escribe un mensaje..." disabled><div class="circ"></div>' +
+      '</div>'
+    ));
+
+    return wrap;
+  }
+
+  function renderChatBanner(isPablo, overlap){
+    if(isPablo){
+      if(state.mutualConfirmed){
+        var finalPlan = state.lastCounterOffer || state.proposedPlan;
+        return el(
+          '<div class="chat-banner celebrate" data-track="chat:banner_confirmado" data-inert="true">' +
+            '<div class="b-title">&#127881; ¡Los dos queréis quedar!</div>' +
+            '<div class="b-sub">' + finalPlan + '</div>' +
+          '</div>'
+        );
+      }
+      if(state.lastCounterOffer && !state.pabloDeclinedCounter){
+        var banner = el(
+          '<div class="chat-banner">' +
+            '<div class="top-row">' +
+              '<div><div class="b-title">Sara prefiere: ' + state.lastCounterOffer + '</div><div class="b-sub">¿Te apuntas?</div></div>' +
+              '<button class="b-cta" data-track="chat:responder_contraoferta">Responder</button>' +
+            '</div>' +
+          '</div>'
+        );
+        banner.querySelector('.b-cta').onclick = function(){ openModal('pabloCounterResponse'); };
+        return banner;
+      }
+      if(state.saraHasProposal){
+        return el(
+          '<div class="chat-banner" data-track="chat:banner_esperando" data-inert="true">' +
+            '<div class="b-title">Le has propuesto: ' + state.proposedPlan + '</div>' +
+            '<div class="b-sub">Esperando respuesta, no te avisaremos si dice que no.</div>' +
+          '</div>'
+        );
+      }
+      if(overlap.length === 0){
+        return el(
+          '<div class="chat-banner" data-track="chat:banner_sin_plan" data-inert="true">' +
+            '<div class="b-title">¡Habéis hecho match!</div>' +
+            '<div class="b-sub">Tus planes: ' + (state.plans.length ? joinEs(state.plans) : 'aún no has elegido ninguno') + '</div>' +
+          '</div>'
+        );
+      }
+      var b = el(
+        '<div class="chat-banner">' +
+          '<div class="top-row">' +
+            '<div><div class="b-title">¡Coincidís en planes!</div><div class="b-sub">' + joinEs(overlap) + '</div></div>' +
+            '<button class="b-cta" data-track="chat:planear">Planear?</button>' +
+          '</div>' +
+        '</div>'
+      );
+      b.querySelector('.b-cta').onclick = function(){ openModal('confirmIntent'); };
+      return b;
+    } else {
+      if(state.saraDecision === 'yes'){
+        return el(
+          '<div class="chat-banner celebrate" data-track="chat:banner_confirmado" data-inert="true">' +
+            '<div class="b-title">&#127881; ¡Los dos queréis quedar!</div>' +
+            '<div class="b-sub">' + state.proposedPlan + '</div>' +
+          '</div>'
+        );
+      }
+      if(state.saraDecision === 'counter'){
+        return el(
+          '<div class="chat-banner" data-track="chat:banner_contraoferta_enviada" data-inert="true">' +
+            '<div class="b-title">Le has propuesto a Pablo: ' + state.lastCounterOffer + '</div>' +
+            '<div class="b-sub">Esperando respuesta.</div>' +
+          '</div>'
+        );
+      }
+      if(state.saraDecision === 'no'){
+        return el(
+          '<div class="chat-banner" data-track="chat:banner_post_no" data-inert="true">' +
+            '<div class="b-title">¡Habéis hecho match!</div>' +
+          '</div>'
+        );
+      }
+      if(state.saraHasProposal){
+        var b2 = el(
+          '<div class="chat-banner">' +
+            '<div class="top-row">' +
+              '<div><div class="b-title">Pablo te ha propuesto un plan</div></div>' +
+              '<button class="b-cta" data-track="chat:ver_propuesta">Ver propuesta</button>' +
+            '</div>' +
+          '</div>'
+        );
+        b2.querySelector('.b-cta').onclick = function(){ openModal('saraResponse'); };
+        return b2;
+      }
+      return el(
+        '<div class="chat-banner" data-track="chat:banner_sin_propuesta" data-inert="true">' +
+          '<div class="b-title">¡Habéis hecho match!</div>' +
+        '</div>'
+      );
+    }
+  }
+
+  function openModal(name){
+    state.modal = name;
+    logEvent('action', {label: 'modal:abrir:' + name});
+    renderModal();
+  }
+  function closeModal(){
+    state.modal = null;
+    renderModal();
+    if(state.screen === 'chat'){ refreshChatScreen(); }
+  }
+  function refreshChatScreen(){
+    var s = document.getElementById('screen');
+    s.innerHTML = "";
+    s.appendChild(renderChat());
+  }
+
+  function handleDecision(kind){
+    logEvent('action', {label: kind === 'like' ? 'discover:decision_like' : 'discover:decision_dislike'});
+    if(kind === 'dislike'){
+      showToast("Has pasado del perfil de Sara");
+      state.discoverDecided = true;
+      changeScreenInPlace();
+      return;
+    }
+    changeScreen('match');
+  }
+
+  function getOverlap(){
+    return state.plans.indexOf(SPECIAL) > -1
+      ? SARA_PLANS.slice()
+      : SARA_PLANS.filter(function(p){ return state.plans.indexOf(p) > -1; });
+  }
+
+  function attachSwipeHandlers(cardEl){
+    var dragging = false, intent = null, startX = 0, startY = 0, dx = 0;
+    var THRESHOLD = 110;
+
+    cardEl.addEventListener('pointerdown', function(e){
+      dragging = true; intent = null; startX = e.clientX; startY = e.clientY; dx = 0;
+      cardEl.style.transition = 'none';
+    });
+
+    cardEl.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      var ddx = e.clientX - startX;
+      var ddy = e.clientY - startY;
+      if(intent === null){
+        if(Math.abs(ddx) < 6 && Math.abs(ddy) < 6) return;
+        intent = Math.abs(ddx) > Math.abs(ddy) ? 'horizontal' : 'vertical';
+        if(intent === 'horizontal'){ try{ cardEl.setPointerCapture(e.pointerId); }catch(err){} }
+      }
+      if(intent !== 'horizontal') return;
+      e.preventDefault();
+      dx = ddx;
+      var rot = dx / 18;
+      cardEl.style.transform = 'translateX(' + dx + 'px) rotate(' + rot + 'deg)';
+      var likeFlag = cardEl.querySelector('.swipe-flag.like');
+      var dislikeFlag = cardEl.querySelector('.swipe-flag.dislike');
+      likeFlag.style.opacity = Math.max(0, Math.min(1, dx / THRESHOLD));
+      dislikeFlag.style.opacity = Math.max(0, Math.min(1, -dx / THRESHOLD));
+    });
+
+    function endDrag(e){
+      if(!dragging) return;
+      dragging = false;
+      if(intent !== 'horizontal'){ intent = null; return; }
+      suppressNextClick = true;
+      cardEl.style.transition = 'transform .28s ease';
+      if(dx > THRESHOLD){
+        cardEl.style.transform = 'translateX(600px) rotate(24deg)';
+        setTimeout(function(){ handleDecision('like'); }, 180);
+      } else if(dx < -THRESHOLD){
+        cardEl.style.transform = 'translateX(-600px) rotate(-24deg)';
+        setTimeout(function(){ handleDecision('dislike'); }, 180);
+      } else {
+        cardEl.style.transform = 'translateX(0) rotate(0)';
+        var likeFlag = cardEl.querySelector('.swipe-flag.like');
+        var dislikeFlag = cardEl.querySelector('.swipe-flag.dislike');
+        if(likeFlag) likeFlag.style.opacity = 0;
+        if(dislikeFlag) dislikeFlag.style.opacity = 0;
+      }
+      intent = null;
+    }
+    cardEl.addEventListener('pointerup', endDrag);
+    cardEl.addEventListener('pointercancel', endDrag);
+  }
+
+  function bottomNav(active){
+    var tabs = [
+      {id:'perfilSelf', label:'Perfil'},
+      {id:'discover_descubre', label:'Descubre'},
+      {id:'discover', label:'Gente'},
+      {id:'les_gustas', label:'Les gustas'},
+      {id:'chats', label:'Chats'}
+    ];
+    var nav = el('<div class="bottom-nav"></div>');
+    tabs.forEach(function(tab){
+      var isActive = tab.id === active;
+      var isBuilt = tab.id === 'perfilSelf' || tab.id === 'discover';
+      var item = el(
+        '<button class="nav-item' + (isActive?' active':'') + '" data-track="nav:' + tab.id + '"' + (isBuilt?'':' data-inert="true"') + '>' +
+          '<span class="dot"></span><span>' + tab.label + '</span>' +
+        '</button>'
+      );
+      item.onclick = function(){
+        if(tab.id === 'perfilSelf') changeScreen('perfilSelf');
+        else if(tab.id === 'discover') changeScreen('discover');
+        else showToast("No incluido en este prototipo todavía");
+      };
+      nav.appendChild(item);
+    });
+    return nav;
+  }
+
+  // ---------- MAIN RENDER ----------
+  function render(){
+    if(state.view === 'gate') renderGate();
+    else if(state.view === 'app') renderApp();
+  }
+
+  function resetAppState(){
+    state.screen = "persona";
+    state.plans = [];
+    state.modal = null;
+    state.modalDraft = [];
+    state.discoverDecided = false;
+    state.perspective = "pablo";
+    state.proposedPlan = null;
+    state.saraHasProposal = false;
+    state.saraDecision = null;
+    state.lastCounterOffer = null;
+    state.mutualConfirmed = false;
+    state.pabloDeclinedCounter = false;
+    state.pickPlanChoice = null;
+    state.saraPickChoice = null;
+    logEvent('nav', {label:'&#8635; Reinicio manual'});
+    render();
+  }
+
+  document.getElementById('btnReset').onclick = resetAppState;
+
+  render();
+})();
+</script>
+
+</body>
+</html>

@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
 <title>Rediseño de Bumble — Case study</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root, [data-theme="light"]{
+    color-scheme: light;
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
     --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
@@ -19,7 +21,7 @@
     --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
     --card:#1D1A24; color-scheme:dark;
   }
-  :root{--radius:5px; --maxw:820px;}
+  :root{--radius:5px; --maxw:1000px;}
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -51,6 +53,16 @@
 
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
 
+  .cs-cover{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:stretch;
+    background:var(--bg); padding:40px 40px 40px 0; margin-top:8px;
+  }
+  .cs-cover-img{display:flex; align-items:center; justify-content:center;}
+  .cs-cover-img img{width:100%; height:100%; object-fit:contain; display:block;}
+  @media (max-width:760px){
+    .cs-cover{grid-template-columns:1fr; padding:28px 24px 28px 0; gap:24px;}
+  }
+
   .cs-tag{
     display:inline-flex; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
     background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;
@@ -67,7 +79,7 @@
   .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
 
   h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:19px; margin:44px 0 12px;}
-  .prose{max-width:64ch; font-size:15.5px; color:var(--ink);}
+  .prose{font-size:15.5px; color:var(--ink);}
   .prose + .prose{margin-top:14px;}
   .prose strong{font-weight:600;}
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
@@ -230,15 +242,19 @@
 </header>
 
 <main>
-  <span class="cs-tag">Case study · En construcción</span>
-  <h1 class="cs-title">Rediseño de Bumble: del match visual al match compartido</h1>
-  <p class="cs-sub">Rediseño completo del perfil, el match, el chat y la organización de la cita en Bumble, a partir de research directo con usuarios.</p>
-
-  <div class="meta-strip">
-    <span>Rol<strong>Product Designer</strong></span>
-    <span>Producto<strong>Bumble (rediseño no oficial)</strong></span>
-    <span>Herramientas<strong>Figma, Claude</strong></span>
-    <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
+  <div class="cs-cover">
+    <div class="cs-cover-text">
+      <span class="cs-tag">Case study · En construcción</span>
+      <h1 class="cs-title">Rediseño de Bumble: del match visual al match compartido</h1>
+      <p class="cs-sub">Rediseño completo del perfil, el match, el chat y la organización de la cita en Bumble, a partir de research directo con usuarios.</p>
+      <div class="meta-strip">
+        <span>Rol<strong>Product Designer</strong></span>
+        <span>Producto<strong>Bumble (rediseño no oficial)</strong></span>
+        <span>Herramientas<strong>Figma, Claude</strong></span>
+        <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
+      </div>
+    </div>
+    <div class="cs-cover-img"><img src="bumble-framework.png" alt="Imagen de portada — Rediseño de Bumble"></div>
   </div>
 
   <h3 class="sub-h">Contexto</h3>
@@ -283,7 +299,7 @@
       <p>Usa Bumble por soledad, encuentra match con poca frecuencia, y siempre espera que sea el hombre quien proponga la cita.</p>
     </div>
     <div class="research-card">
-      <span class="rc-tag">Entrevista 2 · Ronan</span>
+      <span class="rc-tag">Entrevista 2</span>
       <p>La foto decide el like, la bio casi no se lee. Elige el lugar de la cita pensando en poder "cortar" fácil, no en lo que prefiere la otra persona.</p>
     </div>
     <div class="research-card">
@@ -431,15 +447,178 @@
     Bumble ya tiene en su ADN la idea de dar control y seguridad, las mujeres escriben primero. Extender esa misma lógica de consentimiento mutuo a la fase de organizar la cita es coherente con la marca, no un añadido ajeno.
   </div>
 
-  <h3 class="sub-h">Wireframes</h3>
-  <p class="prose">Antes de construir el prototipo interactivo, bocetié en baja fidelidad las pantallas clave del flujo: la pregunta de planes en el onboarding, el banner de match por afinidad, y el checkpoint de doble opt-in dentro del chat.</p>
-  <img src="wireframes-parte1.png" alt="Wireframes de onboarding, perfil y banner de match" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;">
-  <img src="wireframes-parte2.png" alt="Wireframes del chat y el checkpoint de doble opt-in" style="width:100%; border-radius:5px; margin:0 0 8px; display:block;">
-  <p class="prose" style="font-size:13px; color:var(--muted); font-style:italic;">Nota: son bocetos de muy baja fidelidad, pensados solo para validar la estructura antes de pasar a diseño. Puede que no se entiendan del todo a simple vista, pero ayudaron a definir el diseño de fidelidad media que ves a continuación.</p>
-
   <h3 class="sub-h">Test de usabilidad</h3>
-  <p class="prose">Actualmente en proceso, con el prototipo interactivo de fidelidad media construido a partir de estos wireframes.</p>
-  <img src="mid-fidelity-bumble.png" alt="Diseño de fidelidad media del flujo de Bumble" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;">
+  <p class="prose">Para testear esto con usuarios reales, construí un prototipo interactivo en HTML con ayuda de IA, no una pieza de producción, sino una herramienta rápida para poder observar cómo navegaba la gente de verdad. Tiene algunos fallos visuales y de flujo, priorizar velocidad de iteración sobre acabado fue una decisión consciente para poder testear antes. Puedes probarlo tú mismo/a:</p>
+
+  <div class="miro-wrap" style="aspect-ratio:360/780; max-width:400px;">
+    <iframe src="prototipo-test-bumble.html" style="width:100%; height:100%; border:0; display:block;"></iframe>
+  </div>
+  <p class="miro-note">Prototipo interactivo construido con IA para el test de usabilidad.</p>
+
+  <h3 class="sub-h">Cómo fue evolucionando</h3>
+  <p class="prose">El diseño pasó por tres versiones antes de llegar a la actual, cada cambio surgió de algo concreto que salió en los tests de usabilidad, no de intuición sin contrastar.</p>
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">Fase 1 — Perfil y descubrimiento</h4>
+
+  <p class="prose"><strong>1. Buscador de planes dentro del modal de novedad</strong><br>Al abrir Bumble, con cuenta ya creada, aparece un modal de novedad con un botón "Ver cómo funciona", que despliega las opciones, incluyendo el buscador de planes.</p>
+  <img src="bumble-desicion1.png" alt="Modal de novedad y buscador de planes" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <p class="prose"><strong>2. Posición del banner "Match de plan"</strong></p>
+  <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
+    <li>Primera versión: abajo</li>
+    <li>Segunda versión: arriba</li>
+    <li>Tercera versión: vuelve abajo, consistente con dónde Bumble ya muestra sus notificaciones de coincidencias</li>
+  </ul>
+  <p class="prose">En el test de usabilidad, ninguna de las dos posiciones anteriores resolvía el problema, la gente seguía sin notar el banner antes de dar like.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    Antes de mover un elemento de sitio, hay que descartar que el problema sea de jerarquía visual (contraste, peso, color) y no de posición. Mover algo sin resolver su jerarquía repite el mismo fallo en otro lugar, como pasó aquí entre la primera y la segunda versión.
+  </div>
+  <img src="bumble-desicion2.png" alt="Comparativa de las 3 posiciones del banner Match de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <p class="prose"><strong>3. Card "Match de plan" dentro del perfil</strong><br>No existía en la primera ni en la segunda versión, se añadió en la tercera al observar, en los tests, que la gente sí se detenía a mirar el perfil completo antes de decidir.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    Cuando un mensaje clave depende de que el usuario lo vea en un único punto del recorrido, conviene reforzarlo en más de un momento del flujo, no confiar todo a un solo elemento. Aquí, el perfil actúa como una segunda oportunidad de comunicar la coincidencia, sin duplicar esfuerzo de diseño.
+  </div>
+  <img src="bumble-desicion3.png" alt="Card de match de plan dentro del perfil" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">Fase 2 — Chat</h4>
+
+  <p class="prose"><strong>4. Disparador del modal en el chat</strong></p>
+  <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
+    <li>Primeras versiones: aparecía nada más entrar al chat</li>
+    <li>Versión final: aparece tras cierta cantidad de mensajes</li>
+  </ul>
+  <p class="prose">En el test, varios testers comentaron que sentían que se les proponía un plan antes incluso de conocerse.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    El timing de una interacción puede ser tan importante como su contenido. Una misma función, propuesta en el momento equivocado del recorrido, se percibe como invasiva, aunque el diseño visual sea idéntico.
+  </div>
+  <img src="bumble-desicion4.png" alt="Chat con el banner y el modal de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <p class="prose"><strong>5. Modal tipo bottom sheet, no pantalla completa</strong><br>Sigue el patrón visual que ya tiene Bumble para sus propios modales, priorizando la consistencia con la app existente sobre una solución de diseño propia.</p>
+  <img src="bumble-desicion5.png" alt="Modal tipo bottom sheet" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <p class="prose"><strong>6. Cambio de copy del tercer botón, de "Ahora no" a "Prefiero seguir hablando"</strong><br>A raíz del test, varios testers interpretaron "Ahora no" como un rechazo, alguno llegó a pensar que eso borraría el chat.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    El copy de una opción negativa comunica tanto como su función. Dos botones pueden tener exactamente el mismo comportamiento técnico y transmitir cosas completamente distintas según las palabras elegidas.
+  </div>
+  <img src="bumble-desicion6.png" alt="Los tres botones de respuesta al plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <p class="prose"><strong>7. Confirmación de match mutuo dentro del chat</strong><br>No existía en las primeras versiones. En los tests, la gente no se daba cuenta de que, tras el "me apunto" de ambos, ya podían organizar el plan libremente.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    Un sistema silencioso, donde no se notifica un "no", solo funciona si el "sí" mutuo es igual de explícito. Si el silencio es la norma en todo el flujo, el usuario no distingue entre "no ha pasado nada todavía" y "ya podéis avanzar", hace falta una señal positiva clara para romper esa ambigüedad.
+  </div>
+  <img src="bumble-desicion7.png" alt="Confirmación de match mutuo dentro del chat" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+
+  <h3 class="sub-h">UI</h3>
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">1. Color</h4>
+  <p class="prose">Bumble no tiene ningún tono verde en su paleta de marca, así que introducir uno nuevo tenía que estar justificado por una necesidad funcional, no por preferencia estética.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    Cuando un elemento necesita comunicar un estado, el color de marca no siempre es la mejor herramienta, porque compite con sus otros usos (CTA, badges). Un color semántico dedicado evita esa ambigüedad.
+  </div>
+  <img src="bumble-desicionColor.png" alt="Escala de verdes explorada, con los dos tonos finales seleccionados" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">2. Tipografía</h4>
+  <p class="prose">Bumble Sans, la tipografía de la marca, es un asset privado. Elegí Poppins como alternativa pública, no por parecido superficial, sino por compartir la misma geometría redondeada que le da su personalidad cercana.</p>
+  <img src="bumble-desicionFuente.png" alt="Comparativa tipográfica y elección de Poppins como alternativa" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">3. Design system y componentes</h4>
+  <p class="prose">En vez de partir de un kit genérico, construí los componentes específicos de este rediseño, el banner de match, los chips de planes, y los estados del modal de doble opt-in.</p>
+  <div class="callout">
+    <span class="callout-label">Principio aplicado</span>
+    Un design system documenta el criterio detrás de cada decisión repetible, no solo estilos. Cada estado tiene una razón de ser propia, no heredada de un patrón ajeno.
+  </div>
+  <img src="bumble-designSytem.png" alt="Librería de componentes del rediseño" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+
+  <h3 class="sub-h">Prueba el prototipo final</h3>
+
+  <style>
+    .proto-showcase{
+      display:flex; flex-direction:column; gap:20px;
+      margin:24px 0 40px; padding:28px; border-radius:16px;
+      background:#ffffff !important; color-scheme:light;
+    }
+    .proto-mockup-full{width:100%; border-radius:16px; display:block;}
+
+    .proto-row{display:flex; gap:14px; align-items:stretch;}
+    @media (max-width:700px){.proto-row{flex-direction:column;}}
+
+    .proto-photo-col{flex:1; border-radius:12px; overflow:hidden; min-height:260px; position:relative;}
+    .proto-photo-col img{width:100%; height:100%; object-fit:cover; display:block;}
+
+    .proto-mid-col{flex:1.3; display:flex; flex-direction:column; gap:14px;}
+    .proto-right-col{flex:1;}
+
+    .proto-card{
+      background:#ffffff !important; border:1px solid #E4E4EA; border-radius:12px; padding:16px 18px;
+      box-shadow:0 4px 16px -6px rgba(20,20,30,.12); flex:1;
+    }
+    .proto-card h4{font-family:'Space Grotesk', sans-serif; font-size:14.5px; margin-bottom:8px; color:#15161A !important;}
+    .proto-card p{font-size:13px; color:#63636D !important; line-height:1.5;}
+    .proto-tag{
+      background:#F5F5F7 !important; border:1px solid #E4E4EA; border-radius:10px; padding:8px 11px;
+      font-size:12.5px; margin-bottom:7px; display:flex; gap:7px; align-items:flex-start; color:#15161A !important;
+    }
+    .proto-cta{
+      display:block; text-align:center; background:#15161A !important; color:#ffffff !important; text-decoration:none;
+      padding:16px; border-radius:10px; font-weight:600; font-size:15px;
+    }
+    .proto-cta:hover{opacity:.9;}
+  </style>
+
+  <div class="proto-showcase">
+    <img class="proto-mockup-full" src="bumble-mockup-prototipo.png" alt="Mockup del prototipo en móvil">
+
+    <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin-bottom:10px; color:#15161A;">Conoce a Pedro</h4>
+    <div class="proto-row">
+      <div class="proto-photo-col">
+        <img src="bumble-Image-person1.png" alt="Pedro, 25">
+      </div>
+      <div class="proto-mid-col">
+        <div class="proto-card">
+          <h4>Sobre él</h4>
+          <p>Diseñador gráfico freelance. Lleva un año soltero y se ha bajado Bumble porque está cansado de que sus planes de fin de semana sean siempre con la misma gente de siempre.</p>
+        </div>
+        <div class="proto-card">
+          <h4>Sus intereses</h4>
+          <p>No busca match, o eso dice, busca a alguien con quien de verdad le apetezca hacer algo, sin quedarse en el "hola, qué tal" de siempre.</p>
+        </div>
+      </div>
+      <div class="proto-right-col">
+        <div class="proto-card" style="height:100%;">
+          <h4>Sus gustos</h4>
+          <div class="proto-tag">🐱 Cafeterías con gatos</div>
+          <div class="proto-tag">🛼 Patinar los domingos</div>
+          <div class="proto-tag">🗺️ Descubrir sitios random por la ciudad que nadie más conoce todavía</div>
+        </div>
+      </div>
+    </div>
+
+    <a class="proto-cta" href="https://www.figma.com/proto/Zcv3HJkqKXRMcWUXbVTPBH/Portfolio?node-id=197-6676&viewport=-860%2C-1351%2C0.07&t=kJe1febd1VLhwLkA-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=181%3A66286&show-proto-sidebar=1&page-id=1%3A2" target="_blank" rel="noopener">Probar prototipo</a>
+  </div>
+
+  <h3 class="sub-h">Resultado</h3>
+  <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
+    <li>El diseño final se validó con 2 sesiones adicionales de test, sobre la versión ya iterada tras los hallazgos anteriores</li>
+    <li>El objetivo principal, que el concepto de match por planes y el checkpoint de doble opt-in se entendieran sin explicación previa, se cumplió en ambos casos</li>
+    <li>Los comentarios fueron positivos en general</li>
+    <li>Quedan algunos ajustes menores por definir, ninguno que comprometa la dirección de la solución, sino puntos de refinamiento propios de seguir iterando</li>
+  </ul>
+
+  <h3 class="sub-h">Aprendizajes</h3>
+  <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
+    <li>Esperaba que la disponibilidad de la gente fuera el mayor obstáculo del testing, y lo fue, pero sorprendió lo rápido que se entendía el concepto general. El reto real estuvo en el flujo, no en la idea de fondo.</li>
+    <li>Estaba segura de que "Ahora no" se leería como neutro, y el test demostró lo contrario, generaba dudas sobre si rompía el match. Confirmó que la intuición de diseño necesita contrastarse con datos, por bien fundamentada que parezca.</li>
+    <li>Explicar un concepto nuevo a alguien con un modelo mental ya fijo de Bumble fue lo más difícil, incluso para mí. Pero en las pruebas, la gente llegaba sola a entender para qué servía, señal de que el diseño comunicaba por sí solo.</li>
+    <li>Sentí que dejé de diseñar pantallas y empecé a diseñar el problema real en la fase 2, cuando una persona propone el plan y la otra lo recibe, ahí se juega la carga emocional que motivó todo el rediseño. Una entrevista lo confirmó, incluso sin depender de la foto al inicio, esta vuelve a pesar conforme avanza la conversación.</li>
+    <li>De cara a seguir prototipando con IA, quiero ser más estructurada, decidir de antemano qué es fijo y qué queda abierto a experimentar, en vez de resolverlo sobre la marcha. Lo mismo con la organización de archivos y frames en Figma.</li>
+  </ul>
 
   <div class="nextproj">
     <a href="index.html">← Volver a proyectos</a>
