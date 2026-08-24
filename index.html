@@ -26,7 +26,7 @@
     color-scheme:dark;
   }
   :root{
-    --radius:5px; --maxw:960px;
+    --radius:5px; --maxw:1100px;
 
     /* Escala de espaciado — base 8px */
     --space-xs:8px;   /* elementos muy pegados: idx + título, icono + texto */
@@ -227,30 +227,30 @@
   .section-sub{color:var(--muted); font-size:15px; margin-bottom:var(--space-lg);}
 
   /* PROJECT CARDS */
-  .proj-grid{display:flex; flex-direction:column; gap:var(--space-md);}
+  .proj-grid{display:flex; flex-direction:column;}
   .proj-card{
     display:grid; grid-template-columns:1.15fr .85fr; align-items:stretch;
-    border:1px solid var(--line); border-radius:12px;
-    background:linear-gradient(to right, var(--card), var(--card-2));
-    text-decoration:none; transition:border-color .15s, transform .15s, opacity .4s ease;
-    overflow:hidden;
+    border-top:1px solid var(--line);
+    padding:38px 0;
+    text-decoration:none; transition:opacity .4s ease;
   }
   @media (max-width:820px){.proj-card{grid-template-columns:1fr;}}
-  .proj-card:hover{border-color:var(--accent); transform:translateY(-2px);}
 
-  .proj-text{padding:36px 38px; display:flex; flex-direction:column;}
-  .proj-status{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.03em;}
-  .proj-card h3{font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(24px,3vw,34px); line-height:1.15; margin-top:14px;}
-  .proj-subtitle{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted-soft); margin-top:8px;}
-  .proj-desc{color:var(--muted); font-size:14.5px; line-height:1.55; margin-top:16px; max-width:46ch;}
+  .proj-text{display:flex; flex-direction:column; justify-content:center;}
+  .proj-index{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted);}
+  .proj-status{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.03em; margin-top:10px;}
+  .proj-card h3{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:30px; line-height:1.15; margin-top:14px;}
+  .proj-subtitle{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--muted); margin-top:8px;}
+  .proj-desc{color:var(--muted); font-size:14.5px; line-height:1.55; margin-top:16px;}
   .proj-problem{margin-top:18px; font-size:13.5px; color:var(--ink); line-height:1.5;}
   .proj-problem-label{display:block; font-family:'IBM Plex Mono', monospace; font-size:10.5px; text-transform:uppercase; color:var(--muted); letter-spacing:.04em; margin-bottom:4px;}
-  .proj-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
-  .proj-tags span{font-family:'IBM Plex Mono', monospace; font-size:11.5px; border:1px solid var(--line); border-radius:100px; padding:var(--pad-pill); color:var(--ink); background:var(--card);}
+  .proj-tags{margin-top:22px; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em;}
+  .proj-tags span:not(:last-child)::after{content:" · ";}
 
   .proj-media{
     position:relative; min-height:280px; padding:14px; align-self:center;
     display:flex; align-items:center; justify-content:center; background:transparent;
+    overflow:hidden;
   }
   .proj-media img{width:100%; height:auto; max-height:100%; object-fit:contain; display:block; transition:transform .4s ease;}
   .proj-card:hover .proj-media img{transform:scale(1.05);}
@@ -422,12 +422,13 @@
 <!-- PROJECTS -->
 <section id="proyectos">
   <div class="section-head"><span class="idx">00</span><h2>Mis proyectos</h2></div>
-  <p class="section-sub">Un proyecto en producción real, dos en construcción.</p>
+  <p class="section-sub">Dos proyectos terminados, uno próximamente.</p>
 
   <div class="proj-grid">
 
   <a class="proj-card scroll-reveal" href="magnettu.html">
     <div class="proj-text">
+      <span class="proj-index">#1</span>
       <span class="proj-status">Case study · En producción</span>
       <h3>Magnettu :  Rediseño de creación de perfiles</h3>
       <div class="proj-subtitle">/rediseño de creación de perfiles</div>
@@ -443,6 +444,7 @@
 
   <a class="proj-card tone-coral scroll-reveal" href="rediseno.html">
     <div class="proj-text">
+      <span class="proj-index">#2</span>
       <span class="proj-status">Case study · Finalizado</span>
       <h3>Nueva funcionalidad</h3>
       <div class="proj-subtitle">/rediseño de Bumble</div>
@@ -458,6 +460,7 @@
 
   <a class="proj-card tone-mint disabled scroll-reveal" href="autonomos.html">
     <div class="proj-text">
+      <span class="proj-index">#3</span>
       <span class="proj-status">Próximamente</span>
       <h3>0→1: Herramienta de colaboración para autónomos</h3>
       <div class="proj-subtitle">/colaboración para autónomos</div>
