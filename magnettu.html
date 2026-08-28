@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tatiana Marcalla</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="alternate icon" type="image/png" href="favicon.png">
+<link rel="alternate icon" type="image/png" href="imagenes/general/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -43,11 +43,18 @@
   a:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
 
   header.top{
-    max-width:var(--maxw); margin:0 auto; padding:26px 24px;
+    padding:14px 22px;
     display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+    position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:10;
+    width:calc(100% - 40px); max-width:var(--maxw);
+    box-sizing:border-box; border-radius:16px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   }
-  header.top a.back{color:var(--muted); text-decoration:none;}
-  header.top a.back:hover{color:var(--ink);}
+  [data-theme="dark"] header.top{background:rgba(0,0,0,.25);}
+  header.top a.back{color:#fff; text-decoration:none; text-shadow:0 1px 4px rgba(0,0,0,.55);}
+  header.top a.back:hover{opacity:.8;}
+  header.top .header-right span{color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55);}
   .header-right{display:flex; align-items:center; gap:16px;}
   .theme-toggle{
     display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
@@ -64,13 +71,18 @@
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
 
   .cs-cover{
-    display:grid; grid-template-columns:1.1fr .9fr; gap:var(--space-xl); align-items:stretch;
-    background:var(--bg); padding:var(--space-xl) var(--space-xl) var(--space-xl) 0; margin-top:8px;
+    background:var(--bg); padding:var(--space-xl) 0 0; margin-top:8px;
   }
-  .cs-cover-img{display:flex; align-items:center; justify-content:center;}
-  .cs-cover-img img{width:100%; height:100%; object-fit:contain; display:block;}
   @media (max-width:760px){
-    .cs-cover{grid-template-columns:1fr; padding:28px 24px 28px 0; gap:24px;}
+    .cs-cover{padding:28px 0 0;}
+  }
+
+  .hero-banner{width:100%; height:420px; overflow:hidden; position:relative;}
+  .hero-banner img{width:100%; height:100%; object-fit:cover; object-position:center; display:block;}
+  .hero-banner::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:150px;
+    background:linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+    z-index:5; pointer-events:none;
   }
 
   .cs-tag{
@@ -78,15 +90,17 @@
     background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;
   }
   h1.cs-title{
-    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(30px,4.6vw,44px); line-height:1.12; max-width:16ch;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(30px,4.6vw,44px); line-height:1.12;
   }
-  p.cs-sub{margin-top:18px; font-size:16.5px; color:var(--muted); max-width:60ch;}
+  p.cs-sub{margin-top:14px; font-size:16.5px; color:var(--muted);}
 
   .meta-strip{
-    margin-top:32px; padding-top:20px; border-top:1px solid var(--line);
+    margin-top:36px;
     display:flex; gap:36px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
   }
   .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
+
+  .cs-divider{border:none; border-top:1px solid var(--line); margin-top:28px;}
 
   h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:21px; margin:var(--space-2xl) 0 12px;}
   .prose{max-width:64ch; font-size:15.5px; color:var(--ink);}
@@ -101,6 +115,28 @@
   .prose-list li::marker{color:var(--muted);}
   .prose-list strong{font-weight:600;}
   .prose-list.prose-wide{max-width:none;}
+
+  .impact-list{list-style:none; margin:28px 0 var(--space-2xl); padding:0; max-width:64ch;}
+  .impact-list li{position:relative; padding-left:24px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
+  .impact-list li:last-child{margin-bottom:0;}
+  .impact-list li::before{
+    content:""; position:absolute; left:0; top:5px; width:14px; height:14px;
+    background-color:var(--coral);
+    -webkit-mask-image:url('imagenes/icons/bullets.svg'); mask-image:url('imagenes/icons/bullets.svg');
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+  }
+  [data-theme="dark"] .impact-list li::before{background-color:#fff;}
+
+  .phase-title{margin:64px 0 8px; text-align:center;}
+  .phase-title .phase-label{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:14px;
+  }
+  .phase-title h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:28px; line-height:1.25; margin:0;
+  }
 
   .img-slot{
     border:1.5px dashed var(--line); border-radius:var(--radius); background:var(--card); padding:44px 16px;
@@ -153,6 +189,10 @@
     .redesign-img{max-width:none;}
   }
 
+  .redesign-stack{display:flex; flex-direction:column; gap:var(--space-sm);}
+  .redesign-stack-img{width:100%;}
+  .redesign-stack-img img{width:100%; height:auto; object-fit:contain; display:block; border-radius:8px;}
+
   .result-row{display:flex; gap:var(--space-xl); align-items:flex-start;}
   .result-text{flex:1; min-width:280px;}
   .result-compare{
@@ -172,8 +212,9 @@
     .result-compare{max-width:420px;}
   }
 
-  .problem-row{display:flex; gap:var(--space-xl); align-items:flex-start;}
+  .problem-row{display:flex; gap:var(--space-xl); align-items:flex-start; margin-top:var(--space-2xl);}
   .problem-text{flex:1; min-width:280px;}
+  .problem-text h3.sub-h{margin-top:0;}
   .problem-stats{
     flex:0 1 380px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:20px;
     background:var(--card); padding:20px; border-radius:var(--radius);
@@ -198,6 +239,7 @@
     margin:28px 0; font-size:14.5px;
   }
   .callout .callout-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px;}
+  .callout.callout-quote{background:transparent; border:none; text-align:center;}
 
   .nextproj{
     margin-top:70px; padding-top:28px; border-top:1px solid var(--line);
@@ -214,21 +256,24 @@
 </head>
 <body>
 
-<header class="top">
-  <a class="back" href="index.html">← Volver</a>
-  <div class="header-right">
-    <span>Tatiana</span>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
-      <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-      </svg>
-      <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-    </button>
-  </div>
-</header>
+<div class="hero-banner">
+  <img src="imagenes/magnettu/portada-magnettu-proyecto.png" alt="Imagen de portada — Magnettu">
+  <header class="top">
+    <a class="back" href="index.html">← Volver</a>
+    <div class="header-right">
+      <span>Tatiana</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
+        <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+</div>
 
 <main>
   <div class="cs-cover">
@@ -241,27 +286,37 @@
         <span>Empresa<strong>Magnettu</strong></span>
         <span>Herramientas<strong>Figma, Claude</strong></span>
       </div>
+      <div class="cs-divider"></div>
     </div>
-    <div class="cs-cover-img"><img src="imagen-proyecto.png" alt="Imagen de portada — Magnettu"></div>
   </div>
+
+  <ul class="impact-list">
+    <li>Reduje el flujo de un modal confuso a 3 pasos guiados</li>
+    <li>Automaticé la conexión de LinkedIn con una sola pregunta nueva</li>
+    <li>Prototipé con IA en vez de maquetar pantalla por pantalla</li>
+  </ul>
+
+  <p class="prose prose-wide">Este case study tiene dos fases: primero, el rediseño completo del flujo de creación de perfiles. Después, un detalle más pequeño pero igual de importante, el modal que resuelve cómo se conecta LinkedIn.</p>
 
   <h3 class="sub-h">Contexto</h3>
   <p class="prose prose-wide">Cuando entré en Magnettu, la plataforma aún no tenía ningún apartado pensado para agencias. Con el tiempo, la empresa pivotó hacia ese sector, y con eso llegó la necesidad de gestionar <strong>perfiles, usuarios y grupos</strong>, algo que hasta entonces no existía como tal.</p>
   <p class="prose prose-wide">La primera solución, diseñada por otra diseñadora del equipo sobre la que yo luego iteré, se llamó <strong>"Grupos y Miembros"</strong>: un único espacio que mezclaba usuarios, perfiles y grupos sin distinción clara. Funcionaba, pero generaba confusión constante en el día a día.</p>
 
-  <p class="prose-wide" style="font-style:italic; color:var(--muted);">(No conservé una captura de esta versión original, por eso no hay imagen aquí)</p>
+  <div class="phase-title">
+    <span class="phase-label">Fase 1</span>
+    <h2 class="phase-h">El flujo de creación de perfiles</h2>
+  </div>
 
-  <h3 class="sub-h">El problema</h3>
   <div class="problem-row">
     <div class="problem-text">
-      <p class="prose prose-wide">El primer paso no fue separar, sino consolidar: agrupé todo bajo <strong>Marcas Personales</strong>, un nombre y espacio común, aunque seguía mezclando perfiles personales, de empresa y grupos. Para entender qué necesitaba una agencia real, hicimos varias sesiones de research directo con una que ya usaba la herramienta.</p>
-      <p class="prose prose-wide">El reto de fondo:</p>
+      <h3 class="sub-h">El problema</h3>
       <ul class="prose-list prose-wide">
-        <li>Magnettu servía tanto a <strong>agencias</strong> (colaboración con clientes) como a <strong>departamentos de marketing</strong> con programas de employee advocacy.</li>
+        <li>Magnettu servía tanto a agencias (colaboración con clientes) como a departamentos de marketing con programas de employee advocacy.</li>
         <li>Para una agencia, el email del propietario era imprescindible. Para advocacy interno, pedirlo como obligatorio no tenía sentido.</li>
+        <li>Por eso, los managers nos pedían ayuda constantemente para crear nuevos perfiles.</li>
         <li>Intentar simplificar el flujo para ambos casos generó fricción constante con cada caso de uso nuevo.</li>
+        <li>Para entender qué necesitaba una agencia real, hicimos varias sesiones de research con una que ya usaba la herramienta.</li>
       </ul>
-      <p class="prose prose-wide">Fue más adelante, en V2, cuando finalmente separé perfiles personales, perfiles de empresa y grupos en sus propias secciones.</p>
     </div>
     <div class="problem-stats">
       <div>
@@ -306,7 +361,7 @@
       <div class="evo-item">
         <div class="v-version fail">V2</div>
         <h4>Todo en un solo modal, con reorganización de fondo</h4>
-        <p>Nombre del perfil, URL de LinkedIn obligatoria, cómo se conectaría y permisos, todo en una sola pantalla. Esta versión también reorganizó la estructura: "marcas" pasó a llamarse "perfiles personales", los grupos se separaron en su propia sección, y perfiles personales y perfiles de empresa quedaron cada uno en su propio apartado para que no se confundieran entre sí.</p>
+        <p>Nombre del perfil, URL de LinkedIn obligatoria y permisos, todo en una sola pantalla. También reorganicé la estructura: "marcas" pasó a llamarse "perfiles personales", y personales, empresa y grupos quedaron cada uno en su propia sección.</p>
         <div class="why">
           <b>Por qué falló:</b>
           <ul class="why-list">
@@ -319,37 +374,24 @@
     </div>
   </div>
 
-  <p class="prose prose-wide">Después de tres intentos que no terminaban de resolver el problema de fondo, rediseñé el flujo desde cero.</p>
-
   <h3 class="sub-h">Mi rediseño</h3>
-  <div class="redesign-row">
-    <div class="redesign-text">
+  <div class="redesign-stack">
+    <div class="redesign-stack-text">
       <p class="prose prose-wide">Rediseñé el flujo en 3 pasos separados en lugar de un único modal, con el objetivo de que la persona entendiera por qué se le pedía cada dato, no solo qué dato rellenar.</p>
-      <div class="callout">
-        <p><strong>La pregunta clave del rediseño: ¿quién va a conectar LinkedIn?</strong></p>
-        <p>Con tres opciones: la conecto yo · la conecta el propietario · aún sin definir</p>
+      <div class="callout callout-quote">
+        <p><strong><em>La pregunta clave del rediseño:</em></strong> <em>¿quién va a conectar LinkedIn?</em></p>
       </div>
-      <p class="prose prose-wide">Esto resolvía un problema muy concreto: los managers pedían a los propietarios que conectaran su cuenta manualmente, pero se olvidaban, porque implicaba entrar en Magnettu y hacerlo ellos mismos. Ahora, si el manager elige "la conecta el propietario", este recibe automáticamente un email de invitación, quitando ese paso manual del medio.</p>
+      <p class="prose prose-wide">Resolvía un problema concreto: los managers pedían a los propietarios que conectaran su cuenta, pero se olvidaban porque implicaba entrar en Magnettu. Ahora, si el manager elige "la conecta el propietario", este recibe un email de invitación automático, sin ese paso manual.</p>
     </div>
-    <div class="redesign-img"><img src="mi-rediseño.png" alt="Mi rediseño — flujo en 3 pasos separados"></div>
+    <div class="redesign-stack-img"><img src="imagenes/magnettu/mi-rediseño.png" alt="Mi rediseño — flujo en 3 pasos separados"></div>
   </div>
-
-  <h3 class="sub-h">El flujo completo, de principio a fin</h3>
-  <p class="prose" style="color:var(--muted);">Toda la lógica condicional del rediseño, en un solo vistazo.</p>
-
-  <iframe style="border: 1px solid rgba(0, 0, 0, 0.1); width:100%; max-width:800px; aspect-ratio:800/450; display:block; margin-top:16px;" src="https://embed.figma.com/board/V4UmllxwljmYSoiPVQsFC7/Untitled?node-id=1-2&embed-host=share" allowfullscreen></iframe>
-  <p class="userflow-caption">Explora el flujo completo directamente en Figma.</p>
-
-  <style>
-    .userflow-caption{margin-top:8px; font-size:12.5px; color:var(--muted);}
-  </style>
 
   <h3 class="sub-h">Cómo fue evolucionando</h3>
   <p class="prose prose-wide">Algunas de las decisiones de este rediseño no son evidentes solo mirando las pantallas, así que las desgloso una por una.</p>
 
   <div class="decision-block stacked">
     <div class="decision-txt">
-      <span class="decision-tag">De 5 pasos a uno solo</span>
+      <span class="decision-tag">1. De 5 pasos a uno solo</span>
       <p class="prose prose-wide">El primer paso del rediseño no fue añadir algo nuevo, sino quitar fricción de lo que ya existía.</p>
       <ul class="prose-list prose-wide">
         <li><strong>Primera versión:</strong> el flujo tenía 5 pasos, empezando por el nombre de la marca y el objetivo, separados sin una prioridad real de qué información pedir antes.</li>
@@ -357,73 +399,41 @@
       </ul>
       <p class="prose prose-wide">Al no ver toda la información de golpe, muchas personas decían "ya lo haré más tarde" y ese paso quedaba sin completar para siempre. Unificarlo resolvió justo eso.</p>
     </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion1.png" alt="Decisión 1 — unificación de los pasos iniciales del flujo"></div>
+    <div class="decision-img"><img src="imagenes/magnettu/imagen-magnettu-desicion1.png" alt="Decisión 1 — unificación de los pasos iniciales del flujo"></div>
   </div>
 
   <div class="decision-block stacked">
     <div class="decision-txt">
-      <span class="decision-tag">Crear varios perfiles a la vez</span>
-      <p class="prose prose-wide">Esta decisión no siempre se nota a simple vista, pero fue clave para el día a día de los managers que gestionaban muchos perfiles a la vez.</p>
-      <ul class="prose-list prose-wide">
-        <li><strong>Primera versión:</strong> solo se podía crear un perfil a la vez.</li>
-        <li><strong>Segunda versión:</strong> se añadió la opción de crear varios perfiles de golpe, con el copy "Añadir otro".</li>
-        <li><strong>Versión final:</strong> se mantuvo la opción, con el copy actualizado a "Añadir más perfiles".</li>
-      </ul>
-      <p class="prose prose-wide">Aunque el copy cambió poco entre versiones, la funcionalidad se volvió indispensable a medida que crecían los clientes con equipos grandes.</p>
-    </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion2.png" alt="Decisión 2 — crear varios perfiles a la vez"></div>
-  </div>
-
-  <div class="decision-block stacked">
-    <div class="decision-txt">
-      <span class="decision-tag">Información del perfil y quién conecta LinkedIn</span>
+      <span class="decision-tag">2. Información del perfil y quién conecta LinkedIn</span>
       <p class="prose prose-wide">Esta fue de las decisiones más delicadas del rediseño, porque tocaba directamente el problema de fondo: quién debía conectar LinkedIn y cuándo pedir cada dato.</p>
       <ul class="prose-list prose-wide">
         <li><strong>Primera versión:</strong> pedía nombre de perfil y objetivo. Se quitó el objetivo porque muchas personas no tenían uno claro, solo querían crear el perfil.</li>
         <li><strong>Segunda versión:</strong> se añadió la URL de LinkedIn, el método de acceso y el email, este último condicionado al método elegido.</li>
-        <li><strong>Versión final:</strong> se mantuvo el nombre de perfil sin poder editarlo en este paso, se añadió la pregunta "¿quién va a conectar la cuenta?" (con tres opciones: la conecto yo, la conecta el propietario, o aún sin definir), y un botón para aplicar la configuración de la primera fila a todos los perfiles creados a la vez.</li>
+        <li><strong>Versión final:</strong> se mantuvo el nombre de perfil sin poder editarlo, se añadió la pregunta "¿quién va a conectar la cuenta?" (yo / el propietario / aún sin definir), y un botón para aplicar la configuración de la primera fila a todos los perfiles.</li>
       </ul>
       <p class="prose prose-wide">La pregunta sobre quién conecta la cuenta terminó siendo el cambio más importante de todo el flujo, resolvía el motivo real por el que los propietarios nunca conectaban su LinkedIn.</p>
     </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion3.png" alt="Decisión 3 — información del perfil y quién conecta LinkedIn"></div>
+    <div class="decision-img"><img src="imagenes/magnettu/imagen-magnettu-desicion3.png" alt="Decisión 3 — información del perfil y quién conecta LinkedIn"></div>
   </div>
 
-  <div class="decision-block stacked">
-    <div class="decision-txt">
-      <span class="decision-tag">Permisos</span>
-      <p class="prose prose-wide">Los permisos parecen un detalle técnico, pero fue una de las partes donde más iteramos, porque afectaba directamente a si alguien podía entrar a trabajar en su perfil o no.</p>
-      <ul class="prose-list prose-wide">
-        <li><strong>Primera versión:</strong> colaboradores y permisos eran pasos separados. Muchos creían que colaboradores era opcional, lo dejaban para después y se olvidaban.</li>
-        <li><strong>Segunda versión:</strong> se unificó todo en una sola línea, más visible, manteniendo los checkboxes por ser rápidos de leer.</li>
-        <li><strong>Versión final:</strong> permisos pasó a ser el último paso, se mantuvieron los checkboxes, se ocultan (con un guion) los permisos que no aplican si el perfil no tiene acceso a Magnettu, y se añadieron tooltips explicando qué incluye cada permiso.</li>
-      </ul>
-      <p class="prose prose-wide">Los tooltips fueron una solución simple para un problema real: la gente no siempre entiende qué significa cada permiso, y preferimos explicarlo ahí mismo antes que en documentación aparte.</p>
-    </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion4.png" alt="Decisión 4 — permisos"></div>
+  <div class="other-tweaks">
+    <h4 class="other-tweaks-h">Otros ajustes del rediseño</h4>
+    <ul class="other-tweaks-list">
+      <li>El flujo se comporta distinto según se cree 1 perfil o varios: con varios, se detiene en permisos; con uno, continúa a colaboradores y LinkedIn.</li>
+      <li>En la versión original, un solo botón abría un desplegable con dos opciones: crear el perfil con notificación o sin ella. En la versión final, esas dos opciones pasaron a ser botones visibles directamente.</li>
+      <li>Se añadió una nueva funcionalidad para poder editar los permisos u otras opciones globalmente.</li>
+      <li>Se puede crear varios perfiles a la vez, con el copy "Añadir más perfiles".</li>
+    </ul>
   </div>
 
-  <div class="decision-block stacked">
-    <div class="decision-txt">
-      <span class="decision-tag">Notificación al crear el perfil</span>
-      <p class="prose prose-wide">Esta decisión fue casi lo contrario a las demás: en vez de añadir más control, decidimos quitarlo.</p>
-      <ul class="prose-list prose-wide">
-        <li><strong>Versión anterior:</strong> al terminar de crear un perfil aparecía un desplegable con dos opciones, enviar con notificación o sin ella.</li>
-        <li><strong>Versión final:</strong> se eliminó esa decisión explícita porque generaba dudas. Se compensó con un tooltip explicativo secundario, en vez del texto primario de antes.</li>
-      </ul>
-      <p class="prose prose-wide">A veces menos opciones generan más confianza que más opciones, aquí funcionó así.</p>
-    </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion5.png" alt="Decisión 5 — notificación al crear el perfil"></div>
-  </div>
-
-  <div class="decision-block stacked">
-    <div class="decision-txt">
-      <span class="decision-tag">Un flujo distinto según cuántos perfiles creas</span>
-      <p class="prose prose-wide">El flujo no se comporta igual según cuántos perfiles estés creando, y esa diferencia fue intencional.</p>
-      <p class="prose prose-wide">Cuando se crea un único perfil, el flujo incluye dos pasos extra, Colaboradores y LinkedIn, que acompañan el onboarding completo de esa persona en el mismo momento. Cuando se crean varios perfiles a la vez, en cambio, el flujo se detiene en permisos, repetir colaboradores y conexión de LinkedIn uno a uno para 5 o 10 perfiles sería tedioso, así que esa configuración se deja para hacerla perfil por perfil, más adelante.</p>
-      <p class="prose prose-wide">Es una decisión pensada para no forzar el mismo nivel de detalle cuando el contexto de uso es completamente distinto.</p>
-    </div>
-    <div class="decision-img"><img src="imagen-magnettu-desicion6.png" alt="Decisión 6 — flujo distinto según cuántos perfiles creas"></div>
-  </div>
+  <style>
+    .other-tweaks{margin:var(--space-md) 0;}
+    .other-tweaks-h{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:18px; color:var(--ink); margin-bottom:12px;}
+    .other-tweaks-list{font-size:15.5px; color:var(--ink); margin:0; padding-left:20px; list-style:disc;}
+    .other-tweaks-list li{margin-bottom:8px;}
+    .other-tweaks-list li:last-child{margin-bottom:0;}
+    .other-tweaks-list li::marker{color:var(--muted);}
+  </style>
 
   <style>
     .decision-block{display:flex; gap:28px; align-items:center; margin:var(--space-md) 0;}
@@ -453,10 +463,13 @@
       <div id="mntDemo"></div>
     </div>
     <p class="proto-note">Nota: este prototipo es una representación del diseño para mostrar la lógica del flujo, no una réplica exacta al cien por cien del producto real.</p>
+    <a class="figma-flow-link" href="https://embed.figma.com/board/V4UmllxwljmYSoiPVQsFC7/Untitled?node-id=1-2&embed-host=share" target="_blank">Ver el diagrama completo del flujo en Figma →</a>
   </div>
 
   <style>
     .proto-wrap{margin:24px 0 32px;}
+    .figma-flow-link{display:inline-block; margin-top:14px; color:var(--accent); text-decoration:none; font-size:14px;}
+    .figma-flow-link:hover{text-decoration:underline;}
     .proto-label{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted); text-transform:uppercase; margin-bottom:10px;}
     .proto-note{font-size:12.5px; color:var(--muted); margin-top:12px; font-style:italic;}
     .mnt-demo{
@@ -827,23 +840,28 @@
     </ul>
   </div>
 
-  <h3 class="sub-h">Un detalle del rediseño: el modal de invitación</h3>
-  <div class="redesign-row align-top">
-    <div class="redesign-text">
-      <p class="prose prose-wide">Cuando el manager elige que sea el propietario quien conecte LinkedIn, este recibe un modal de invitación. Fue la pieza que llevé un paso más allá del prototipo, directamente a código.</p>
-      <ul class="prose-list prose-wide">
-        <li>Diseñé la pantalla en Figma y le pedí a Claude que la convirtiera en HTML implementable casi tal cual.</li>
-        <li>Para que el traspaso funcionara, entré en el código real de la app con Claude Code y Cursor, reutilizando componentes ya existentes.</li>
-        <li>Todo esto ocurrió en paralelo a una actualización del design system que estaba en curso, así que el desarrollador recibió un componente ya alineado con los patrones nuevos, listo para integrar sin retrabajo.</li>
-      </ul>
-    </div>
-    <div class="redesign-img"><img src="modal-dentro-de-magnettu.png" alt="Modal de invitación dentro de Magnettu"></div>
+  <div class="phase-title">
+    <span class="phase-label">Fase 2</span>
+    <h2 class="phase-h">El modal de invitación</h2>
   </div>
 
-  <p class="prose prose-wide">Este flujo tiene, en realidad, dos versiones, según dónde vive el formulario cuando la persona lo completa, no según quién creó el perfil:</p>
+  <h3 class="sub-h">Conexión con LinkedIn</h3>
+  <div class="redesign-stack">
+    <div class="redesign-stack-text">
+      <p class="prose prose-wide">Cuando el propietario debe conectar LinkedIn, recibe este modal. Lo llevé un paso más allá del prototipo: directamente a código.</p>
+      <ul class="prose-list prose-wide">
+        <li>Coincidió con una actualización del design system, así que el componente ya llegó alineado a los patrones nuevos.</li>
+        <li>Entré en el código real de la app con Claude Code y Cursor, reutilizando componentes existentes.</li>
+        <li>Diseñé la pantalla en Figma y pedí a Claude que la convirtiera en HTML listo para implementar.</li>
+      </ul>
+    </div>
+    <div class="redesign-stack-img"><img src="imagenes/magnettu/modal-dentro-de-magnettu.png" alt="Modal de invitación dentro de Magnettu"></div>
+  </div>
+
+  <p class="prose prose-wide" style="margin-top:var(--space-sm);">El modal tiene dos versiones, según dónde complete el formulario la persona, no según quién creó el perfil:</p>
   <ul class="prose-list prose-wide">
-    <li><strong>Contexto A · Por email.</strong> El propietario llega desde el enlace de invitación sin sesión iniciada en Magnettu. Ve una página standalone donde completar la URL y conectar LinkedIn es obligatorio, no existe la opción de "hacerlo más tarde".</li>
-    <li><strong>Contexto B · Dentro de Magnettu.</strong> El propietario ya tiene sesión activa. Ve el mismo flujo como un modal flotando sobre el dashboard, con la opción de posponer siempre disponible, y que se cierra solo al conectar o al posponer.</li>
+    <li><strong>Por email</strong>: sin sesión iniciada, LinkedIn es obligatorio, sin opción de posponer.</li>
+    <li><strong>Dentro de Magnettu</strong>: con sesión activa, aparece como modal flotante, se puede posponer.</li>
   </ul>
 
   <div class="dualproto-wrap">
@@ -1329,33 +1347,13 @@
   </script>
 
   <h3 class="sub-h">Resultado</h3>
-  <div class="result-row">
-    <div class="result-text">
-      <p class="prose prose-wide">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
-      <p class="prose prose-wide">Lo que se observó:</p>
-      <ul class="prose-list prose-wide">
-        <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos, y en llamadas de venta con agencias ya no surgían tantas dudas sobre este paso.</li>
-        <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
-        <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba en la V3.</li>
-        <li><strong>Detecté un problema de contraste</strong> en algunos textos durante las sesiones, pendiente de ajustar en la siguiente iteración.</li>
-      </ul>
-    </div>
-    <div class="result-compare">
-      <div class="result-arrows">
-        <div class="result-col">
-          <div class="result-arrow down">↓</div>
-          <div class="result-title">Peticiones de "créamelo tú"</div>
-          <div class="result-sub">Managers pidiendo que el equipo creara el perfil por ellos</div>
-        </div>
-        <div class="result-col">
-          <div class="result-arrow up">↑</div>
-          <div class="result-title">Perfiles completados sin ayuda</div>
-          <div class="result-sub">Managers que terminan el flujo por su cuenta, sin intervención manual</div>
-        </div>
-      </div>
-      <p class="result-note">Patrón observado desde el lanzamiento. Representación ilustrativa, sin cifras exactas disponibles.</p>
-    </div>
-  </div>
+  <p class="prose prose-wide">La versión final lleva unas semanas en producción. Los datos cuantitativos fueron poco concluyentes (solo una semana de datos reales), así que la validación vino sobre todo de sesiones reales grabadas en Datadog, viendo cómo los brand managers usaban el flujo.</p>
+  <p class="prose prose-wide">Lo que se observó:</p>
+  <ul class="prose-list prose-wide">
+    <li><strong>Menos fricción al crear marcas.</strong> Los managers dejaron de pedirnos que creáramos los perfiles por ellos.</li>
+    <li><strong>Mejor entendimiento del formulario.</strong> Campos que antes se dejaban vacíos por no saber para qué servían, ahora se completan.</li>
+    <li><strong>La URL de LinkedIn sigue siendo el mayor punto de fricción</strong>, pero al ser opcional en este paso, ya no bloquea la creación del perfil como pasaba antes.</li>
+  </ul>
 
   <h3 class="sub-h">Aprendizajes</h3>
   <ul class="prose-list prose-wide">

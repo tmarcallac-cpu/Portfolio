@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <title>Tatiana Marcalla</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="alternate icon" type="image/png" href="favicon.png">
+<link rel="alternate icon" type="image/png" href="imagenes/general/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -86,6 +86,11 @@
   .prose strong{font-weight:600;}
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
   .prose.prose-wide{max-width:none;}
+
+  .impact-list{list-style:none; margin:44px 0; padding:0; max-width:64ch;}
+  .impact-list li{position:relative; padding-left:22px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
+  .impact-list li:last-child{margin-bottom:0;}
+  .impact-list li::before{content:"–"; position:absolute; left:0; color:var(--accent); font-weight:600;}
 
   .problem-statement{
     border-left:3px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:0 var(--radius) var(--radius) 0;
@@ -256,8 +261,14 @@
         <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
       </div>
     </div>
-    <div class="cs-cover-img"><img src="bumble-framework.png" alt="Imagen de portada — Rediseño de Bumble"></div>
+    <div class="cs-cover-img"><img src="imagenes/general/bumble-framework.png" alt="Imagen de portada — Rediseño de Bumble"></div>
   </div>
+
+  <ul class="impact-list">
+    <li>Rediseñé el perfil para que el match también dependa de afinidad de planes, no solo de fotos</li>
+    <li>Convertí la organización de la cita en algo compartido, no una carga de una sola persona</li>
+    <li>Validé el concepto con entrevistas reales antes de diseñar cualquier pantalla</li>
+  </ul>
 
   <h3 class="sub-h">Contexto</h3>
   <p class="prose">Antes de decidirme por Bumble, exploré otra dirección con una entrevista sobre YouTube, pero la persona estaba satisfecha con el producto y no había una fricción real que justificara un rediseño. En cambio, una entrevista sobre citas online sacó a la luz un problema mucho más claro y con más capas, así que decidí centrar el case study ahí.</p>
@@ -463,7 +474,7 @@
   <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">Fase 1 — Perfil y descubrimiento</h4>
 
   <p class="prose"><strong>1. Buscador de planes dentro del modal de novedad</strong><br>Al abrir Bumble, con cuenta ya creada, aparece un modal de novedad con un botón "Ver cómo funciona", que despliega las opciones, incluyendo el buscador de planes.</p>
-  <img src="bumble-desicion1.png" alt="Modal de novedad y buscador de planes" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion1.png" alt="Modal de novedad y buscador de planes" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <p class="prose"><strong>2. Posición del banner "Match de plan"</strong></p>
   <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
@@ -476,14 +487,14 @@
     <span class="callout-label">Principio aplicado</span>
     Antes de mover un elemento de sitio, hay que descartar que el problema sea de jerarquía visual (contraste, peso, color) y no de posición. Mover algo sin resolver su jerarquía repite el mismo fallo en otro lugar, como pasó aquí entre la primera y la segunda versión.
   </div>
-  <img src="bumble-desicion2.png" alt="Comparativa de las 3 posiciones del banner Match de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion2.png" alt="Comparativa de las 3 posiciones del banner Match de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <p class="prose"><strong>3. Card "Match de plan" dentro del perfil</strong><br>No existía en la primera ni en la segunda versión, se añadió en la tercera al observar, en los tests, que la gente sí se detenía a mirar el perfil completo antes de decidir.</p>
   <div class="callout">
     <span class="callout-label">Principio aplicado</span>
     Cuando un mensaje clave depende de que el usuario lo vea en un único punto del recorrido, conviene reforzarlo en más de un momento del flujo, no confiar todo a un solo elemento. Aquí, el perfil actúa como una segunda oportunidad de comunicar la coincidencia, sin duplicar esfuerzo de diseño.
   </div>
-  <img src="bumble-desicion3.png" alt="Card de match de plan dentro del perfil" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion3.png" alt="Card de match de plan dentro del perfil" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">Fase 2 — Chat</h4>
 
@@ -497,24 +508,24 @@
     <span class="callout-label">Principio aplicado</span>
     El timing de una interacción puede ser tan importante como su contenido. Una misma función, propuesta en el momento equivocado del recorrido, se percibe como invasiva, aunque el diseño visual sea idéntico.
   </div>
-  <img src="bumble-desicion4.png" alt="Chat con el banner y el modal de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion4.png" alt="Chat con el banner y el modal de plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <p class="prose"><strong>5. Modal tipo bottom sheet, no pantalla completa</strong><br>Sigue el patrón visual que ya tiene Bumble para sus propios modales, priorizando la consistencia con la app existente sobre una solución de diseño propia.</p>
-  <img src="bumble-desicion5.png" alt="Modal tipo bottom sheet" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion5.png" alt="Modal tipo bottom sheet" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <p class="prose"><strong>6. Cambio de copy del tercer botón, de "Ahora no" a "Prefiero seguir hablando"</strong><br>A raíz del test, varios testers interpretaron "Ahora no" como un rechazo, alguno llegó a pensar que eso borraría el chat.</p>
   <div class="callout">
     <span class="callout-label">Principio aplicado</span>
     El copy de una opción negativa comunica tanto como su función. Dos botones pueden tener exactamente el mismo comportamiento técnico y transmitir cosas completamente distintas según las palabras elegidas.
   </div>
-  <img src="bumble-desicion6.png" alt="Los tres botones de respuesta al plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion6.png" alt="Los tres botones de respuesta al plan" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <p class="prose"><strong>7. Confirmación de match mutuo dentro del chat</strong><br>No existía en las primeras versiones. En los tests, la gente no se daba cuenta de que, tras el "me apunto" de ambos, ya podían organizar el plan libremente.</p>
   <div class="callout">
     <span class="callout-label">Principio aplicado</span>
     Un sistema silencioso, donde no se notifica un "no", solo funciona si el "sí" mutuo es igual de explícito. Si el silencio es la norma en todo el flujo, el usuario no distingue entre "no ha pasado nada todavía" y "ya podéis avanzar", hace falta una señal positiva clara para romper esa ambigüedad.
   </div>
-  <img src="bumble-desicion7.png" alt="Confirmación de match mutuo dentro del chat" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
+  <img src="imagenes/bumble/bumble-desicion7.png" alt="Confirmación de match mutuo dentro del chat" style="width:100%; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
 
   <h3 class="sub-h">UI</h3>
 
@@ -524,11 +535,11 @@
     <span class="callout-label">Principio aplicado</span>
     Cuando un elemento necesita comunicar un estado, el color de marca no siempre es la mejor herramienta, porque compite con sus otros usos (CTA, badges). Un color semántico dedicado evita esa ambigüedad.
   </div>
-  <img src="bumble-desicionColor.png" alt="Escala de verdes explorada, con los dos tonos finales seleccionados" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+  <img src="imagenes/bumble/bumble-desicionColor.png" alt="Escala de verdes explorada, con los dos tonos finales seleccionados" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
 
   <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">2. Tipografía</h4>
   <p class="prose">Bumble Sans, la tipografía de la marca, es un asset privado. Elegí Poppins como alternativa pública, no por parecido superficial, sino por compartir la misma geometría redondeada que le da su personalidad cercana.</p>
-  <img src="bumble-desicionFuente.png" alt="Comparativa tipográfica y elección de Poppins como alternativa" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+  <img src="imagenes/bumble/bumble-desicionFuente.png" alt="Comparativa tipográfica y elección de Poppins como alternativa" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
 
   <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">3. Design system y componentes</h4>
   <p class="prose">En vez de partir de un kit genérico, construí los componentes específicos de este rediseño, el banner de match, los chips de planes, y los estados del modal de doble opt-in.</p>
@@ -536,7 +547,7 @@
     <span class="callout-label">Principio aplicado</span>
     Un design system documenta el criterio detrás de cada decisión repetible, no solo estilos. Cada estado tiene una razón de ser propia, no heredada de un patrón ajeno.
   </div>
-  <img src="bumble-designSytem.png" alt="Librería de componentes del rediseño" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
+  <img src="imagenes/bumble/bumble-designSytem.png" alt="Librería de componentes del rediseño" style="width:100%; border-radius:5px; margin:8px 0 8px; display:block;">
 
   <h3 class="sub-h">Prueba el prototipo final</h3>
 
@@ -575,12 +586,12 @@
   </style>
 
   <div class="proto-showcase">
-    <img class="proto-mockup-full" src="bumble-mockup-prototipo.png" alt="Mockup del prototipo en móvil">
+    <img class="proto-mockup-full" src="imagenes/bumble/bumble-mockup-prototipo.png" alt="Mockup del prototipo en móvil">
 
     <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin-bottom:10px; color:#15161A;">Conoce a Pedro</h4>
     <div class="proto-row">
       <div class="proto-photo-col">
-        <img src="bumble-Image-person1.png" alt="Pedro, 25">
+        <img src="imagenes/bumble/bumble-Image-person1.png" alt="Pedro, 25">
       </div>
       <div class="proto-mid-col">
         <div class="proto-card">
