@@ -100,8 +100,17 @@
   .prose strong{font-weight:600;}
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
   .prose.prose-wide{max-width:none;}
+  .prose li{margin-bottom:12px;}
+  .prose li:last-child{margin-bottom:0;}
 
-  .impact-list{list-style:none; margin:28px 0 44px; padding:0; max-width:64ch;}
+  .prose-list{max-width:64ch; font-family:'IBM Plex Sans', sans-serif; font-size:15.5px; color:var(--ink); margin:14px 0; padding-left:20px; list-style:disc;}
+  .prose-list li{margin-bottom:12px;}
+  .prose-list li:last-child{margin-bottom:0;}
+  .prose-list li::marker{color:var(--muted);}
+  .prose-list strong{font-weight:600;}
+  .prose-list.prose-wide{max-width:none;}
+
+  .impact-list{list-style:none; margin:28px 0 44px; padding:0;}
   .impact-list li{position:relative; padding-left:24px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
   .impact-list li:last-child{margin-bottom:0;}
   .impact-list li::before{
@@ -139,7 +148,7 @@
   .insight-title{font-family:'Space Grotesk', sans-serif; font-size:15px; font-weight:600; margin-bottom:12px;}
   .insight-title.coral{color:var(--coral);}
   .insight-title.mint{color:var(--mint);}
-  .insight-list{list-style:none; display:flex; flex-direction:column; gap:10px;}
+  .insight-list{list-style:none; display:flex; flex-direction:column; gap:12px;}
   .insight-list li{padding:12px 14px; border-radius:8px; font-size:13.5px; line-height:1.45;}
   .insight-list li.chip-coral{background:var(--coral-soft); color:var(--coral);}
   .insight-list li.chip-mint{background:var(--mint-soft); color:var(--mint);}
@@ -505,10 +514,20 @@
   </div>
 
   <h3 class="sub-h">Test de usabilidad</h3>
-  <p class="prose">Para testear esto con usuarios reales, construí un prototipo interactivo en HTML con ayuda de IA, no una pieza de producción, sino una herramienta rápida para poder observar cómo navegaba la gente de verdad. Tiene algunos fallos visuales y de flujo, priorizar velocidad de iteración sobre acabado fue una decisión consciente para poder testear antes. Puedes probarlo tú mismo/a:</p>
+  <p class="prose">Para testear esto con usuarios reales, construí un prototipo interactivo en HTML con ayuda de IA, no una pieza de producción, sino una herramienta rápida para poder observar cómo navegaba la gente de verdad. Tiene algunos fallos visuales y de flujo, priorizar velocidad de iteración sobre acabado fue una decisión consciente para poder testear antes.</p>
 
   <img src="imagenes/bumble/imagen-bumble-test.png" alt="Test de usabilidad — prototipo interactivo" style="width:100%; height:auto; object-fit:contain; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
   <p class="miro-note">Prototipo interactivo construido con IA para el test de usabilidad.</p>
+
+  <h4 style="font-family:'Space Grotesk', sans-serif; font-size:16px; margin:32px 0 14px;">Hallazgos</h4>
+  <ul class="prose-list prose-wide">
+    <li>El banner "Match de plan" pasaba desapercibido antes de dar like, competía mal con la foto y el nombre.</li>
+    <li>Había ambigüedad entre el botón de like pequeño y el grande.</li>
+    <li>El checkpoint de "Planear" se sentía prematuro si aparecía sin conversación previa.</li>
+    <li>Los testers hombres proyectaron que "las chicas tardan en decir que sí"; la tester mujer no confirmó ese patrón y propuso una opción intermedia, que se incorporó al diseño.</li>
+    <li>La navegación para editar planes y el aviso silencioso se entendieron bien, sin necesidad de explicarlos.</li>
+  </ul>
+  <p class="prose prose-wide">En las 2 sesiones finales, ya sobre el diseño iterado, el objetivo principal (que el match por planes y el checkpoint se entendieran sin explicación) se cumplió en ambas. De estos tests salieron tres cambios directos: más peso visual al banner de match, el modal se retrasó hasta cierta cantidad de mensajes en el chat, y el copy del tercer botón pasó de "Ahora no" a "Prefiero seguir hablando", porque se interpretaba como rechazo.</p>
 
   <h3 class="sub-h">Cómo fue evolucionando</h3>
   <p class="prose">El diseño pasó por tres versiones antes de llegar a la actual, cada cambio surgió de algo concreto que salió en los tests de usabilidad, no de intuición sin contrastar.</p>
@@ -668,11 +687,10 @@
 
   <h3 class="sub-h">Aprendizajes</h3>
   <ul class="prose" style="padding-left:20px; margin-bottom:12px;">
-    <li>Esperaba que la disponibilidad de la gente fuera el mayor obstáculo del testing, y lo fue, pero sorprendió lo rápido que se entendía el concepto general. El reto real estuvo en el flujo, no en la idea de fondo.</li>
-    <li>Estaba segura de que "Ahora no" se leería como neutro, y el test demostró lo contrario, generaba dudas sobre si rompía el match. Confirmó que la intuición de diseño necesita contrastarse con datos, por bien fundamentada que parezca.</li>
-    <li>Explicar un concepto nuevo a alguien con un modelo mental ya fijo de Bumble fue lo más difícil, incluso para mí. Pero en las pruebas, la gente llegaba sola a entender para qué servía, señal de que el diseño comunicaba por sí solo.</li>
-    <li>Sentí que dejé de diseñar pantallas y empecé a diseñar el problema real en la fase 2, cuando una persona propone el plan y la otra lo recibe, ahí se juega la carga emocional que motivó todo el rediseño. Una entrevista lo confirmó, incluso sin depender de la foto al inicio, esta vuelve a pesar conforme avanza la conversación.</li>
-    <li>De cara a seguir prototipando con IA, quiero ser más estructurada, decidir de antemano qué es fijo y qué queda abierto a experimentar, en vez de resolverlo sobre la marcha. Lo mismo con la organización de archivos y frames en Figma.</li>
+    <li>Creía que "Ahora no" se leería como neutro; el test demostró lo contrario, generaba dudas sobre si rompía el match. La intuición de diseño necesita contrastarse con datos.</li>
+    <li>Explicar un concepto nuevo a alguien con el modelo mental fijo de Bumble fue difícil incluso para mí, pero en las pruebas la gente llegaba sola a entenderlo, señal de que el diseño comunicaba por sí solo.</li>
+    <li>En la fase 2 (cuando una persona propone el plan y la otra lo recibe) se juega la carga emocional que motivó el rediseño. Una entrevista confirmó que la foto vuelve a pesar conforme avanza la conversación, incluso sin depender de ella al inicio.</li>
+    <li>De cara a seguir prototipando con IA, quiero ser más estructurada: decidir de antemano qué es fijo y qué queda abierto a experimentar, en vez de resolverlo sobre la marcha.</li>
   </ul>
 
   <div class="nextproj">
