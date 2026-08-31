@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototipo — Creación de perfiles en Magnettu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{color-scheme:light;}
+  body{
+    padding:20px; background:#F7F8FA;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .mnt-demo{
+    color-scheme:light;
+    border:1px solid #E4E4EA; border-radius:8px; overflow:hidden; background:#fff;
+    box-shadow:0 12px 30px -14px rgba(20,20,30,.18);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .mnt-modal{display:flex; min-height:460px;}
+  .mnt-side{width:230px; background:#2C3652; color:#fff; padding:24px 20px; flex-shrink:0; display:flex; flex-direction:column;}
+  .mnt-logo{display:flex; align-items:center; gap:8px; font-weight:700; font-size:15px; margin-bottom:28px;}
+  .mnt-logo .dot{width:22px; height:22px; border-radius:50%; background:#E63875; display:flex; align-items:center; justify-content:center; font-size:11px;}
+  .mnt-steps{flex:1;}
+  .mnt-step{display:flex; gap:10px; padding-bottom:22px; position:relative;}
+  .mnt-step::before{content:''; position:absolute; left:10px; top:22px; bottom:-4px; width:1px; background:rgba(255,255,255,.15);}
+  .mnt-step:last-child::before{display:none;}
+  .mnt-step-icon{width:21px; height:21px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; margin-top:1px;}
+  .mnt-step.done .mnt-step-icon{background:#22C55E; color:#fff;}
+  .mnt-step.current .mnt-step-icon{background:transparent; border:2px solid #fff; color:#fff;}
+  .mnt-step.upcoming .mnt-step-icon{background:transparent; border:2px solid rgba(255,255,255,.3); color:rgba(255,255,255,.4);}
+  .mnt-step-txt .t{font-size:13.5px; font-weight:600;}
+  .mnt-step.upcoming .mnt-step-txt .t{color:rgba(255,255,255,.4);}
+  .mnt-step-txt .s{font-size:11.5px; color:rgba(255,255,255,.55); margin-top:1px;}
+  .mnt-side-foot{font-size:12px; color:rgba(255,255,255,.6); border-top:1px solid rgba(255,255,255,.12); padding-top:14px; margin-top:14px;}
+  .mnt-side-foot a{color:#8CB4FF; text-decoration:none;}
+
+  .mnt-content{flex:1; padding:30px 32px; display:flex; flex-direction:column;}
+  .mnt-content h2{font-size:19px; font-weight:600; color:#151A2B;}
+  .mnt-content .desc{font-size:13px; color:#6B7280; margin-top:4px; margin-bottom:22px;}
+  .mnt-body{flex:1;}
+  .mnt-footer{display:flex; justify-content:space-between; align-items:center; padding-top:18px; margin-top:auto; border-top:1px solid #EEF0F4;}
+  .mnt-footer .right{display:flex; gap:10px;}
+
+  .mnt-btn{font-size:13px; font-weight:600; padding:9px 16px; border-radius:6px; border:1px solid #D8DBE3; background:#fff; color:#374151; cursor:pointer; font-family:inherit;}
+  .mnt-btn:hover{background:#F7F8FA;}
+  .mnt-btn.primary{background:#2C3652; color:#fff; border-color:#2C3652;}
+  .mnt-btn.primary:hover{background:#222A42;}
+  .mnt-btn:disabled{opacity:.4; cursor:not-allowed;}
+
+  .mnt-row-add{display:flex; gap:10px; margin-bottom:10px; align-items:center;}
+  .mnt-input{flex:1; border:1px solid #D8DBE3; border-radius:6px; padding:9px 11px; font-size:13px; font-family:inherit;}
+  .mnt-input.small{max-width:230px;}
+  .mnt-addlink{font-size:13px; color:#2C3652; font-weight:600; cursor:pointer; margin-top:6px; display:inline-block;}
+  .mnt-rmv{cursor:pointer; color:#B0B4BE; font-size:16px; padding:0 4px;}
+
+  table.mnt-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  table.mnt-table th{text-align:left; color:#9AA1AE; font-weight:600; font-size:11px; text-transform:uppercase; padding-bottom:10px; border-bottom:1px solid #EEF0F4;}
+  table.mnt-table td{padding:10px 8px 10px 0; border-bottom:1px solid #F4F5F7; vertical-align:middle;}
+  .mnt-select{border:1px solid #D8DBE3; border-radius:6px; padding:7px 9px; font-size:12.5px; font-family:inherit; width:100%;}
+  .mnt-select.active{border-color:#3B82F6; background:#EFF5FF;}
+  .mnt-avatar{width:24px; height:24px; border-radius:50%; background:#FBE2EA; color:#C23568; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-right:6px;}
+  .mnt-chk{width:15px; height:15px;}
+  .mnt-hint{font-size:10.5px; color:#B0B4BE; margin-top:2px;}
+  .mnt-demobar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 16px; background:#F7F8FA; border-bottom:1px solid #E4E4EA;
+    font-size:12px; color:#6B7280;
+  }
+  .mnt-reset{
+    font-family:inherit; font-size:11.5px; font-weight:600; color:#2C3652;
+    background:#fff; border:1px solid #D8DBE3; border-radius:100px; padding:5px 12px; cursor:pointer;
+  }
+  .mnt-reset:hover{background:#EFF1F5;}
+  .mnt-table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+
+  @media (max-width:640px){
+    .mnt-modal{flex-direction:column; min-height:0;}
+    .mnt-side{width:100%; padding:16px 18px;}
+    .mnt-steps{display:flex; overflow-x:auto; gap:14px; padding-bottom:2px;}
+    .mnt-step{padding-bottom:0; flex-shrink:0;}
+    .mnt-step::before{display:none;}
+    .mnt-step-txt .s{display:none;}
+    .mnt-side-foot{display:none;}
+    .mnt-content{padding:20px;}
+    .mnt-content h2{font-size:16.5px;}
+    table.mnt-table{min-width:520px;}
+    .mnt-row-add{flex-wrap:wrap;}
+    .mnt-input.small{max-width:none;}
+    .mnt-footer{flex-wrap:wrap; gap:10px;}
+    .mnt-footer .right{flex-wrap:wrap;}
+  }
+  .mnt-empty{border:1.5px dashed #E2E4EA; border-radius:8px; padding:26px; text-align:center; color:#9AA1AE; font-size:12.5px;}
+  .mnt-success{background:#EAFBF1; border:1px solid #BEEFD2; color:#166534; font-size:12.5px; padding:9px 13px; border-radius:6px; margin-bottom:18px; display:flex; align-items:center; gap:8px;}
+  .mnt-li-center{text-align:center; padding:30px 10px;}
+  .mnt-li-icon{width:52px; height:52px; border-radius:50%; background:#EFF5FF; color:#0A66C2; font-size:22px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
+</style>
+</head>
+<body>
+
+<div class="mnt-demo">
+  <div class="mnt-demobar">
+    <span>Prototipo — flujo de creación de perfiles</span>
+    <button class="mnt-reset" id="mntResetTop">↺ Reiniciar</button>
+  </div>
+  <div id="mntDemo"></div>
+</div>
+
+<script>
+(function(){
+  const el = document.getElementById('mntDemo');
+
+  const state = {
+    profiles: [{name:'', linkedin:''}],
+    access: {},      // per profile index: { mode, who, email }
+    perms: {},       // per profile index: {ver,crear,ia,aprobar,publicar,configurar}
+    collaborators: [],
+    stepIdx: 0,
+    created: false
+  };
+
+  function steps(){
+    return state.profiles.length === 1
+      ? ['perfiles','acceso','permisos','colaboradores','linkedin']
+      : ['perfiles','acceso','permisos'];
+  }
+  function stepMeta(k){
+    return {
+      perfiles:{t:'Perfiles', s:'Nombre y URL de LinkedIn'},
+      acceso:{t:'Acceso', s:'Cómo trabaja contigo'},
+      permisos:{t:'Permisos', s:'Qué puede hacer cada uno'},
+      colaboradores:{t:'Colaboradores', s:'Opcional'},
+      linkedin:{t:'LinkedIn', s:'Opcional'}
+    }[k];
+  }
+  function ensureRowState(i){
+    if(!state.access[i]) state.access[i] = {mode:'', who:'', email:''};
+    if(!state.perms[i]) state.perms[i] = {ver:true, crear:true, ia:true, aprobar:false, publicar:false, configurar:false};
+  }
+  state.profiles.forEach((_,i)=>ensureRowState(i));
+
+  function render(){
+    const stps = steps();
+    const key = stps[state.stepIdx];
+    el.innerHTML = `
+      <div class="mnt-modal">
+        <div class="mnt-side">
+          <div class="mnt-logo"><span class="dot">u</span> magnettu</div>
+          <div class="mnt-steps">
+            ${stps.map((k,i)=>{
+              const st = i < state.stepIdx ? 'done' : (i===state.stepIdx ? 'current' : 'upcoming');
+              const m = stepMeta(k);
+              return `<div class="mnt-step ${st}">
+                <div class="mnt-step-icon">${st==='done' ? '✓' : (i+1)}</div>
+                <div class="mnt-step-txt"><div class="t">${m.t}</div><div class="s">${m.s}</div></div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div class="mnt-side-foot">
+            Has creado ${state.profiles.filter(p=>p.name.trim()).length} perfil(es)<br>
+            Puedes crear ${43 - state.profiles.filter(p=>p.name.trim()).length} más<br>
+            <a href="#">Ampliar límite →</a>
+          </div>
+        </div>
+        <div class="mnt-content">
+          <div id="mntBody"></div>
+        </div>
+      </div>`;
+    renderStep(key);
+  }
+
+  function renderStep(key){
+    const body = document.getElementById('mntBody');
+    if(key==='perfiles') return renderPerfiles(body);
+    if(key==='acceso') return renderAcceso(body);
+    if(key==='permisos') return renderPermisos(body);
+    if(key==='colaboradores') return renderColaboradores(body);
+    if(key==='linkedin') return renderLinkedin(body);
+  }
+
+  function footer(body, {backDisabled, rightHtml}){
+    const f = document.createElement('div');
+    f.className = 'mnt-footer';
+    f.innerHTML = `<button class="mnt-btn" id="mntBack" ${backDisabled?'style="visibility:hidden"':''}>← Atrás</button><div class="right">${rightHtml}</div>`;
+    body.appendChild(f);
+    const backBtn = f.querySelector('#mntBack');
+    if(backBtn) backBtn.onclick = ()=>{ state.stepIdx = Math.max(0,state.stepIdx-1); render(); };
+  }
+
+  function renderPerfiles(body){
+    body.innerHTML = `
+      <h2>¿Qué perfiles vas a gestionar?</h2>
+      <div class="desc">Añade los perfiles de una vez. El resto los configuras después.</div>
+      <div class="mnt-body" id="rows"></div>
+      <span class="mnt-addlink" id="addRow">+ Añadir más perfiles</span>
+    `;
+    const rows = body.querySelector('#rows');
+    function drawRows(){
+      rows.innerHTML = state.profiles.map((p,i)=>`
+        <div class="mnt-row-add">
+          <input class="mnt-input" placeholder="Nombre del perfil" data-i="${i}" data-f="name" value="${p.name}">
+          <input class="mnt-input" placeholder="linkedin.com/in/..." data-i="${i}" data-f="linkedin" value="${p.linkedin}">
+          ${state.profiles.length>1 ? `<span class="mnt-rmv" data-rm="${i}">✕</span>` : ''}
+        </div>`).join('');
+      rows.querySelectorAll('input').forEach(inp=>{
+        inp.oninput = (e)=>{
+          const i = +e.target.dataset.i, f = e.target.dataset.f;
+          state.profiles[i][f] = e.target.value;
+          updateFooterState();
+        };
+      });
+      rows.querySelectorAll('[data-rm]').forEach(x=>{
+        x.onclick = ()=>{ state.profiles.splice(+x.dataset.rm,1); drawRows(); render(); };
+      });
+    }
+    drawRows();
+    body.querySelector('#addRow').onclick = ()=>{
+      state.profiles.push({name:'', linkedin:''});
+      ensureRowState(state.profiles.length-1);
+      drawRows();
+    };
+    footer(body, {backDisabled:true, rightHtml:`<button class="mnt-btn primary" id="mntNext">Continuar →</button>`});
+    updateFooterState();
+    function updateFooterState(){
+      const nextBtn = document.getElementById('mntNext');
+      const ok = state.profiles.some(p=>p.name.trim());
+      if(nextBtn){ nextBtn.disabled = !ok; nextBtn.onclick = ()=>{ state.profiles.forEach((_,i)=>ensureRowState(i)); state.stepIdx=1; render(); }; }
+    }
+  }
+
+  function renderAcceso(body){
+    body.innerHTML = `
+      <h2>¿Cómo trabaja contigo cada perfil?</h2>
+      <div class="desc">Define cómo va a colaborar cada usuario y quién conecta su LinkedIn a Magnettu.</div>
+      <div class="mnt-body mnt-table-wrap">
+        <table class="mnt-table"><th>¿Quién vinculará LinkedIn?</th><th>Propietario</th></tr></thead>
+          <tbody id="accBody"></tbody>
+        </table>
+      </div>
+    `;
+    const tb = body.querySelector('#accBody');
+    function draw(){
+      tb.innerHTML = state.profiles.filter(p=>p.name.trim()).map((p,idx)=>{
+        const i = state.profiles.indexOf(p);
+        const a = state.access[i];
+        const emailNeeded = a.who === 'propietario';
+        return `<tr>
+          <td><span class="mnt-avatar">${p.name.trim()[0]?.toUpperCase()||'?'}</span>${p.name}</td>
+          <td>
+            <select class="mnt-select" data-i="${i}" data-f="mode">
+              <option value="" ${a.mode===''?'selected':''}>Lo configuro más adelante</option>
+              <option value="magnettu" ${a.mode==='magnettu'?'selected':''}>Accede a Magnettu</option>
+              <option value="enlaces" ${a.mode==='enlaces'?'selected':''}>Vía enlaces compartidos</option>
+            </select>
+          </td>
+          <td>
+            <select class="mnt-select ${a.who?'active':''}" data-i="${i}" data-f="who">
+              <option value="" ${a.who===''?'selected':''}>Sin asignar</option>
+              <option value="yo" ${a.who==='yo'?'selected':''}>La conecto yo</option>
+              <option value="propietario" ${a.who==='propietario'?'selected':''}>La conecta el propietario</option>
+            </select>
+          </td>
+          <td>
+            <input class="mnt-input small" data-i="${i}" data-f="email" placeholder="email@ejemplo.com" value="${a.email}" ${emailNeeded ? '' : 'disabled'}>
+            <div class="mnt-hint">${emailNeeded ? 'Necesario para invitarle' : 'No necesario'}</div>
+          </td>
+        </tr>`;
+      }).join('');
+      tb.querySelectorAll('select, input').forEach(elm=>{
+        elm.onchange = elm.oninput = (e)=>{
+          const i = +e.target.dataset.i, f = e.target.dataset.f;
+          state.access[i][f] = e.target.value;
+          draw();
+        };
+      });
+    }
+    draw();
+    footer(body, {backDisabled:false, rightHtml:`<button class="mnt-btn primary" id="mntNext">Continuar →</button>`});
+    document.getElementById('mntNext').onclick = ()=>{ state.stepIdx=2; render(); };
+  }
+
+  function renderPermisos(body){
+    const active = state.profiles.filter(p=>p.name.trim());
+    body.innerHTML = `
+      <h2>Permisos por perfil</h2>
+      <div class="desc">Define qué puede hacer el propietario de cada perfil.</div>
+      <div class="mnt-body mnt-table-wrap">
+        <table class="mnt-table">
+          <thead><tr><th>Perfiles</th><th>Ver</th><th>Crear</th><th>Usar IA</th><th>Aprobar</th><th>Publicar</th><th>Configurar</th></tr></thead>
+          <tbody>
+            ${active.map(p=>{
+              const i = state.profiles.indexOf(p);
+              const perm = state.perms[i];
+              const fields = ['ver','crear','ia','aprobar','publicar','configurar'];
+              return `<tr><td><span class="mnt-avatar">${p.name.trim()[0]?.toUpperCase()||'?'}</span>${p.name}</td>
+                ${fields.map(f=>`<td style="text-align:center"><input type="checkbox" class="mnt-chk" data-i="${i}" data-f="${f}" ${perm[f]?'checked':''} ${f==='ver'?'disabled':''}></td>`).join('')}
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    body.querySelectorAll('.mnt-chk').forEach(c=>{
+      c.onchange = (e)=>{ state.perms[+e.target.dataset.i][e.target.dataset.f] = e.target.checked; };
+    });
+    const single = active.length === 1;
+    footer(body, {backDisabled:false, rightHtml: single
+      ? `<button class="mnt-btn primary" id="mntNext">Continuar →</button>`
+      : `<button class="mnt-btn" id="mntSkip">Crear perfiles sin notificar</button><button class="mnt-btn primary" id="mntInvite">Crear perfiles e invitar</button>`
+    });
+    if(single){
+      document.getElementById('mntNext').onclick = ()=>{ state.stepIdx=3; render(); };
+    } else {
+      const finish = ()=>{ el.innerHTML = doneScreen(active); };
+      document.getElementById('mntSkip').onclick = finish;
+      document.getElementById('mntInvite').onclick = finish;
+    }
+  }
+
+  function renderColaboradores(body){
+    body.innerHTML = `
+      <h2>Añadir colaboradores <span style="font-weight:400;color:#9AA1AE">(Opcional)</span></h2>
+      <div class="desc">Añade miembros del equipo que ayudarán a gestionar este perfil. Este paso es opcional.</div>
+      <div class="mnt-body">
+        <input class="mnt-input" placeholder="Email o usuario existente" style="margin-bottom:14px;">
+        <div class="mnt-empty">Aún no hay colaboradores<br><span style="font-size:11.5px">Añade miembros del equipo para colaborar en este perfil.</span></div>
+      </div>
+    `;
+    footer(body, {backDisabled:false, rightHtml:`<button class="mnt-btn" id="mntSkip">Crear perfiles sin notificar</button><button class="mnt-btn primary" id="mntInvite">Crear perfiles e invitar</button>`});
+    const goNext = ()=>{ state.stepIdx=4; render(); };
+    document.getElementById('mntSkip').onclick = goNext;
+    document.getElementById('mntInvite').onclick = goNext;
+  }
+
+  function renderLinkedin(body){
+    const active = state.profiles.filter(p=>p.name.trim());
+    const i = state.profiles.indexOf(active[0]);
+    const who = state.access[i]?.who;
+    const ownerConnects = who === 'propietario';
+    body.innerHTML = `
+      <div class="mnt-success">✓ ${active[0].name} se ha creado correctamente</div>
+      <div class="mnt-li-center">
+        <div class="mnt-li-icon">in</div>
+        <h2>Conecta el perfil con LinkedIn</h2>
+        <div class="desc" style="max-width:340px;margin-left:auto;margin-right:auto">
+          ${ownerConnects
+            ? `No es necesario que la conectes tú. El propietario recibirá un email para conectar su cuenta directamente.`
+            : `Para publicar contenido necesitamos vincular la cuenta de LinkedIn. Puedes hacerlo ahora o dejarlo para más tarde.`}
+        </div>
+        ${ownerConnects ? '' : `<button class="mnt-btn primary" style="margin-top:6px">Conectar LinkedIn</button>`}
+      </div>
+    `;
+    footer(body, {backDisabled:true, rightHtml:`<button class="mnt-btn" id="mntOmit">Omitir por ahora</button>`});
+    document.getElementById('mntOmit').onclick = ()=>{ el.innerHTML = doneScreen(active); };
+  }
+
+  function doneScreen(active){
+    return `<div class="mnt-modal" style="min-height:220px;">
+      <div class="mnt-content" style="align-items:center;justify-content:center;text-align:center;">
+        <div class="mnt-li-icon" style="background:#EAFBF1;color:#16A34A;">✓</div>
+        <h2>Perfil${active.length>1?'es':''} creado${active.length>1?'s':''}</h2>
+        <div class="desc">${active.map(p=>p.name).join(', ')}</div>
+        <button class="mnt-btn primary" id="mntRestart" style="margin-top:10px;">Volver a probar el prototipo</button>
+      </div>
+    </div>`;
+  }
+
+  render();
+  function doReset(){
+    state.profiles = [{name:'', linkedin:''}];
+    state.access = {}; state.perms = {}; state.stepIdx = 0;
+    ensureRowState(0);
+    render();
+  }
+  document.getElementById('mntResetTop').onclick = doReset;
+  el.addEventListener('click', (e)=>{
+    if(e.target && e.target.id === 'mntRestart') doReset();
+  });
+})();
+</script>
+
+</body>
+</html>

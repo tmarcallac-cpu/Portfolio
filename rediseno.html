@@ -35,11 +35,18 @@
   a:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
 
   header.top{
-    max-width:var(--maxw); margin:0 auto; padding:26px 24px;
+    padding:14px 22px;
     display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+    position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:10;
+    width:calc(100% - 40px); max-width:var(--maxw);
+    box-sizing:border-box; border-radius:16px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   }
-  header.top a.back{color:var(--muted); text-decoration:none;}
-  header.top a.back:hover{color:var(--ink);}
+  [data-theme="dark"] header.top{background:rgba(0,0,0,.25);}
+  header.top a.back{color:#fff; text-decoration:none; text-shadow:0 1px 4px rgba(0,0,0,.55);}
+  header.top a.back:hover{opacity:.8;}
+  header.top .header-right span{color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55);}
   .header-right{display:flex; align-items:center; gap:16px;}
   .theme-toggle{
     display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
@@ -55,14 +62,19 @@
 
   main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
 
-  .cs-cover{
-    display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:stretch;
-    background:var(--bg); padding:40px 40px 40px 0; margin-top:8px;
+  .hero-banner{width:100%; height:420px; overflow:hidden; position:relative;}
+  .hero-banner img{width:100%; height:100%; object-fit:cover; object-position:center; display:block;}
+  .hero-banner::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:150px;
+    background:linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+    z-index:5; pointer-events:none;
   }
-  .cs-cover-img{display:flex; align-items:center; justify-content:center;}
-  .cs-cover-img img{width:100%; height:100%; object-fit:contain; display:block;}
+
+  .cs-cover{
+    background:var(--bg); padding:40px 0 0; margin-top:8px;
+  }
   @media (max-width:760px){
-    .cs-cover{grid-template-columns:1fr; padding:28px 24px 28px 0; gap:24px;}
+    .cs-cover{padding:28px 0 0;}
   }
 
   .cs-tag{
@@ -70,15 +82,17 @@
     background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;
   }
   h1.cs-title{
-    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(30px,4.6vw,44px); line-height:1.12; max-width:18ch;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(30px,4.6vw,44px); line-height:1.12;
   }
-  p.cs-sub{margin-top:18px; font-size:16.5px; color:var(--muted); max-width:60ch;}
+  p.cs-sub{margin-top:14px; font-size:16.5px; color:var(--muted);}
 
   .meta-strip{
-    margin-top:32px; padding-top:20px; border-top:1px solid var(--line);
+    margin-top:36px;
     display:flex; gap:36px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
   }
   .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
+
+  .cs-divider{border:none; border-top:1px solid var(--line); margin-top:28px;}
 
   h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:19px; margin:44px 0 12px;}
   .prose{font-size:15.5px; color:var(--ink);}
@@ -87,10 +101,27 @@
   .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
   .prose.prose-wide{max-width:none;}
 
-  .impact-list{list-style:none; margin:44px 0; padding:0; max-width:64ch;}
-  .impact-list li{position:relative; padding-left:22px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
+  .impact-list{list-style:none; margin:28px 0 44px; padding:0; max-width:64ch;}
+  .impact-list li{position:relative; padding-left:24px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
   .impact-list li:last-child{margin-bottom:0;}
-  .impact-list li::before{content:"–"; position:absolute; left:0; color:var(--accent); font-weight:600;}
+  .impact-list li::before{
+    content:""; position:absolute; left:0; top:5px; width:14px; height:14px;
+    background-color:var(--coral);
+    -webkit-mask-image:url('imagenes/icons/bullets.svg'); mask-image:url('imagenes/icons/bullets.svg');
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+  }
+  [data-theme="dark"] .impact-list li::before{background-color:#fff;}
+
+  .phase-title{margin:64px 0 8px; text-align:center;}
+  .phase-title .phase-label{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:14px;
+  }
+  .phase-title h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:28px; line-height:1.25; margin:0;
+  }
 
   .problem-statement{
     border-left:3px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:0 var(--radius) var(--radius) 0;
@@ -232,21 +263,24 @@
 </head>
 <body>
 
-<header class="top">
-  <a class="back" href="index.html">← Volver</a>
-  <div class="header-right">
-    <span>Tatiana</span>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
-      <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-      </svg>
-      <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
-    </button>
-  </div>
-</header>
+<div class="hero-banner">
+  <img src="imagenes/bumble/portada-bumble-proyecto.png" alt="Imagen de portada — Rediseño de Bumble">
+  <header class="top">
+    <a class="back" href="index.html">← Volver</a>
+    <div class="header-right">
+      <span>Tatiana</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
+        <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+</div>
 
 <main>
   <div class="cs-cover">
@@ -260,15 +294,20 @@
         <span>Herramientas<strong>Figma, Claude</strong></span>
         <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
       </div>
+      <div class="cs-divider"></div>
     </div>
-    <div class="cs-cover-img"><img src="imagenes/general/bumble-framework.png" alt="Imagen de portada — Rediseño de Bumble"></div>
   </div>
 
   <ul class="impact-list">
-    <li>Rediseñé el perfil para que el match también dependa de afinidad de planes, no solo de fotos</li>
-    <li>Convertí la organización de la cita en algo compartido, no una carga de una sola persona</li>
-    <li>Validé el concepto con entrevistas reales antes de diseñar cualquier pantalla</li>
+    <li>Rediseñé el perfil para que el match también dependa de afinidad de planes, no solo de fotos.</li>
+    <li>Convertí la organización de la cita en algo compartido, no una carga de una sola persona.</li>
+    <li>Validé el concepto con entrevistas reales antes de diseñar cualquier pantalla.</li>
   </ul>
+
+  <div class="phase-title">
+    <span class="phase-label">Research y diseño</span>
+    <h2 class="phase-h">Entender el problema antes de diseñar</h2>
+  </div>
 
   <h3 class="sub-h">Contexto</h3>
   <p class="prose">Antes de decidirme por Bumble, exploré otra dirección con una entrevista sobre YouTube, pero la persona estaba satisfecha con el producto y no había una fricción real que justificara un rediseño. En cambio, una entrevista sobre citas online sacó a la luz un problema mucho más claro y con más capas, así que decidí centrar el case study ahí.</p>
@@ -460,12 +499,15 @@
     Bumble ya tiene en su ADN la idea de dar control y seguridad, las mujeres escriben primero. Extender esa misma lógica de consentimiento mutuo a la fase de organizar la cita es coherente con la marca, no un añadido ajeno.
   </div>
 
+  <div class="phase-title">
+    <span class="phase-label">Prototipo y validación</span>
+    <h2 class="phase-h">De la idea al prototipo probado</h2>
+  </div>
+
   <h3 class="sub-h">Test de usabilidad</h3>
   <p class="prose">Para testear esto con usuarios reales, construí un prototipo interactivo en HTML con ayuda de IA, no una pieza de producción, sino una herramienta rápida para poder observar cómo navegaba la gente de verdad. Tiene algunos fallos visuales y de flujo, priorizar velocidad de iteración sobre acabado fue una decisión consciente para poder testear antes. Puedes probarlo tú mismo/a:</p>
 
-  <div class="miro-wrap" style="aspect-ratio:360/780; max-width:400px;">
-    <iframe src="prototipo-test-bumble.html" style="width:100%; height:100%; border:0; display:block;"></iframe>
-  </div>
+  <img src="imagenes/bumble/imagen-bumble-test.png" alt="Test de usabilidad — prototipo interactivo" style="width:100%; height:auto; object-fit:contain; border-radius:5px; margin:20px 0 8px; display:block;" loading="lazy" decoding="async">
   <p class="miro-note">Prototipo interactivo construido con IA para el test de usabilidad.</p>
 
   <h3 class="sub-h">Cómo fue evolucionando</h3>
