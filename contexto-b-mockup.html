@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Contexto B — Modal dentro de Magnettu</title>
+<style>
+  :root {
+    --deepblue-300: #9fbbda;
+    --deepblue-700: #30527c;
+    --deepblue-900: #273a53;
+    --deepblue-A50: #1a2537;
+    --success-main: #16a34a;
+    --bg-default: #F8F9FA;
+    --bg-paper: #FFFFFF;
+    --text-primary: rgba(0,0,0,0.87);
+    --text-secondary: rgba(0,0,0,0.6);
+    --text-disabled: rgba(0,0,0,0.38);
+    --divider: rgba(0,0,0,0.12);
+    --radius-xs: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-family); background: #ddd; }
+
+  /* ===== Fake dashboard de fondo ===== */
+  .fake-dashboard {
+    display: flex;
+    height: 100vh;
+  }
+  .fake-sidebar {
+    width: 200px;
+    background: var(--deepblue-900);
+    color: white;
+    padding: 20px 16px;
+    flex-shrink: 0;
+  }
+  .fake-sidebar .logo { font-weight: 700; font-size: 16px; margin-bottom: 24px; }
+  .fake-sidebar .item {
+    font-size: 13px; padding: 8px 10px; border-radius: 6px;
+    margin-bottom: 4px; opacity: 0.75;
+  }
+  .fake-main { flex: 1; background: var(--bg-default); padding: 24px; }
+  .fake-topbar {
+    background: var(--bg-paper); border: 1px solid var(--divider);
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+    font-size: 13px; color: var(--text-secondary);
+  }
+  .fake-card {
+    background: var(--bg-paper); border: 1px solid var(--divider);
+    border-radius: 8px; height: 200px;
+  }
+
+  /* ===== Overlay + modal ===== */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+  }
+  .modal {
+    background: var(--bg-paper);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 3px 14px rgba(0,0,0,0.12), 0 8px 10px rgba(0,0,0,0.14), 0 5px 5px rgba(0,0,0,0.20);
+    padding: 32px;
+    width: 480px;
+    max-width: 90vw;
+  }
+
+  .modal h1 { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+  .modal .subtitle {
+    font-size: 14px; font-weight: 500; line-height: 1.43;
+    color: var(--text-secondary); margin: 0 0 24px;
+  }
+
+  .field-block { margin-bottom: 20px; }
+  .field-label { font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px; color: #6E7794; }
+  .url-row { display: flex; gap: 8px; }
+
+  .input-wrap {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--divider); border-radius: var(--radius-xs);
+    padding: 10px 12px; background: var(--bg-paper);
+  }
+  .input-wrap:focus-within { border-color: var(--deepblue-700); }
+  .input-wrap svg { flex-shrink: 0; color: var(--text-secondary); }
+  .input-wrap input {
+    border: none; outline: none; font-family: var(--font-family);
+    font-size: 14px; font-weight: 500; width: 100%; background: transparent;
+  }
+  .input-wrap input::placeholder { color: var(--text-disabled); }
+
+  .btn-save-url {
+    padding: 0 16px; border-radius: var(--radius-md); border: none;
+    font-family: var(--font-family); font-size: 13px; font-weight: 700;
+    cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px;
+  }
+  .btn-save-url.active { background: var(--deepblue-900); color: white; }
+  .btn-save-url.active:hover { background: var(--deepblue-A50); }
+  .btn-save-url.disabled { background: #ECECEC; color: var(--text-disabled); cursor: not-allowed; }
+
+  .spinner {
+    width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .btn-linkedin {
+    width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: 8px; height: 38px; background: var(--deepblue-700); color: white;
+    border: none; border-radius: var(--radius-md); font-family: var(--font-family);
+    font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .btn-linkedin:hover { background: var(--deepblue-A50); }
+
+  .connected-card {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--divider); border-radius: var(--radius-xs);
+  }
+  .connected-card .avatar {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--deepblue-300);
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-weight: 500; font-size: 13px; flex-shrink: 0;
+  }
+  .connected-card .name { font-size: 14px; font-weight: 600; flex: 1; }
+  .connected-card .status {
+    display: flex; align-items: center; gap: 4px; font-size: 12px;
+    font-weight: 600; color: var(--success-main);
+  }
+
+  .modal-footer {
+    display: flex; justify-content: flex-end; margin-top: 24px;
+    padding-top: 20px; border-top: 1px solid var(--divider);
+  }
+  .btn-later {
+    background: none; border: none; color: #6E7794;
+    font-family: var(--font-family); font-size: 14px; font-weight: 600;
+    cursor: pointer; padding: 8px 12px; border-radius: var(--radius-md);
+    transition: color 0.15s ease;
+  }
+  .btn-later:hover { color: #4D5362; }
+
+  .state-switcher {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 20; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    max-width: 90vw;
+  }
+  .state-switcher button {
+    font-family: var(--font-family); font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--divider);
+    background: var(--bg-paper); color: var(--text-secondary); cursor: pointer;
+  }
+  .state-switcher button.active { background: var(--deepblue-900); color: white; border-color: var(--deepblue-900); }
+
+  .reopen-btn {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 20; font-family: var(--font-family); font-size: 12px; font-weight: 600;
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--divider);
+    background: var(--bg-paper); cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+  <div class="state-switcher">
+    <button class="active" data-state="empty">Vacío</button>
+    <button data-state="solo-conectar">Solo conectar (URL ya puesta)</button>
+  </div>
+
+  <div class="fake-dashboard">
+    <div class="fake-sidebar">
+      <div class="logo">magnettu</div>
+      <div class="item">Home</div>
+      <div class="item">Gestión de contenido</div>
+      <div class="item">Inspiración</div>
+      <div class="item">Planificación</div>
+      <div class="item">Rankings</div>
+    </div>
+    <div class="fake-main">
+      <div class="fake-topbar">Conecta tu cuenta de LinkedIn — Vincula LinkedIn para gestionar y publicar tus contenidos directamente desde magnettu.</div>
+      <div class="fake-card"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h1>Hola, Mar Rojas</h1>
+      <p class="subtitle" id="intro-text">Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.</p>
+
+      <div class="field-block" id="url-block">
+        <label class="field-label">1. URL de tu perfil de LinkedIn</label>
+        <div class="url-row">
+          <div class="input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            <input id="url-input" type="text" placeholder="https://linkedin.com/in/tu-perfil" />
+          </div>
+          <button class="btn-save-url disabled" id="save-url-btn">Guardar</button>
+        </div>
+      </div>
+
+      <div class="field-block">
+        <label class="field-label" id="connect-label">2. Conecta tu LinkedIn a tu perfil</label>
+        <button class="btn-linkedin" id="connect-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          Conectar cuenta de LinkedIn
+        </button>
+        <div class="connected-card" id="connected-card" style="display:none;">
+          <div class="avatar">MR</div>
+          <div class="name">Mar Rojas</div>
+          <div class="status">
+            Conectado
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-later" id="later-btn">Hacerlo más tarde</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="reopen-btn" id="reopen-btn" style="display:none;">Modal cerrado — click para volver a abrir</button>
+
+<script>
+  const urlInput = document.getElementById('url-input');
+  const urlBlock = document.getElementById('url-block');
+  const saveUrlBtn = document.getElementById('save-url-btn');
+  const introText = document.getElementById('intro-text');
+  const connectLabel = document.getElementById('connect-label');
+  const connectBtn = document.getElementById('connect-btn');
+  const connectedCard = document.getElementById('connected-card');
+  const laterBtn = document.getElementById('later-btn');
+  const overlay = document.getElementById('overlay');
+  const reopenBtn = document.getElementById('reopen-btn');
+  const stateButtons = document.querySelectorAll('.state-switcher button');
+
+  const INTRO_FULL = 'Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.';
+  const INTRO_SOLO_CONECTAR = 'Has sido invitado a unirte a Magnettu. Solo falta un paso: conecta tu cuenta de LinkedIn.';
+
+  let lastSavedUrl = '';
+  let saveStatus = 'idle';
+  let showUrlField = true;
+
+  function updateSaveButton() {
+    const text = urlInput.value.trim();
+    const hasUnsaved = text.length > 0 && text !== lastSavedUrl;
+    const canSave = hasUnsaved && saveStatus !== 'saving';
+    saveUrlBtn.classList.toggle('active', canSave);
+    saveUrlBtn.classList.toggle('disabled', !canSave);
+
+    if (saveStatus === 'saving') {
+      saveUrlBtn.innerHTML = '<span class="spinner"></span> Guardando...';
+    } else if (saveStatus === 'saved') {
+      saveUrlBtn.textContent = 'Guardado';
+    } else {
+      saveUrlBtn.textContent = 'Guardar';
+    }
+  }
+
+  urlInput.addEventListener('input', () => {
+    saveStatus = 'idle';
+    updateSaveButton();
+  });
+
+  saveUrlBtn.addEventListener('click', () => {
+    if (saveUrlBtn.classList.contains('disabled')) return;
+    saveStatus = 'saving';
+    updateSaveButton();
+    setTimeout(() => {
+      lastSavedUrl = urlInput.value.trim();
+      saveStatus = 'saved';
+      updateSaveButton();
+      setTimeout(() => {
+        saveStatus = 'idle';
+        updateSaveButton();
+      }, 1200);
+    }, 800);
+  });
+
+  function closeModal() {
+    overlay.style.display = 'none';
+    reopenBtn.style.display = 'block';
+  }
+
+  connectBtn.addEventListener('click', () => {
+    // se conecta y el modal se cierra automaticamente, sin transicion
+    closeModal();
+  });
+
+  laterBtn.addEventListener('click', () => {
+    // la URL ya guardada (si la hubo) se mantiene; el modal se cierra
+    closeModal();
+  });
+
+  reopenBtn.addEventListener('click', () => {
+    overlay.style.display = 'flex';
+    reopenBtn.style.display = 'none';
+  });
+
+  function setState(state) {
+    showUrlField = state !== 'solo-conectar';
+    urlBlock.style.display = showUrlField ? 'block' : 'none';
+    connectLabel.textContent = showUrlField ? '2. Conecta tu LinkedIn a tu perfil' : 'Conecta tu LinkedIn a tu perfil';
+    introText.textContent = showUrlField ? INTRO_FULL : INTRO_SOLO_CONECTAR;
+
+    urlInput.value = '';
+    lastSavedUrl = '';
+    saveStatus = 'idle';
+    connectBtn.style.display = 'flex';
+    connectedCard.style.display = 'none';
+    overlay.style.display = 'flex';
+    reopenBtn.style.display = 'none';
+
+    updateSaveButton();
+    stateButtons.forEach(b => b.classList.toggle('active', b.dataset.state === state));
+  }
+
+  stateButtons.forEach(btn => {
+    btn.addEventListener('click', () => setState(btn.dataset.state));
+  });
+
+  setState('empty');
+</script>
+
+</body>
+</html>

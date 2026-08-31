@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Contexto A — Página standalone LinkedIn</title>
+<style>
+  :root {
+    --deepblue-50: #f4f7fb;
+    --deepblue-100: #e8edf6;
+    --deepblue-300: #9fbbda;
+    --deepblue-700: #30527c;
+    --deepblue-900: #273a53;
+    --deepblue-A50: #1a2537;
+
+    --success-main: #16a34a;
+
+    --bg-default: #F8F9FA;
+    --bg-paper: #FFFFFF;
+
+    --text-primary: rgba(0,0,0,0.87);
+    --text-secondary: rgba(0,0,0,0.6);
+    --text-disabled: rgba(0,0,0,0.38);
+    --divider: rgba(0,0,0,0.12);
+
+    --radius-xs: 4px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+
+    --font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-family);
+    background: var(--bg-default);
+    color: var(--text-primary);
+    padding: 32px 16px;
+  }
+
+  .page-wrap { max-width: 480px; margin: 0 auto; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-bottom: 32px;
+  }
+  .brand-header .logo-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--deepblue-900); display: flex;
+    align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+  }
+  .brand-header .logo-text { font-weight: 700; font-size: 18px; color: var(--deepblue-900); }
+
+  .onboard-card {
+    background: var(--bg-paper);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.12);
+    border: 1px solid var(--divider);
+    padding: 32px;
+    min-height: 360px;
+  }
+
+  .onboard-card h1 { font-size: 24px; font-weight: 700; margin: 0 0 8px; }
+  .onboard-card .subtitle {
+    font-size: 14px; font-weight: 500; line-height: 1.43;
+    color: var(--text-secondary); margin: 0 0 24px;
+  }
+
+  .field-block { margin-bottom: 20px; }
+  .field-label { font-size: 12px; font-weight: 700; display: block; margin-bottom: 6px; color: #6E7794; }
+
+  .url-row { display: flex; gap: 8px; }
+
+  .input-wrap {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--divider); border-radius: var(--radius-xs);
+    padding: 10px 12px; transition: border-color 0.15s ease; background: var(--bg-paper);
+  }
+  .input-wrap:focus-within { border-color: var(--deepblue-700); }
+  .input-wrap svg { flex-shrink: 0; color: var(--text-secondary); }
+  .input-wrap input {
+    border: none; outline: none; font-family: var(--font-family);
+    font-size: 14px; font-weight: 500; color: var(--text-primary);
+    width: 100%; background: transparent;
+  }
+  .input-wrap input::placeholder { color: var(--text-disabled); }
+
+  .btn-save-url {
+    height: auto;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-family: var(--font-family);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-save-url.active {
+    background: var(--deepblue-900);
+    color: white;
+  }
+  .btn-save-url.active:hover { background: var(--deepblue-A50); }
+  .btn-save-url.disabled {
+    background: #ECECEC;
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    width: 12px; height: 12px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .btn-linkedin {
+    width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: 8px; height: 38px; background: var(--deepblue-700); color: white;
+    border: none; border-radius: var(--radius-md); font-family: var(--font-family);
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s ease;
+  }
+  .btn-linkedin:hover { background: var(--deepblue-A50); }
+
+  .connected-card {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--divider); border-radius: var(--radius-xs);
+  }
+  .connected-card .avatar {
+    width: 32px; height: 32px; border-radius: 50%; background: var(--deepblue-300);
+    display: flex; align-items: center; justify-content: center; color: white;
+    font-weight: 500; font-size: 13px; flex-shrink: 0;
+  }
+  .connected-card .name { font-size: 14px; font-weight: 600; flex: 1; }
+  .connected-card .status {
+    display: flex; align-items: center; gap: 4px; font-size: 12px;
+    font-weight: 600; color: var(--success-main);
+  }
+
+  .complete-block { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--divider); }
+
+  .btn-complete {
+    width: 100%; height: 40px; border-radius: var(--radius-md); border: none;
+    font-family: var(--font-family); font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s ease;
+  }
+  .btn-complete.enabled { background: var(--deepblue-900); color: white; }
+  .btn-complete.enabled:hover { background: var(--deepblue-A50); }
+  .btn-complete.disabled { background: #ECECEC; color: var(--text-disabled); cursor: not-allowed; }
+
+  .success-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; min-height: 296px; text-align: center;
+  }
+  .success-screen svg { color: var(--success-main); }
+  .success-screen p { font-size: 17px; font-weight: 700; margin: 0; max-width: 320px; }
+
+  .state-switcher {
+    max-width: 480px; margin: 0 auto 24px; display: flex; gap: 8px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .state-switcher button {
+    font-family: var(--font-family); font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--divider);
+    background: var(--bg-paper); color: var(--text-secondary); cursor: pointer;
+  }
+  .state-switcher button.active { background: var(--deepblue-900); color: white; border-color: var(--deepblue-900); }
+
+  .dev-note { max-width: 480px; margin: 16px auto 0; font-size: 11px; color: var(--text-disabled); text-align: center; }
+</style>
+</head>
+<body>
+
+  <div class="state-switcher">
+    <button class="active" data-state="empty">Vacío</button>
+    <button data-state="solo-conectar">Solo conectar (URL ya puesta)</button>
+    <button data-state="success">Pantalla de éxito</button>
+  </div>
+
+  <div class="page-wrap">
+    <div class="brand-header">
+      <div class="logo-circle">U</div>
+      <div class="logo-text">magnettu</div>
+    </div>
+
+    <div class="onboard-card" id="card">
+      <!-- Contenido normal -->
+      <div id="form-content">
+        <h1>Hola, Mar Rojas</h1>
+        <p class="subtitle" id="intro-text">Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.</p>
+
+        <div class="field-block" id="url-block">
+          <label class="field-label">1. URL de tu perfil de LinkedIn</label>
+          <div class="url-row">
+            <div class="input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              <input id="url-input" type="text" placeholder="https://linkedin.com/in/tu-perfil" />
+            </div>
+            <button class="btn-save-url disabled" id="save-url-btn">Guardar</button>
+          </div>
+        </div>
+
+        <div class="field-block" id="connect-block">
+          <label class="field-label" id="connect-label">2. Conecta tu LinkedIn a tu perfil</label>
+          <button class="btn-linkedin" id="connect-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            Conectar cuenta de LinkedIn
+          </button>
+          <div class="connected-card" id="connected-card" style="display:none;">
+            <div class="avatar">MR</div>
+            <div class="name">Mar Rojas</div>
+            <div class="status">
+              Conectado
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="complete-block">
+          <button class="btn-complete disabled" id="complete-btn">Completar registro</button>
+        </div>
+      </div>
+
+      <!-- Pantalla de éxito -->
+      <div class="success-screen" id="success-content" style="display:none;">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke-width="2"/>
+        </svg>
+        <p>¡Estupendo! Todo ha sido conectado correctamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="dev-note">Mockup de validación — no es el componente final de producción</p>
+
+<script>
+  const urlInput = document.getElementById('url-input');
+  const urlBlock = document.getElementById('url-block');
+  const saveUrlBtn = document.getElementById('save-url-btn');
+  const introText = document.getElementById('intro-text');
+  const connectLabel = document.getElementById('connect-label');
+  const connectBtn = document.getElementById('connect-btn');
+  const connectedCard = document.getElementById('connected-card');
+  const completeBtn = document.getElementById('complete-btn');
+  const formContent = document.getElementById('form-content');
+  const successContent = document.getElementById('success-content');
+  const stateButtons = document.querySelectorAll('.state-switcher button');
+
+  const INTRO_FULL = 'Has sido invitado a unirte a Magnettu. Para completar tu perfil, por favor vincula tu cuenta de LinkedIn.';
+  const INTRO_SOLO_CONECTAR = 'Has sido invitado a unirte a Magnettu. Solo falta un paso: conecta tu cuenta de LinkedIn.';
+
+  let lastSavedUrl = '';
+  let isConnected = false;
+  let showUrlField = true;
+  let saveStatus = 'idle'; // idle | saving | saved
+
+  function updateSaveButton() {
+    const text = urlInput.value.trim();
+    const hasUnsaved = text.length > 0 && text !== lastSavedUrl;
+    const canSave = hasUnsaved && saveStatus !== 'saving';
+
+    saveUrlBtn.classList.toggle('active', canSave);
+    saveUrlBtn.classList.toggle('disabled', !canSave);
+
+    if (saveStatus === 'saving') {
+      saveUrlBtn.innerHTML = '<span class="spinner"></span> Guardando...';
+    } else if (saveStatus === 'saved') {
+      saveUrlBtn.textContent = 'Guardado';
+    } else {
+      saveUrlBtn.textContent = 'Guardar';
+    }
+  }
+
+  function updateCompleteButton() {
+    const urlStepDone = !showUrlField || lastSavedUrl.trim().length > 0;
+    const canComplete = urlStepDone && isConnected;
+    completeBtn.classList.toggle('enabled', canComplete);
+    completeBtn.classList.toggle('disabled', !canComplete);
+  }
+
+  urlInput.addEventListener('input', () => {
+    saveStatus = 'idle';
+    updateSaveButton();
+  });
+
+  saveUrlBtn.addEventListener('click', () => {
+    if (saveUrlBtn.classList.contains('disabled')) return;
+    saveStatus = 'saving';
+    updateSaveButton();
+    setTimeout(() => {
+      lastSavedUrl = urlInput.value.trim();
+      saveStatus = 'saved';
+      updateSaveButton();
+      updateCompleteButton();
+      setTimeout(() => {
+        saveStatus = 'idle';
+        updateSaveButton();
+      }, 1200);
+    }, 800);
+  });
+
+  connectBtn.addEventListener('click', () => {
+    isConnected = true;
+    connectBtn.style.display = 'none';
+    connectedCard.style.display = 'flex';
+    updateCompleteButton();
+  });
+
+  completeBtn.addEventListener('click', () => {
+    if (completeBtn.classList.contains('disabled')) return;
+    formContent.style.display = 'none';
+    successContent.style.display = 'flex';
+  });
+
+  function setState(state) {
+    formContent.style.display = 'block';
+    successContent.style.display = 'none';
+
+    showUrlField = state !== 'solo-conectar';
+    urlBlock.style.display = showUrlField ? 'block' : 'none';
+    connectLabel.textContent = showUrlField ? '2. Conecta tu LinkedIn a tu perfil' : 'Conecta tu LinkedIn a tu perfil';
+    introText.textContent = showUrlField ? INTRO_FULL : INTRO_SOLO_CONECTAR;
+
+    urlInput.value = '';
+    lastSavedUrl = '';
+    isConnected = false;
+    saveStatus = 'idle';
+    connectBtn.style.display = 'flex';
+    connectedCard.style.display = 'none';
+
+    if (state === 'success') {
+      formContent.style.display = 'none';
+      successContent.style.display = 'flex';
+    }
+
+    updateSaveButton();
+    updateCompleteButton();
+    stateButtons.forEach(b => b.classList.toggle('active', b.dataset.state === state));
+  }
+
+  stateButtons.forEach(btn => {
+    btn.addEventListener('click', () => setState(btn.dataset.state));
+  });
+
+  setState('empty');
+</script>
+
+</body>
+</html>
