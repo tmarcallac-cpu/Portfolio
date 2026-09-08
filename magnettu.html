@@ -96,9 +96,11 @@
 
   .meta-strip{
     margin-top:36px;
-    display:flex; gap:36px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    display:flex; flex-direction:column; gap:10px; list-style:none; padding:0;
   }
-  .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
+  .meta-strip li{position:relative; padding-left:16px; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; color:var(--ink);}
+  .meta-strip li::before{content:"•"; position:absolute; left:0; color:var(--muted);}
+  .meta-strip strong{font-family:'IBM Plex Mono', monospace; font-weight:500; color:var(--muted); font-size:12px; margin-right:4px;}
 
   .cs-divider{border:none; border-top:1px solid var(--line); margin-top:28px;}
 
@@ -281,11 +283,12 @@
       <span class="cs-tag">Case study · En producción</span>
       <h1 class="cs-title">De un modal confuso a un flujo guiado</h1>
       <p class="cs-sub">Rediseño de la creación de perfiles en Magnettu, prototipado de forma interactiva con IA.</p>
-      <div class="meta-strip">
-        <span>Rol<strong>Product Designer</strong></span>
-        <span>Empresa<strong>Magnettu</strong></span>
-        <span>Herramientas<strong>Figma, Claude</strong></span>
-      </div>
+      <ul class="meta-strip">
+        <li><strong>Rol:</strong>Product Designer</li>
+        <li><strong>Empresa:</strong>Magnettu</li>
+        <li><strong>Herramientas:</strong>Figma, Claude</li>
+        <li><strong>Scope:</strong>Research → Arquitectura del flujo → Diseño de interacción → Definición de timelines de diseño → Traspaso a desarrollo</li>
+      </ul>
       <div class="cs-divider"></div>
     </div>
   </div>

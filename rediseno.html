@@ -88,9 +88,11 @@
 
   .meta-strip{
     margin-top:36px;
-    display:flex; gap:36px; flex-wrap:wrap; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted);
+    display:flex; flex-direction:column; gap:10px; list-style:none; padding:0;
   }
-  .meta-strip strong{color:var(--ink); font-weight:500; display:block; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; margin-top:2px;}
+  .meta-strip li{position:relative; padding-left:16px; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; color:var(--ink);}
+  .meta-strip li::before{content:"•"; position:absolute; left:0; color:var(--muted);}
+  .meta-strip strong{font-family:'IBM Plex Mono', monospace; font-weight:500; color:var(--muted); font-size:12px; margin-right:4px;}
 
   .cs-divider{border:none; border-top:1px solid var(--line); margin-top:28px;}
 
@@ -297,12 +299,11 @@
       <span class="cs-tag">Case study · Finalizado</span>
       <h1 class="cs-title">Rediseño de Bumble: del match visual al match compartido</h1>
       <p class="cs-sub">Rediseño completo del perfil, el match, el chat y la organización de la cita en Bumble, a partir de research directo con usuarios.</p>
-      <div class="meta-strip">
-        <span>Rol<strong>Product Designer</strong></span>
-        <span>Producto<strong>Bumble (rediseño no oficial)</strong></span>
-        <span>Herramientas<strong>Figma, Claude</strong></span>
-        <span>Alcance<strong>Perfil, match, chat y cita</strong></span>
-      </div>
+      <ul class="meta-strip">
+        <li><strong>Rol:</strong>Product Designer</li>
+        <li><strong>Herramientas:</strong>Miro, Figma, IA</li>
+        <li><strong>Scope:</strong>Research → Journey map → Wireframes → Prototipo de media fidelidad → Test de usabilidad</li>
+      </ul>
       <div class="cs-divider"></div>
     </div>
   </div>
