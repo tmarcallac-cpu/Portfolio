@@ -13,7 +13,7 @@
   :root, [data-theme="light"]{
     color-scheme: light;
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
-    --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
+    --line:#E4E4EA; --accent:#6B7FD1; --accent-soft:#E8ECFA;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
     --card:#FFFFFF; color-scheme:light;
   }
@@ -272,7 +272,7 @@
 <script>
   (function(){
     var saved = localStorage.getItem('theme');
-    document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
   })();
 </script>
 </head>

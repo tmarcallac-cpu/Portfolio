@@ -11,20 +11,26 @@
 <style>
   :root, [data-theme="light"]{
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D; --muted-soft:#ABABB6;
-    --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
+    --line:#E4E4EA; --accent:#6B7FD1; --accent-soft:#E8ECFA; --accent-strong:#4A5FE8;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
     --lilac:#8B5CF6; --lilac-soft:#F1ECFE;
     --card:#FFFFFF; --card-2:#F5F0E8;
     --accent-gradient:linear-gradient(135deg, var(--accent), var(--accent));
+    --btn-solid-bg:var(--accent-strong);
+    --hero-bg:#DEE3F5;
+    --hero-divider-color:rgba(21,22,26,.18);
     color-scheme:light;
   }
   [data-theme="dark"]{
     --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4; --muted-soft:#6E6A7D;
-    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242; --accent-strong:var(--accent);
     --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
     --lilac:#A99BFF; --lilac-soft:#241F3D;
     --card:#1D1A24; --card-2:#241F30;
     --accent-gradient:linear-gradient(135deg, #8B85F8, #F2789F);
+    --btn-solid-bg:var(--accent-gradient);
+    --hero-bg:#1E1B2A;
+    --hero-divider-color:var(--line);
     color-scheme:dark;
   }
   :root{
@@ -66,6 +72,10 @@
     .custom-cursor{display:none;}
   }
 
+  .hero-band{
+    background:linear-gradient(180deg, var(--hero-bg) 0%, var(--hero-bg) 65%, transparent 100%);
+  }
+
   header.top{
     max-width:var(--maxw); margin:0 auto; padding:26px 24px;
     display:flex; justify-content:space-between; align-items:center;
@@ -75,7 +85,7 @@
   header.top nav a{text-decoration:none; color:var(--muted); transition:.15s;}
   header.top nav a:hover{color:var(--ink);}
   .btn-ghost{border:1px solid var(--line); border-radius:100px; padding:var(--pad-btn); text-decoration:none; color:var(--ink);}
-  .btn-solid{background:var(--accent-gradient); color:var(--bg); border-radius:100px; padding:var(--pad-btn); text-decoration:none; line-height:1.4;}
+  .btn-solid{background:var(--btn-solid-bg); color:var(--bg); border-radius:100px; padding:var(--pad-btn); text-decoration:none; line-height:1.4;}
   header.top nav a.btn-solid,
   header.top nav a.btn-solid:hover,
   header.top nav a.btn-solid:focus,
@@ -101,32 +111,6 @@
   .nav-toggle.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
   .nav-toggle.active span:nth-child(2){opacity:0;}
   .nav-toggle.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-
-  .scroll-dots{
-    position:fixed; right:26px; top:50%; transform:translateY(-50%); z-index:40;
-    display:flex; flex-direction:column; align-items:center; gap:12px;
-  }
-  .scroll-dots-list{display:flex; flex-direction:column; align-items:center; gap:14px;}
-  .scroll-dots .dot{
-    width:8px; height:8px; padding:0; border-radius:50%; border:none; background:var(--line);
-    cursor:pointer; transition:.25s ease; display:block;
-  }
-  .scroll-dots .dot.active{width:11px; height:11px; background:var(--accent);}
-  .scroll-dots .arrow{
-    width:26px; height:26px; border-radius:50%; border:1px solid var(--line);
-    background:var(--card); color:var(--muted); display:flex; align-items:center; justify-content:center;
-    cursor:pointer; font-size:13px; transition:.2s ease;
-  }
-  .scroll-dots .arrow:hover{color:var(--bg); background:var(--accent); border-color:var(--accent);}
-  .scroll-dots .arrow[hidden]{display:none;}
-  .scroll-dots-label{
-    position:absolute; right:100%; top:50%; transform:translateY(-50%); margin-right:14px;
-    background:var(--ink); color:var(--bg); font-family:'IBM Plex Mono', monospace; font-size:12px;
-    padding:var(--pad-pill); border-radius:6px; white-space:nowrap;
-    opacity:0; pointer-events:none; transition:opacity .3s ease;
-  }
-  .scroll-dots-label.show{opacity:1;}
-  @media (max-width:820px){.scroll-dots{display:none;}}
 
   @media (max-width:820px){
     .nav-toggle{display:flex;}
@@ -169,13 +153,16 @@
   .hero h1 .hl-large strong{font-weight:700;}
   .hero h1 .accent{color:var(--accent);}
   .hero-sub{font-size:clamp(20px,2.8vw,28px); font-weight:400; color:var(--ink); font-family:'Space Grotesk', sans-serif;}
-  .hero-divider{border:none; border-top:1px solid var(--line); margin:28px 0;}
+  .hero-divider{border:none; border-top:1px solid var(--hero-divider-color); margin:28px 0;}
+  .section-divider{border:none; border-top:1px solid var(--line); margin-top:var(--space-2xl);}
+  .section-divider-top{margin-top:0;}
   .hero p.lede{margin-top:0; font-size:17px; color:var(--muted); max-width:48ch; opacity:0; animation:fadeUp .5s ease .6s forwards;}
   .hero-tags{margin-top:26px; display:flex; gap:10px; flex-wrap:wrap; opacity:0; animation:fadeUp .5s ease .75s forwards;}
   .hero-tags span{font-family:'IBM Plex Mono', monospace; font-size:11.5px; padding:var(--pad-pill); border-radius:100px;}
   .hero-tags span:nth-child(1){background:var(--accent-soft); color:var(--accent);}
   .hero-tags span:nth-child(2){background:var(--coral-soft); color:var(--coral);}
   .hero-tags span:nth-child(3){background:var(--mint-soft); color:var(--mint);}
+  .hero-cta{margin-top:26px; display:inline-block; opacity:0; animation:fadeUp .5s ease .75s forwards;}
 
   /* INTRO CARD */
   .intro-card{
@@ -199,7 +186,6 @@
     font-size:10.5px; padding:4px 8px; border-radius:100px; opacity:0; animation:popIn .3s ease 1.1s forwards;
   }
   .photo .pin.p1{top:20px; right:-30px;}
-  .photo .pin.p2{bottom:34px; left:-24px; animation-delay:1.3s;}
 
   @media (max-width:820px){
     .photo{order:-1; width:150px; height:150px; margin:0 auto 32px;}
@@ -331,7 +317,7 @@
   footer.contact h2{font-family:'Space Grotesk', sans-serif; font-size:28px; margin-bottom:12px;}
   footer.contact a.mail{
     display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:15px;
-    color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);
+    color:var(--accent-strong); text-decoration:none; border-bottom:1px solid var(--accent-strong);
   }
 
   .footer-strip{
@@ -354,7 +340,7 @@
 <script>
   (function(){
     var saved = localStorage.getItem('theme');
-    document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
   })();
 </script>
 </head>
@@ -362,6 +348,7 @@
 
 <div class="custom-cursor" id="customCursor"></div>
 
+<div class="hero-band">
 <header class="top">
   <span>Tatiana</span>
   <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -385,24 +372,10 @@
   </nav>
 </header>
 
-<nav class="scroll-dots" aria-label="Progreso de scroll">
-  <button class="arrow arrow-up" id="scrollPrevBtn" aria-label="Ir a la sección anterior" hidden>↑</button>
-  <div class="scroll-dots-list">
-    <button class="dot" data-key="hero" aria-label="Ir a Hero"></button>
-    <button class="dot" data-key="proyectos" aria-label="Ir a Mis proyectos"></button>
-    <button class="dot" data-key="sobre-mi" aria-label="Ir a Sobre mí"></button>
-    <a class="dot" href="about.html" aria-label="Ir a Mi trayectoria"></a>
-    <button class="dot" data-key="contacto" aria-label="Ir a Contacto"></button>
-  </div>
-  <button class="arrow arrow-down" id="scrollNextBtn" aria-label="Ir a la sección siguiente">↓</button>
-  <span class="scroll-dots-label" id="scrollDotsLabel"></span>
-</nav>
-
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-grid">
     <div>
-      <div class="eyebrow"><span class="dot"></span> Disponible para nuevos proyectos</div>
       <h1>
         <span class="hl-small"><em>¡Hola!</em></span>
         <span class="hl-large"><em>Soy <span class="accent">Tatiana</span>, <strong>Product Designer</strong></em></span>
@@ -410,79 +383,22 @@
       <p class="hero-sub">Desde Barcelona</p>
       <hr class="hero-divider">
       <p class="lede">Product Designer con foco en research, prototipado interactivo con IA y colaboración cercana con negocio y desarrollo.</p>
-      <div class="hero-tags"><span>Product Design</span><span>AI Prototyping</span><span>Research</span></div>
+      <a class="btn-solid hero-cta" href="#proyectos">Ver proyectos →</a>
     </div>
     <div class="photo">
       <div class="block"></div>
       <div class="frame"><img src="imagenes/home/tatiana-hero.jpeg" alt="Tatiana"></div>
       <div class="pin p1">Barcelona</div>
-      <div class="pin p2">@ Magnettu</div>
     </div>
   </div>
 </section>
-
-<!-- PROJECTS -->
-<section id="proyectos">
-  <div class="section-head"><span class="idx">00</span><h2>Mis proyectos</h2></div>
-  <p class="section-sub">Dos proyectos terminados, uno próximamente.</p>
-
-  <div class="proj-grid">
-
-  <a class="proj-card scroll-reveal" href="magnettu.html">
-    <div class="proj-text">
-      <span class="proj-index">#1</span>
-      <span class="proj-status">Case study · En producción</span>
-      <h3>Magnettu :  Rediseño de creación de perfiles</h3>
-      <div class="proj-subtitle">/rediseño de creación de perfiles</div>
-      <p class="proj-desc">Cómo un modal confuso que nadie usaba se convirtió en un flujo guiado de 3 pasos, prototipado de forma interactiva con IA.</p>
-      <div class="proj-problem"><span class="proj-problem-label">Problema</span>El flujo pedía datos sin explicar por qué, y la gente abandonaba a medio camino.</div>
-      <div class="proj-tags"><span>3 semanas</span><span>Figma</span><span>IA</span><span>Code</span></div>
-    </div>
-    <div class="proj-media">
-      <img src="imagenes/home/magnettu-proyecto.png" alt="Magnettu — Rediseño de creación de perfiles">
-      <span class="proj-badge"><img src="imagenes/home/logo-magnettu.png" alt="Magnettu"></span>
-    </div>
-  </a>
-
-  <a class="proj-card tone-coral scroll-reveal" href="rediseno.html">
-    <div class="proj-text">
-      <span class="proj-index">#2</span>
-      <span class="proj-status">Case study · Finalizado</span>
-      <h3>Nueva funcionalidad</h3>
-      <div class="proj-subtitle">/rediseño de Bumble</div>
-      <p class="proj-desc">Del match visual al match compartido: rediseño de perfil, match, chat y organización de la cita, a partir de research directo con usuarios.</p>
-      <div class="proj-problem"><span class="proj-problem-label">Problema</span>Al decidir el match solo por la foto, se pierde la oportunidad de conectar por gustos e intereses compartidos.</div>
-      <div class="proj-tags"><span>2 semanas</span><span>Miro</span><span>Figma</span><span>IA</span></div>
-    </div>
-    <div class="proj-media">
-      <img src="imagenes/general/bumble-framework.png" alt="Rediseño de Bumble">
-      <span class="proj-badge"><img src="imagenes/home/bumble-logo.png" alt="Bumble"></span>
-    </div>
-  </a>
-
-  <a class="proj-card tone-mint disabled scroll-reveal" href="autonomos.html">
-    <div class="proj-text">
-      <span class="proj-index">#3</span>
-      <span class="proj-status">Próximamente</span>
-      <h3>0→1: Herramienta de colaboración para autónomos</h3>
-      <div class="proj-subtitle">/colaboración para autónomos</div>
-      <p class="proj-desc">Producto nuevo: cómo equipos de autónomos se coordinan bajo objetivos compartidos.</p>
-      <div class="proj-tags"><span>Research</span></div>
-    </div>
-    <div class="proj-media">
-      <div class="proj-placeholder">Proyecto en curso</div>
-      <span class="proj-badge">🧑‍💻</span>
-    </div>
-  </a>
-
-  </div>
-  </a>
-</section>
+</div>
 
 <!-- SOBRE MÍ INTRO -->
 <section id="sobre-mi">
   <div class="intro-card scroll-reveal">
-    <div class="section-head"><span class="idx">01</span><h2>Un poco de mí</h2></div>
+    <div class="section-head"><h2>Sobre mí</h2></div>
+    <hr class="section-divider section-divider-top">
 
     <div class="intro-cols">
       <div class="intro-left">
@@ -506,15 +422,67 @@
         <span class="chip-pill chip-3">"Diseño con criterio, valido con IA"</span>
       </div>
     </div>
-
-    <a class="linkedin-link" href="https://www.linkedin.com/in/tatianamarcallaconza/" target="_blank" rel="noopener">Conéctate conmigo en LinkedIn</a>
   </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="proyectos">
+  <div class="section-head"><h2>Mis proyectos</h2></div>
+
+  <div class="proj-grid">
+
+  <a class="proj-card scroll-reveal" href="magnettu.html">
+    <div class="proj-text">
+      <span class="proj-status">Case study · En producción</span>
+      <h3>Magnettu :  Rediseño de creación de perfiles</h3>
+      <div class="proj-subtitle">/rediseño de creación de perfiles</div>
+      <p class="proj-desc">Cómo un modal confuso que nadie usaba se convirtió en un flujo guiado de 3 pasos, prototipado de forma interactiva con IA.</p>
+      <div class="proj-problem"><span class="proj-problem-label">Problema</span>El flujo pedía datos sin explicar por qué, y la gente abandonaba a medio camino.</div>
+      <div class="proj-tags"><span>3 semanas</span><span>Figma</span><span>IA</span><span>Code</span></div>
+    </div>
+    <div class="proj-media">
+      <img src="imagenes/home/magnettu-proyecto.png" alt="Magnettu — Rediseño de creación de perfiles">
+      <span class="proj-badge"><img src="imagenes/home/logo-magnettu.png" alt="Magnettu"></span>
+    </div>
+  </a>
+
+  <a class="proj-card tone-coral scroll-reveal" href="rediseno.html">
+    <div class="proj-text">
+      <span class="proj-status">Case study · Finalizado</span>
+      <h3>Nueva funcionalidad</h3>
+      <div class="proj-subtitle">/rediseño de Bumble</div>
+      <p class="proj-desc">Del match visual al match compartido: rediseño de perfil, match, chat y organización de la cita, a partir de research directo con usuarios.</p>
+      <div class="proj-problem"><span class="proj-problem-label">Problema</span>Al decidir el match solo por la foto, se pierde la oportunidad de conectar por gustos e intereses compartidos.</div>
+      <div class="proj-tags"><span>2 semanas</span><span>Miro</span><span>Figma</span><span>IA</span></div>
+    </div>
+    <div class="proj-media">
+      <img src="imagenes/general/bumble-framework.png" alt="Rediseño de Bumble">
+      <span class="proj-badge"><img src="imagenes/home/bumble-logo.png" alt="Bumble"></span>
+    </div>
+  </a>
+
+  <a class="proj-card tone-mint disabled scroll-reveal" href="autonomos.html">
+    <div class="proj-text">
+      <span class="proj-status">Próximamente</span>
+      <h3>0→1: Herramienta de colaboración para autónomos</h3>
+      <div class="proj-subtitle">/colaboración para autónomos</div>
+      <p class="proj-desc">Producto nuevo: cómo equipos de autónomos se coordinan bajo objetivos compartidos.</p>
+      <div class="proj-tags"><span>Research</span></div>
+    </div>
+    <div class="proj-media">
+      <div class="proj-placeholder">Proyecto en curso</div>
+      <span class="proj-badge">🧑‍💻</span>
+    </div>
+  </a>
+
+  </div>
+  </a>
 </section>
 
 <!-- ABOUT -->
 <section id="about">
-  <div class="section-head"><span class="idx">02</span><h2>Mi trayectoria</h2></div>
-  <p class="section-sub">Cómo llegué hasta aquí.</p>
+  <div class="section-head"><h2>Mi trayectoria</h2></div>
+  <hr class="section-divider section-divider-top">
 
   <div class="timeline-wrap">
     <div class="timeline scroll-reveal" id="timelineScroll">
@@ -610,93 +578,6 @@
     });
   }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
   els.forEach(function(el){ observer.observe(el); });
-})();
-
-(function(){
-  var dotsNav = document.querySelector('.scroll-dots');
-  if(!dotsNav) return;
-
-  var labels = {hero:'Hero', proyectos:'Mis proyectos', 'sobre-mi':'Sobre mí', trayectoria:'Mi trayectoria', contacto:'Contacto'};
-  var navOrder = ['hero', 'proyectos', 'sobre-mi', 'trayectoria', 'contacto'];
-  var scrollableKeys = ['hero', 'proyectos', 'sobre-mi', 'contacto'];
-  var sectionEls = {};
-  scrollableKeys.forEach(function(key){ sectionEls[key] = document.getElementById(key); });
-
-  var allDots = dotsNav.querySelectorAll('.dot[data-key]');
-  var prevBtn = document.getElementById('scrollPrevBtn');
-  var nextBtn = document.getElementById('scrollNextBtn');
-  var label = document.getElementById('scrollDotsLabel');
-
-  var cursorIndex = 0;
-  function setCursor(index){
-    cursorIndex = Math.max(0, Math.min(index, navOrder.length - 1));
-    var key = navOrder[cursorIndex];
-    allDots.forEach(function(d){ d.classList.toggle('active', d.dataset.key === key); });
-    updateArrows();
-  }
-
-  function updateArrows(){
-    if(prevBtn) prevBtn.hidden = cursorIndex <= 0;
-    if(nextBtn) nextBtn.hidden = cursorIndex >= navOrder.length - 1;
-  }
-
-  setCursor(0);
-
-  if('IntersectionObserver' in window){
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          var key = scrollableKeys.filter(function(k){ return sectionEls[k] === entry.target; })[0];
-          var idx = navOrder.indexOf(key);
-          if(idx > -1) setCursor(idx);
-        }
-      });
-    }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
-    scrollableKeys.forEach(function(key){ if(sectionEls[key]) observer.observe(sectionEls[key]); });
-  }
-
-  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function goTo(key){
-    var section = sectionEls[key];
-    if(!section) return;
-    section.scrollIntoView({behavior: prefersReducedMotion ? 'auto' : 'smooth', block:'start'});
-  }
-
-  allDots.forEach(function(dot){
-    if(!scrollableKeys.includes(dot.dataset.key)) return;
-    dot.addEventListener('click', function(){
-      goTo(dot.dataset.key);
-      setCursor(navOrder.indexOf(dot.dataset.key));
-    });
-  });
-
-  var labelTimer;
-  function showLabel(key){
-    if(!label || !labels[key]) return;
-    label.textContent = labels[key];
-    label.classList.add('show');
-    clearTimeout(labelTimer);
-    labelTimer = setTimeout(function(){ label.classList.remove('show'); }, 1600);
-  }
-
-  if(prevBtn){
-    prevBtn.addEventListener('click', function(){
-      var newIndex = Math.max(cursorIndex - 1, 0);
-      var targetKey = navOrder[newIndex];
-      if(scrollableKeys.includes(targetKey)) goTo(targetKey);
-      setCursor(newIndex);
-      showLabel(targetKey);
-    });
-  }
-  if(nextBtn){
-    nextBtn.addEventListener('click', function(){
-      var newIndex = Math.min(cursorIndex + 1, navOrder.length - 1);
-      var targetKey = navOrder[newIndex];
-      if(scrollableKeys.includes(targetKey)) goTo(targetKey);
-      setCursor(newIndex);
-      showLabel(targetKey);
-    });
-  }
 })();
 
 (function(){

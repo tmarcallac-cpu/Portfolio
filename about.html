@@ -11,13 +11,13 @@
 <style>
   :root, [data-theme="light"]{
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D;
-    --line:#E4E4EA; --accent:#4A5FE8; --accent-soft:#EDEFFC;
+    --line:#E4E4EA; --accent:#6B7FD1; --accent-soft:#E8ECFA; --accent-strong:#4A5FE8;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
     --card:#FFFFFF; color-scheme:light;
   }
   [data-theme="dark"]{
     --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4;
-    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242; --accent-strong:var(--accent);
     --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
     --card:#1D1A24; color-scheme:dark;
   }
@@ -39,7 +39,7 @@
   header.top nav a{text-decoration:none; color:var(--muted); transition:.15s;}
   header.top nav a:hover, header.top nav a.active{color:var(--ink);}
   .btn-ghost{border:1px solid var(--line); border-radius:100px; padding:7px 16px; text-decoration:none; color:var(--ink);}
-  .btn-solid{background:var(--accent); color:var(--bg); border-radius:100px; padding:7px 18px; text-decoration:none; line-height:1.4;}
+  .btn-solid{background:var(--accent-strong); color:var(--bg); border-radius:100px; padding:7px 18px; text-decoration:none; line-height:1.4;}
   header.top nav a.btn-solid,
   header.top nav a.btn-solid:hover,
   header.top nav a.btn-solid:focus,
@@ -105,7 +105,7 @@
 
   footer.contact{text-align:center; padding:60px 24px 0; border-top:1px solid var(--line); margin-top:20px;}
   footer.contact h2{font-family:'Space Grotesk', sans-serif; font-size:26px; margin-bottom:12px;}
-  footer.contact a.mail{display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:15px; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent);}
+  footer.contact a.mail{display:inline-block; margin-top:8px; font-family:'IBM Plex Mono', monospace; font-size:15px; color:var(--accent-strong); text-decoration:none; border-bottom:1px solid var(--accent-strong);}
 
   .footer-strip{
     margin:56px auto 0; max-width:var(--maxw); border-top:1px solid var(--line); padding:44px 24px;
@@ -127,7 +127,7 @@
 <script>
   (function(){
     var saved = localStorage.getItem('theme');
-    document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
   })();
 </script>
 </head>
