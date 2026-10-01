@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tatiana Marcalla</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" type="image/png" href="imagenes/general/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root, [data-theme="light"]{
+    --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D; --muted-soft:#ABABB6;
+    --line:#E4E4EA; --accent:#6B7FD1; --accent-soft:#E8ECFA;
+    --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
+    --card:#FFFFFF; color-scheme:light;
+  }
+  [data-theme="dark"]{
+    --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4; --muted-soft:#6E6A7D;
+    --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
+    --card:#1D1A24; color-scheme:dark;
+  }
+  :root{
+    --radius:5px; --maxw:1000px;
+
+    /* Escala de espaciado, base 8px */
+    --space-xs:8px;   /* elementos muy pegados: gaps internos pequeños */
+    --space-sm:16px;  /* dentro de un mismo bloque */
+    --space-md:24px;  /* un bloque al siguiente */
+    --space-lg:32px;  /* separación notable entre grupos */
+    --space-xl:40px;  /* columnas lado a lado (grid/flex de dos columnas) */
+    --space-2xl:44px; /* espacio antes de cada título de sección (h3.sub-h) */
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:radial-gradient(var(--dot) 1px, transparent 1px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:'IBM Plex Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important;} }
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  header.top{
+    padding:14px 22px;
+    display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+    position:absolute; top:18px; left:50%; transform:translateX(-50%); z-index:10;
+    width:calc(100% - 40px); max-width:var(--maxw);
+    box-sizing:border-box; border-radius:16px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  }
+  [data-theme="dark"] header.top{background:rgba(0,0,0,.25);}
+  header.top a.back{color:#fff; text-decoration:none; text-shadow:0 1px 4px rgba(0,0,0,.55);}
+  header.top a.back:hover{opacity:.8;}
+  header.top .header-right span{color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55);}
+  .header-right{display:flex; align-items:center; gap:16px;}
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; transition:.2s ease; padding:0;
+  }
+  .theme-toggle:hover{border-color:var(--accent); color:var(--accent);}
+  .theme-toggle svg{display:block;}
+  .theme-toggle .icon-sun{display:none;}
+  .theme-toggle .icon-moon{display:none;}
+  [data-theme="dark"] .theme-toggle .icon-sun{display:block;}
+  [data-theme="light"] .theme-toggle .icon-moon{display:block;}
+
+  main{max-width:var(--maxw); margin:0 auto; padding:20px 24px 100px;}
+
+  .cs-cover{
+    background:var(--bg); padding:var(--space-xl) 0 0; margin-top:8px;
+  }
+  @media (max-width:760px){
+    .cs-cover{padding:28px 0 0;}
+  }
+
+  .hero-banner{width:100%; height:420px; overflow:hidden; position:relative;}
+  .hero-banner img{width:100%; height:100%; object-fit:cover; object-position:center; display:block;}
+  .hero-banner::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:150px;
+    background:linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));
+    z-index:5; pointer-events:none;
+  }
+  @media (max-width:760px){
+    .hero-banner{height:auto; aspect-ratio:5748/1616; background:var(--bg);}
+    .hero-banner img{object-fit:contain;}
+  }
+
+  .cs-tag{
+    display:inline-flex; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
+    background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;
+  }
+  h1.cs-title{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(30px,4.6vw,44px); line-height:1.12;
+  }
+  p.cs-sub{margin-top:14px; font-size:16.5px; color:var(--muted);}
+
+  .meta-strip{
+    margin-top:36px;
+    display:flex; flex-direction:column; gap:10px; list-style:none; padding:0;
+  }
+  .meta-strip li{position:relative; padding-left:16px; font-family:'IBM Plex Sans', sans-serif; font-size:13.5px; color:var(--ink);}
+  .meta-strip li::before{content:"•"; position:absolute; left:0; color:var(--muted);}
+  .meta-strip strong{font-family:'IBM Plex Mono', monospace; font-weight:500; color:var(--muted); font-size:12px; margin-right:4px;}
+
+  .cs-divider{border:none; border-top:1px solid var(--line); margin-top:28px;}
+
+  h3.sub-h{font-family:'Space Grotesk', sans-serif; font-size:21px; margin:var(--space-2xl) 0 12px;}
+  .prose{max-width:64ch; font-size:15.5px; color:var(--ink);}
+  .prose + .prose{margin-top:14px;}
+  .prose strong{font-weight:600;}
+  .prose em.ph{font-style:normal; color:var(--accent); background:var(--accent-soft); padding:1px 6px; border-radius:4px; font-size:14px;}
+  .prose.prose-wide{max-width:none;}
+
+  .prose-list{max-width:64ch; font-family:'IBM Plex Sans', sans-serif; font-size:15.5px; color:var(--ink); margin:14px 0; padding-left:20px; list-style:disc;}
+  .prose-list li{margin-bottom:12px;}
+  .prose-list li:last-child{margin-bottom:0;}
+  .prose-list li::marker{color:var(--muted);}
+  .prose-list strong{font-weight:600;}
+  .prose-list.prose-wide{max-width:none;}
+
+  .impact-list{list-style:none; margin:28px 0 var(--space-2xl); padding:0; max-width:64ch;}
+  .impact-list li{position:relative; padding-left:24px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
+  .impact-list li:last-child{margin-bottom:0;}
+  .impact-list li::before{
+    content:""; position:absolute; left:0; top:5px; width:14px; height:14px;
+    background-color:var(--coral);
+    -webkit-mask-image:url('imagenes/icons/bullets.svg'); mask-image:url('imagenes/icons/bullets.svg');
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    -webkit-mask-size:contain; mask-size:contain;
+  }
+  [data-theme="dark"] .impact-list li::before{background-color:#fff;}
+
+  .phase-title{margin:64px 0 8px; text-align:center;}
+  .phase-title .phase-label{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); padding:5px 12px; border-radius:100px; margin-bottom:14px;
+  }
+  .phase-title h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:28px; line-height:1.25; margin:0;
+  }
+
+  .img-slot{
+    border:1.5px dashed var(--line); border-radius:var(--radius); background:var(--card); padding:44px 16px;
+    text-align:center; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12px; margin:20px 0 8px;
+  }
+  .img-slot.filled{border-style:solid; padding:0; overflow:hidden;}
+  .img-slot.filled img{width:100%; height:auto; display:block;}
+
+  .evo-wrap{position:relative;}
+  .evo-wrap::after{
+    content:''; position:absolute; top:0; right:0; bottom:12px; width:40px;
+    background:linear-gradient(to right, transparent, var(--bg)); pointer-events:none;
+  }
+  .evo-timeline{
+    display:flex; gap:20px; overflow-x:auto; margin:var(--space-md) 0 var(--space-xs); padding:4px 4px 12px;
+    scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+  }
+  .evo-timeline::-webkit-scrollbar{height:6px;}
+  .evo-timeline::-webkit-scrollbar-thumb{background:var(--line); border-radius:100px;}
+  .evo-item{
+    position:relative; flex:1 1 0; min-width:280px; scroll-snap-align:start;
+    border-left:2px solid var(--line); padding:4px 0 4px 24px;
+  }
+  .evo-item::before{
+    content:''; position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--accent);
+  }
+  .evo-item:has(.v-version.fail)::before{border-color:var(--coral);}
+  .evo-item h4{font-family:'Space Grotesk', sans-serif; font-size:18px; margin-bottom:6px;}
+  .evo-item p{color:var(--muted); font-size:14.5px;}
+  .v-version{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); margin-bottom:4px;}
+  .v-version.fail{color:var(--coral);}
+
+  .why{margin-top:var(--space-xs); font-size:13.5px; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--coral); border-radius:0 4px 4px 0;}
+  .why-list{margin:6px 0 0; padding-left:18px; list-style:disc;}
+  .why-list li{margin-bottom:12px;}
+  .why-list li:last-child{margin-bottom:0;}
+  .why b{color:var(--coral);}
+  .why.positive{border-left-color:var(--mint);}
+  .why.positive b{color:var(--mint);}
+
+  .redesign-row{display:flex; gap:var(--space-xl); align-items:center;}
+  .redesign-row.align-top{align-items:flex-start;}
+  .redesign-text{flex:1; min-width:280px;}
+  .redesign-img{flex:0 1 400px; width:100%; max-width:420px;}
+  .redesign-img img{width:100%; height:auto; object-fit:contain; display:block; border-radius:8px;}
+  @media (max-width:700px){
+    .redesign-row{flex-direction:column; gap:24px;}
+    .redesign-img{max-width:none;}
+  }
+
+  .redesign-stack{display:flex; flex-direction:column; gap:var(--space-sm);}
+  .redesign-stack-img{width:100%;}
+  .redesign-stack-img img{width:100%; height:auto; object-fit:contain; display:block; border-radius:8px;}
+
+  .result-row{display:flex; gap:var(--space-xl); align-items:flex-start;}
+  .result-text{flex:1; min-width:280px;}
+  .result-compare{
+    flex:0 1 380px; width:100%; max-width:420px;
+    background:var(--card); padding:20px; border-radius:var(--radius);
+  }
+  .result-arrows{display:flex; gap:24px; text-align:center;}
+  .result-col{flex:1; display:flex; flex-direction:column; align-items:center;}
+  .result-arrow{font-size:40px; line-height:1; font-weight:700;}
+  .result-arrow.down{color:var(--coral);}
+  .result-arrow.up{color:var(--mint);}
+  .result-title{margin-top:10px; font-weight:600; font-size:15px; color:var(--ink);}
+  .result-sub{margin-top:4px; font-size:13px; color:var(--muted); max-width:28ch;}
+  .result-note{margin-top:12px; font-style:italic; font-size:11.5px; color:var(--muted-soft); text-align:center;}
+  @media (max-width:700px){
+    .result-row{flex-direction:column; gap:24px;}
+    .result-compare{max-width:420px;}
+  }
+
+  .problem-row{display:flex; gap:var(--space-xl); align-items:flex-start; margin-top:var(--space-2xl);}
+  .problem-text{flex:1; min-width:280px;}
+  .problem-text h3.sub-h{margin-top:0;}
+  .problem-stats{
+    flex:0 1 380px; width:100%; max-width:420px; display:flex; flex-direction:column; gap:20px;
+    background:var(--card); padding:20px; border-radius:var(--radius);
+  }
+  .stat-number{font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:32px; color:var(--ink); line-height:1.1;}
+  .stat-caption{margin-top:6px; font-size:13px; color:var(--muted);}
+  .funnel{display:flex; flex-direction:column; gap:var(--space-xs);}
+  .funnel-row{display:flex; flex-direction:column; gap:6px;}
+  .funnel-label{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted);}
+  .funnel-bar{height:34px; border-radius:5px;}
+  .funnel-bar.b1{width:100%; background:var(--accent);}
+  .funnel-bar.b2{width:62%; background:var(--accent); opacity:.75;}
+  .funnel-bar.b3{width:34%; background:var(--coral);}
+  .stat-note{font-style:italic; font-size:11.5px; color:var(--muted-soft); margin:0;}
+  @media (max-width:700px){
+    .problem-row{flex-direction:column; gap:24px;}
+    .problem-stats{max-width:420px;}
+  }
+
+  .callout{
+    border:1px solid var(--accent); background:var(--accent-soft); padding:20px 22px; border-radius:var(--radius);
+    margin:28px 0; font-size:14.5px;
+  }
+  .callout .callout-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px;}
+  .callout.callout-quote{background:transparent; border:none; text-align:center;}
+
+  .nextproj{
+    margin-top:70px; padding-top:28px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:13px;
+  }
+  .nextproj a{text-decoration:none; color:var(--accent);}
+
+  .figma-flow-link{display:inline-block; margin-top:14px; color:var(--accent); text-decoration:none; font-size:14px;}
+  .figma-flow-link:hover{text-decoration:underline;}
+  .evo-item .why p{color:var(--ink); font-size:13.5px; margin-top:6px;}
+  .proto-img-link{position:relative; display:block; margin:20px 0 8px; border-radius:8px;}
+  .proto-img-link img{width:100%; height:auto; display:block; transition:transform .3s ease;}
+  .proto-img-link:hover img, .proto-img-link:focus-visible img{transform:scale(1.02);}
+  .proto-img-label{
+    position:absolute; top:12px; right:12px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent);
+    background:var(--accent-soft); border:1px solid var(--accent); padding:5px 12px; border-radius:100px;
+    opacity:0; transform:translateY(-4px); transition:opacity .2s ease, transform .2s ease; pointer-events:none;
+  }
+  .proto-img-link:hover .proto-img-label, .proto-img-link:focus-visible .proto-img-label{opacity:1; transform:none;}
+  @media (hover:none){ .proto-img-label{opacity:1; transform:none;} }
+</style>
+<script>
+  (function(){
+    var saved = localStorage.getItem('theme');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  })();
+</script>
+</head>
+<body>
+
+<div class="hero-banner">
+  <img src="imagenes/NIO/portada-NIO-proyecto.png" alt="Portada del proyecto NIO: pantallas de NioGrowth con el journey map en estilo videojuego, el calendario de tareas, las estadísticas, la agenda de sesiones con el coach y la versión móvil">
+  <header class="top">
+    <a class="back" href="index.html">← Volver</a>
+    <div class="header-right">
+      <span>Tatiana</span>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo claro">
+        <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+</div>
+
+<main>
+  <div class="cs-cover">
+    <div class="cs-cover-text">
+      <span class="cs-tag">Proyecto con cliente · Ironhack 2022</span>
+      <h1 class="cs-title">Una agenda de crecimiento que no pareciera una agenda</h1>
+      <p class="cs-sub">Diseño de la agenda de crecimiento y la interacción con el coach para NIO, en un equipo de 3 durante 2 semanas.</p>
+      <ul class="meta-strip">
+        <li><strong>Rol:</strong>Usability testing, diseño lo-fi y hi-fi</li>
+        <li><strong>Cliente:</strong>NIO</li>
+        <li><strong>Equipo:</strong>3 personas</li>
+        <li><strong>Duración:</strong>2 semanas</li>
+        <li><strong>Herramientas:</strong>Figma, Miro, Dribbble</li>
+      </ul>
+      <div class="cs-divider"></div>
+    </div>
+  </div>
+
+  <h3 class="sub-h">Contexto</h3>
+  <p class="prose prose-wide">NIO es un SaaS que ayuda a los empleados de una empresa a crecer a nivel personal y profesional con el apoyo de un coach, partiendo de una idea clara: el bienestar de las personas también impulsa los objetivos de la empresa. Nuestro encargo era diseñar dos piezas: <strong>la agenda de crecimiento</strong>, para que cada persona pudiera plantear sus objetivos y convertirlos en hábitos, y <strong>la interacción con su coach</strong> a lo largo de ese proceso.</p>
+  <p class="prose prose-wide">NIO nos dio el research, las personas y el análisis de competidores ya hechos, así que nuestro trabajo se centró en la interfaz. Podíamos elegir entre app o web, y elegimos web porque la mayoría de las ideas encajaban mejor ahí.</p>
+  <img src="imagenes/NIO/imagen-nio-contexto.png" alt="Tres pantallas del prototipo web de NioGrowth: estadísticas de rendimiento, página principal con el progreso semanal del primer hito y tarjetas de tareas, y calendario semanal con tareas por prioridad" style="width:100%; height:auto; display:block; margin:20px 0 8px;" loading="lazy" decoding="async">
+
+  <h3 class="sub-h">El reto</h3>
+  <p class="prose prose-wide">El cliente quería algo cercano y amigable, lejos de la típica herramienta profesional, pero no nos dio referencias claras de cómo debía verse. Parte del trabajo fue interpretar qué significaba "user-friendly" para ellos y convertirlo en decisiones de diseño concretas.</p>
+
+  <h3 class="sub-h">Cómo decidimos en equipo</h3>
+  <p class="prose prose-wide">Analizamos cinco competidores cercanos a lo que buscaba NIO para entender qué tono y qué funcionalidades esperaban. Después, cada una aportó sus ideas de funcionalidades y las fuimos priorizando juntas en una matriz de valor para el usuario frente a viabilidad, hasta llegar a un acuerdo sobre qué entraba y qué no.</p>
+  <p class="prose prose-wide">De ahí salieron los principios que guiaron todo el proyecto: <strong>amigable, fácil y divertida, con personalidad pero creíble</strong>, y sobre todo que no pareciera la típica app de calendario o seguimiento.</p>
+  <div class="img-slot">[Imagen: matriz de prioridad usuario / viabilidad]</div>
+  <p class="prose prose-wide"><em class="ph">[Placeholder: qué parte del trabajo hice yo dentro del equipo]</em></p>
+
+  <h3 class="sub-h">La apuesta: estilo videojuego</h3>
+  <p class="prose prose-wide">Para que el progreso fuera motivador y no una lista de tareas más, nos inspiramos en videojuegos con un avance colorido y de aventura. El color también responde a esa idea: el morado, asociado a la visión, y el verde azulado, al crecimiento y el equilibrio.</p>
+  <p class="prose prose-wide">Era una decisión arriesgada para un producto de entorno laboral, pero en los tests a la mayoría de personas les gustó y no lo percibieron como infantil.</p>
+  <img src="imagenes/NIO/NIO-videojuego.png?v=2" alt="Journey map final de NioGrowth en estilo videojuego: un camino isométrico de bloques morados y turquesa desde Start hasta la meta, con los hitos del objetivo Be less tired, medallas por hito, un árbol que crece y un conejo que marca el progreso" style="width:100%; height:auto; display:block; margin:20px 0 8px;" loading="lazy" decoding="async">
+
+  <h3 class="sub-h">Lo que cambió tras testear</h3>
+
+  <div class="evo-wrap">
+    <div class="evo-timeline">
+      <div class="evo-item">
+        <div class="v-version fail">01</div>
+        <h4>Navegación</h4>
+        <p><b>Qué fallaba:</b> la barra superior era confusa, la gente no sabía en qué sección estaba y necesitaba demasiados pasos para hacer una acción desde la página principal.</p>
+        <div class="why positive">
+          <b>Qué cambiamos:</b>
+          <p>Pasamos la navegación a un sidebar, más ordenado y fácil de ubicar. Una de las personas lo describió como más claro y completo, porque era fácil saber dónde estaba.</p>
+        </div>
+      </div>
+      <div class="evo-item">
+        <div class="v-version fail">02</div>
+        <h4>Sección del coach</h4>
+        <p><b>Qué fallaba:</b> era una funcionalidad central pero tenía demasiada información innecesaria.</p>
+        <div class="why positive">
+          <b>Qué cambiamos:</b>
+          <p>Eliminamos todo lo que no era importante e invertimos el orden de los elementos, porque la interacción empezando por la izquierda resultaba más rápida.</p>
+        </div>
+      </div>
+      <div class="evo-item">
+        <div class="v-version fail">03</div>
+        <h4>Journey map</h4>
+        <p><b>Qué fallaba:</b> la gente no entendía su función, una de las preguntas en los tests fue "¿para qué son los puntos?", y la sección no se sentía conectada con el resto.</p>
+        <div class="why positive">
+          <b>Qué cambiamos:</b>
+          <p>Lo adaptamos para integrarlo mejor con la temática y el resto de la app.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="img-slot">[Imagen: antes y después de cada uno de los tres cambios]</div>
+
+  <h3 class="sub-h">Resultado</h3>
+  <p class="prose prose-wide">Entregamos el prototipo de alta fidelidad de la plataforma web y el cliente quedó satisfecho con el diseño.</p>
+  <a class="proto-img-link" href="https://www.figma.com/proto/q8ngUSywJHAk1kznFcw2fd/NIO-Project?node-id=506-72757&amp;viewport=1228%2C1149%2C0.23&amp;t=gZWPVyuQMitwPczn-1&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=444%3A111452&amp;page-id=417%3A70527" target="_blank" rel="noopener">
+    <img src="imagenes/NIO/nio-prototipo.png" alt="Portátil mostrando la pantalla de inicio del prototipo de NIO Growth Agenda, con la frase Water your roots, so your soul can blossom, el camino isométrico en estilo videojuego y el botón Probar prototipo" loading="lazy" decoding="async">
+    <span class="proto-img-label">Ver prototipo ↗</span>
+  </a>
+  <a class="figma-flow-link" href="https://www.figma.com/proto/q8ngUSywJHAk1kznFcw2fd/NIO-Project?node-id=506-72757&amp;viewport=1228%2C1149%2C0.23&amp;t=gZWPVyuQMitwPczn-1&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=444%3A111452&amp;page-id=417%3A70527" target="_blank" rel="noopener">Probar el prototipo en Figma (en inglés) →</a>
+
+  <h3 class="sub-h">Aprendizajes</h3>
+  <p class="prose prose-wide"><em class="ph">[Placeholder: 2-3 líneas sobre qué aprendí, por ejemplo sobre consensuar decisiones en equipo o defender una apuesta arriesgada como el estilo videojuego]</em></p>
+
+  <div class="nextproj">
+    <a href="rediseno.html">← Proyecto anterior</a>
+    <a href="index.html">Volver al inicio →</a>
+  </div>
+</main>
+
+<script>
+(function(){
+  var toggle = document.getElementById('themeToggle');
+  if(!toggle) return;
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    toggle.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    localStorage.setItem('theme', theme);
+  }
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+  toggle.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+})();
+</script>
+
+</body>
+</html>
