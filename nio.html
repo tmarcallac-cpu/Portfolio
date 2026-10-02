@@ -12,12 +12,14 @@
   :root, [data-theme="light"]{
     --bg:#FAFAFC; --dot:#E4E4EC; --ink:#15161A; --muted:#63636D; --muted-soft:#ABABB6;
     --line:#E4E4EA; --accent:#6B7FD1; --accent-soft:#E8ECFA;
+    --nio-purple:#7C489E; --nio-teal:#4B8F98; --nio-bubble:#F2EDF4;
     --coral:#FF6B5C; --coral-soft:#FFEDEA; --mint:#189873; --mint-soft:#E8FBF4;
     --card:#FFFFFF; color-scheme:light;
   }
   [data-theme="dark"]{
     --bg:#151318; --dot:#26212F; --ink:#F4F2ED; --muted:#B7B2C4; --muted-soft:#6E6A7D;
     --line:#2E2A38; --accent:#8B85F8; --accent-soft:#262242;
+    --nio-purple:var(--accent); --nio-teal:var(--accent); --nio-bubble:var(--accent-soft);
     --coral:#FF7A6C; --coral-soft:#3A241F; --mint:#22C08E; --mint-soft:#173029;
     --card:#1D1A24; color-scheme:dark;
   }
@@ -121,6 +123,13 @@
   .prose-list li::marker{color:var(--muted);}
   .prose-list strong{font-weight:600;}
   .prose-list.prose-wide{max-width:none;}
+  .prose-list.prose-cols{columns:2; column-gap:var(--space-md);}
+  .prose-list.prose-cols li{break-inside:avoid;}
+  .logos-img{width:60%; max-width:560px;}
+  @media (max-width:700px){ .logos-img{width:100%; max-width:none;} }
+  [data-theme="dark"] .logos-img{background:#fff; padding:20px 24px; border-radius:8px;}
+  .mini-h{font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16px; margin-top:var(--space-md); color:var(--nio-teal);}
+  [data-theme="dark"] .mini-h{color:var(--ink);}
 
   .impact-list{list-style:none; margin:28px 0 var(--space-2xl); padding:0; max-width:64ch;}
   .impact-list li{position:relative; padding-left:24px; font-size:16px; line-height:1.6; color:var(--ink); margin-bottom:12px;}
@@ -151,39 +160,65 @@
   .img-slot.filled{border-style:solid; padding:0; overflow:hidden;}
   .img-slot.filled img{width:100%; height:auto; display:block;}
 
-  .evo-wrap{position:relative;}
-  .evo-wrap::after{
-    content:''; position:absolute; top:0; right:0; bottom:12px; width:40px;
-    background:linear-gradient(to right, transparent, var(--bg)); pointer-events:none;
+  /* Antes y después: "Lo que cambió tras testear" */
+  .cmp{margin:var(--space-lg) 0 var(--space-2xl);}
+  .cmp-title{
+    grid-column:1 / -1; font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--nio-teal); margin-bottom:var(--space-sm);
   }
-  .evo-timeline{
-    display:flex; gap:20px; overflow-x:auto; margin:var(--space-md) 0 var(--space-xs); padding:4px 4px 12px;
-    scroll-snap-type:x mandatory; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
-    scrollbar-width:thin; scrollbar-color:var(--line) transparent;
+  .cmp-img{
+    width:100%; height:auto; display:block; border-radius:8px;
+    filter:drop-shadow(0 8px 18px rgba(21,22,26,.10));
   }
-  .evo-timeline::-webkit-scrollbar{height:6px;}
-  .evo-timeline::-webkit-scrollbar-thumb{background:var(--line); border-radius:100px;}
-  .evo-item{
-    position:relative; flex:1 1 0; min-width:280px; scroll-snap-align:start;
-    border-left:2px solid var(--line); padding:4px 0 4px 24px;
+  [data-theme="dark"] .cmp-img{filter:drop-shadow(0 8px 18px rgba(0,0,0,.45));}
+  .cmp-text{font-size:14.5px; color:var(--ink); margin-top:var(--space-sm);}
+  .hl{color:var(--nio-purple);}
+  .cmp-bubble{
+    background:var(--nio-bubble); color:var(--ink); font-size:14px; line-height:1.4; text-align:center;
+    padding:14px 26px; border-radius:50%;
   }
-  .evo-item::before{
-    content:''; position:absolute; left:-6px; top:4px; width:10px; height:10px; border-radius:50%;
-    background:var(--bg); border:2px solid var(--accent);
+  .cmp-bubble-round{
+    width:180px; height:180px; display:flex; align-items:center; justify-content:center;
+    padding:24px; font-size:14px;
   }
-  .evo-item:has(.v-version.fail)::before{border-color:var(--coral);}
-  .evo-item h4{font-family:'Space Grotesk', sans-serif; font-size:18px; margin-bottom:6px;}
-  .evo-item p{color:var(--muted); font-size:14.5px;}
-  .v-version{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); margin-bottom:4px;}
-  .v-version.fail{color:var(--coral);}
+  .cmp-arrow{display:block; width:100%; height:auto; overflow:visible;}
+  .cmp-arrow path{fill:none; stroke:var(--nio-purple); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke;}
+  .cmp-arrow.arrow-down{display:none;}
 
-  .why{margin-top:var(--space-xs); font-size:13.5px; padding:10px 12px; background:var(--card); border:1px solid var(--line); border-left:3px solid var(--coral); border-radius:0 4px 4px 0;}
-  .why-list{margin:6px 0 0; padding-left:18px; list-style:disc;}
-  .why-list li{margin-bottom:12px;}
-  .why-list li:last-child{margin-bottom:0;}
-  .why b{color:var(--coral);}
-  .why.positive{border-left-color:var(--mint);}
-  .why.positive b{color:var(--mint);}
+  /* Home: v1 → v2 arriba, v3 grande abajo */
+  .cmp-home{display:grid; grid-template-columns:4fr 2.6fr 5.4fr; column-gap:var(--space-sm); align-items:start;}
+  .cmp-home .h-v1{grid-column:1; grid-row:2; margin-top:48px;}
+  .cmp-home .h-mid{grid-column:2; grid-row:2; padding-top:4px;}
+  .cmp-home .h-mid .cmp-text{margin-top:4px;}
+  .cmp-home .h-v2{grid-column:3; grid-row:2;}
+  .cmp-home .h-bubble{grid-column:3; grid-row:3; justify-self:end; margin:var(--space-sm) 4% 0 0; max-width:300px;}
+  .cmp-home .h-arrow2{grid-column:1 / -1; grid-row:3; align-self:end; margin-top:56px;}
+  .cmp-home .h-v3{grid-column:1 / 3; grid-row:4; position:relative; margin-top:var(--space-xs);}
+  .cmp-home .h-v3 .cmp-bubble-round{position:absolute; right:-56px; bottom:-48px;}
+  .cmp-home .h-text{grid-column:3; grid-row:4; align-self:center; padding-left:var(--space-xl);}
+
+  /* Coach y journey map: antes abajo a la izquierda, después arriba a la derecha */
+  .cmp-pair{display:grid; grid-template-columns:5fr 1.3fr 6fr; column-gap:var(--space-sm); align-items:start;}
+  .cmp-pair .p-before{grid-column:1; grid-row:2; margin-top:120px;}
+  .cmp-pair .p-arrow{grid-column:2; grid-row:2; margin-top:64px;}
+  .cmp-pair .p-after{grid-column:3; grid-row:2;}
+  .cmp-pair .j-bubble{display:inline-block; margin:-72px 0 var(--space-sm) 40%;}
+
+  @media (max-width:760px){
+    .cmp-home, .cmp-pair{display:flex; flex-direction:column; align-items:stretch;}
+    .cmp-home .h-v1, .cmp-pair .p-before{margin-top:0;}
+    .cmp-home .h-mid{display:flex; flex-direction:column; padding:0;}
+    .cmp-home .h-mid .cmp-text{order:1; margin-top:var(--space-sm);}
+    .cmp-home .h-mid .arrow-down{order:2;}
+    .cmp-arrow.arrow-curve{display:none;}
+    .cmp-arrow.arrow-down{display:block; width:24px; height:48px; margin:var(--space-sm) auto;}
+    .cmp-home .h-bubble{align-self:center; margin:var(--space-sm) 0 0;}
+    .cmp-home .h-v3{margin-top:0;}
+    .cmp-home .h-v3 .cmp-bubble-round{position:relative; right:auto; bottom:auto; width:160px; height:160px; margin:-28px auto 0;}
+    .cmp-home .h-text{padding-left:0;}
+    .cmp-pair .j-bubble{align-self:center; margin:0 0 var(--space-sm);}
+    .cmp-pair .p-before{display:flex; flex-direction:column;}
+  }
 
   .redesign-row{display:flex; gap:var(--space-xl); align-items:center;}
   .redesign-row.align-top{align-items:flex-start;}
@@ -192,7 +227,7 @@
   .redesign-img img{width:100%; height:auto; object-fit:contain; display:block; border-radius:8px;}
   @media (max-width:700px){
     .redesign-row{flex-direction:column; gap:24px;}
-    .redesign-img{max-width:none;}
+    .redesign-img{max-width:none; flex-basis:auto;}
   }
 
   .redesign-stack{display:flex; flex-direction:column; gap:var(--space-sm);}
@@ -255,7 +290,6 @@
 
   .figma-flow-link{display:inline-block; margin-top:14px; color:var(--accent); text-decoration:none; font-size:14px;}
   .figma-flow-link:hover{text-decoration:underline;}
-  .evo-item .why p{color:var(--ink); font-size:13.5px; margin-top:6px;}
   .proto-img-link{position:relative; display:block; margin:20px 0 8px; border-radius:8px;}
   .proto-img-link img{width:100%; height:auto; display:block; transition:transform .3s ease;}
   .proto-img-link:hover img, .proto-img-link:focus-visible img{transform:scale(1.02);}
@@ -299,13 +333,13 @@
 <main>
   <div class="cs-cover">
     <div class="cs-cover-text">
-      <span class="cs-tag">Proyecto con cliente · Ironhack 2022</span>
+      <span class="cs-tag">Proyecto con cliente</span>
       <h1 class="cs-title">Una agenda de crecimiento que no pareciera una agenda</h1>
       <p class="cs-sub">Diseño de la agenda de crecimiento y la interacción con el coach para NIO, en un equipo de 3 durante 2 semanas.</p>
       <ul class="meta-strip">
-        <li><strong>Rol:</strong>Usability testing, diseño lo-fi y hi-fi</li>
+        <li><strong>Rol:</strong>Diseñadora UX/UI</li>
         <li><strong>Cliente:</strong>NIO</li>
-        <li><strong>Equipo:</strong>3 personas</li>
+        <li><strong>Equipo:</strong>3 diseñadores</li>
         <li><strong>Duración:</strong>2 semanas</li>
         <li><strong>Herramientas:</strong>Figma, Miro, Dribbble</li>
       </ul>
@@ -315,57 +349,93 @@
 
   <h3 class="sub-h">Contexto</h3>
   <p class="prose prose-wide">NIO es un SaaS que ayuda a los empleados de una empresa a crecer a nivel personal y profesional con el apoyo de un coach, partiendo de una idea clara: el bienestar de las personas también impulsa los objetivos de la empresa. Nuestro encargo era diseñar dos piezas: <strong>la agenda de crecimiento</strong>, para que cada persona pudiera plantear sus objetivos y convertirlos en hábitos, y <strong>la interacción con su coach</strong> a lo largo de ese proceso.</p>
-  <p class="prose prose-wide">NIO nos dio el research, las personas y el análisis de competidores ya hechos, así que nuestro trabajo se centró en la interfaz. Podíamos elegir entre app o web, y elegimos web porque la mayoría de las ideas encajaban mejor ahí.</p>
+  <p class="prose prose-wide">NIO nos dio el research, las personas y el análisis de competidores ya hechos, así que nuestro trabajo se centró en la interfaz. Podíamos elegir entre app o web, y elegimos web porque la mayoría de las ideas encajaban mejor ahí. Dentro del equipo, me encargué de los tests de usabilidad y del diseño en baja y alta fidelidad. Todo el proyecto se hizo en inglés, porque era el idioma de trabajo que pidió el cliente, por eso las pantallas que verás a continuación están en inglés.</p>
   <img src="imagenes/NIO/imagen-nio-contexto.png" alt="Tres pantallas del prototipo web de NioGrowth: estadísticas de rendimiento, página principal con el progreso semanal del primer hito y tarjetas de tareas, y calendario semanal con tareas por prioridad" style="width:100%; height:auto; display:block; margin:20px 0 8px;" loading="lazy" decoding="async">
 
   <h3 class="sub-h">El reto</h3>
   <p class="prose prose-wide">El cliente quería algo cercano y amigable, lejos de la típica herramienta profesional, pero no nos dio referencias claras de cómo debía verse. Parte del trabajo fue interpretar qué significaba "user-friendly" para ellos y convertirlo en decisiones de diseño concretas.</p>
 
   <h3 class="sub-h">Cómo decidimos en equipo</h3>
-  <p class="prose prose-wide">Analizamos cinco competidores cercanos a lo que buscaba NIO para entender qué tono y qué funcionalidades esperaban. Después, cada una aportó sus ideas de funcionalidades y las fuimos priorizando juntas en una matriz de valor para el usuario frente a viabilidad, hasta llegar a un acuerdo sobre qué entraba y qué no.</p>
-  <p class="prose prose-wide">De ahí salieron los principios que guiaron todo el proyecto: <strong>amigable, fácil y divertida, con personalidad pero creíble</strong>, y sobre todo que no pareciera la típica app de calendario o seguimiento.</p>
-  <div class="img-slot">[Imagen: matriz de prioridad usuario / viabilidad]</div>
-  <p class="prose prose-wide"><em class="ph">[Placeholder: qué parte del trabajo hice yo dentro del equipo]</em></p>
+  <p class="prose prose-wide">Partimos de los competidores que NIO tenía como referencia, para entender qué tono y qué funcionalidades esperaban.</p>
+  <img class="logos-img" src="imagenes/NIO/nio-inspiracion-competidores.png" alt="Logotipos de los seis competidores de referencia: ClickUp, Spill, Koa Health, Fabulous, Guusto y Oliva" style="height:auto; display:block; margin:20px auto var(--space-lg);" loading="lazy" decoding="async">
+  <div class="redesign-row">
+    <div class="redesign-img">
+      <img src="imagenes/NIO/nio-analisis-y-ideas.png" alt="Matriz de priorización con los ejes usuarios y viabilidad: notas adhesivas verdes y grises con ideas de funcionalidades, como el chat con el coach, estadísticas de progreso o distintos tipos de objetivos, separadas por líneas de prioridad alta, media y baja" loading="lazy" decoding="async">
+    </div>
+    <div class="redesign-text">
+      <p class="prose">Cada uno aportó sus ideas de funcionalidades y las fuimos priorizando juntos en una matriz de valor para el usuario frente a viabilidad, hasta llegar a un acuerdo.</p>
+      <h4 class="mini-h">Conclusiones</h4>
+      <ul class="prose-list prose-cols">
+        <li>Amigable</li>
+        <li>Estilo videojuego</li>
+        <li>Fácil y divertida</li>
+        <li>Con personalidad</li>
+        <li>Creíble</li>
+        <li>Que no parezca un calendario</li>
+      </ul>
+    </div>
+  </div>
 
   <h3 class="sub-h">La apuesta: estilo videojuego</h3>
   <p class="prose prose-wide">Para que el progreso fuera motivador y no una lista de tareas más, nos inspiramos en videojuegos con un avance colorido y de aventura. El color también responde a esa idea: el morado, asociado a la visión, y el verde azulado, al crecimiento y el equilibrio.</p>
+  <img src="imagenes/NIO/nio-inspiracion-videojuego.png?v=2" alt="Moodboard inicial: collage de referencias de videojuegos y estilos ilustrados, con mapas isométricos, mundos de bloques, planetas sonrientes, un juego de plantar árboles, paisajes de aventura y ruedas de progreso, en tonos turquesa, morados y verdes" style="width:100%; height:auto; display:block; margin:20px 0 40px;" loading="lazy" decoding="async">
+  <img src="imagenes/NIO/nio-resultado-final.png?v=2" alt="Resultado final: pantalla de NioGrowth con el objetivo Be less tired como un camino isométrico de bloques morados y turquesa desde Start hasta la meta, con tres hitos, medallas de oro, plata y bronce, un árbol que crece y un conejo que marca el progreso" style="width:100%; height:auto; display:block; margin:0 0 20px;" loading="lazy" decoding="async">
   <p class="prose prose-wide">Era una decisión arriesgada para un producto de entorno laboral, pero en los tests a la mayoría de personas les gustó y no lo percibieron como infantil.</p>
-  <img src="imagenes/NIO/NIO-videojuego.png?v=2" alt="Journey map final de NioGrowth en estilo videojuego: un camino isométrico de bloques morados y turquesa desde Start hasta la meta, con los hitos del objetivo Be less tired, medallas por hito, un árbol que crece y un conejo que marca el progreso" style="width:100%; height:auto; display:block; margin:20px 0 8px;" loading="lazy" decoding="async">
 
   <h3 class="sub-h">Lo que cambió tras testear</h3>
 
-  <div class="evo-wrap">
-    <div class="evo-timeline">
-      <div class="evo-item">
-        <div class="v-version fail">01</div>
-        <h4>Navegación</h4>
-        <p><b>Qué fallaba:</b> la barra superior era confusa, la gente no sabía en qué sección estaba y necesitaba demasiados pasos para hacer una acción desde la página principal.</p>
-        <div class="why positive">
-          <b>Qué cambiamos:</b>
-          <p>Pasamos la navegación a un sidebar, más ordenado y fácil de ubicar. Una de las personas lo describió como más claro y completo, porque era fácil saber dónde estaba.</p>
-        </div>
-      </div>
-      <div class="evo-item">
-        <div class="v-version fail">02</div>
-        <h4>Sección del coach</h4>
-        <p><b>Qué fallaba:</b> era una funcionalidad central pero tenía demasiada información innecesaria.</p>
-        <div class="why positive">
-          <b>Qué cambiamos:</b>
-          <p>Eliminamos todo lo que no era importante e invertimos el orden de los elementos, porque la interacción empezando por la izquierda resultaba más rápida.</p>
-        </div>
-      </div>
-      <div class="evo-item">
-        <div class="v-version fail">03</div>
-        <h4>Journey map</h4>
-        <p><b>Qué fallaba:</b> la gente no entendía su función, una de las preguntas en los tests fue "¿para qué son los puntos?", y la sección no se sentía conectada con el resto.</p>
-        <div class="why positive">
-          <b>Qué cambiamos:</b>
-          <p>Lo adaptamos para integrarlo mejor con la temática y el resto de la app.</p>
-        </div>
-      </div>
+  <p class="prose prose-wide">Los tests con usuarios nos hicieron cambiar tres partes clave de la app.</p>
+
+  <!-- Bloque 1: Home -->
+  <div class="cmp cmp-home">
+    <h4 class="cmp-title">Home</h4>
+    <img class="cmp-img h-v1" src="imagenes/NIO/nio-home-v1.png" alt="Primera versión de la home: wireframe con una barra superior gris de mes, año, semana y Add task marcada en rojo, una línea de días de la semana, la lista de tareas diarias y una tarjeta de tarea" loading="lazy" decoding="async">
+    <div class="h-mid">
+      <svg class="cmp-arrow arrow-curve" viewBox="0 0 220 90" aria-hidden="true"><path d="M6 72 C 58 22, 138 8, 210 30"/><path d="M200 20 L210 30 L196 33"/></svg>
+      <svg class="cmp-arrow arrow-down" viewBox="0 0 24 48" aria-hidden="true"><path d="M12 4 L12 42"/><path d="M5 34 L12 43 L19 34"/></svg>
+      <p class="cmp-text">El propósito de la app <span class="hl">no se entendía</span> y resultaba <span class="hl">confuso</span>.</p>
+    </div>
+    <img class="cmp-img h-v2" src="imagenes/NIO/nio-home-v2.png" alt="Segunda versión de la home: barra superior con accesos a Daily Tasks, Notifications, Your coach y Journey map, línea de días, tareas por horas, el reto diario de beber 8 vasos de agua y un personaje que anima junto a un árbol" loading="lazy" decoding="async">
+    <p class="cmp-bubble h-bubble">La navegación superior <span class="hl">no era suficiente</span></p>
+    <svg class="cmp-arrow arrow-curve h-arrow2" viewBox="0 0 1000 110" aria-hidden="true"><path d="M600 8 C 530 72, 300 40, 190 100"/><path d="M206 100 L190 100 L198 86"/></svg>
+    <svg class="cmp-arrow arrow-down h-arrow2-m" viewBox="0 0 24 48" aria-hidden="true"><path d="M12 4 L12 42"/><path d="M5 34 L12 43 L19 34"/></svg>
+    <div class="h-v3">
+      <img class="cmp-img" src="imagenes/NIO/nio-home-v3.png" alt="Versión final de la home de NioGrowth: sidebar a la izquierda con Home, Calendar, Journey Map, Statistics y Coach, progreso semanal del primer hito y tarjetas con la próxima tarea, el reto diario y el árbol que crece" loading="lazy" decoding="async">
+      <p class="cmp-bubble cmp-bubble-round"><span>“Más <span class="hl">claro</span>, más <span class="hl">completo</span>, y me gusta porque es <span class="hl">fácil ubicarse</span>”</span></p>
+    </div>
+    <p class="cmp-text h-text">La barra superior era confusa y no llamaba la atención. En los tests, la gente no sabía en qué sección estaba y necesitaba demasiados pasos para hacer cualquier acción. La pasamos a un <span class="hl">sidebar</span>, donde todo está <span class="hl">ordenado</span> y es fácil <span class="hl">ubicarse</span>.</p>
+  </div>
+
+  <!-- Bloque 2: El coach -->
+  <div class="cmp cmp-pair">
+    <h4 class="cmp-title">El coach</h4>
+    <div class="p-before">
+      <img class="cmp-img" src="imagenes/NIO/nio-coach-v1.png" alt="Primera versión de la sección del coach: columna izquierda marcada en rojo con foto, cargos, listas largas de soft skills, hard skills y certificaciones, y a la derecha el calendario para agendar una sesión" loading="lazy" decoding="async">
+      <p class="cmp-text">El <span class="hl">coach</span> es una pieza central de la app, pero en los tests vimos que tenía demasiada información innecesaria. Nos quedamos solo con lo importante.</p>
+    </div>
+    <svg class="cmp-arrow arrow-curve p-arrow" viewBox="0 0 120 200" aria-hidden="true"><path d="M8 180 C 70 175, 50 40, 110 18"/><path d="M94 15 L110 18 L100 30"/></svg>
+    <svg class="cmp-arrow arrow-down" viewBox="0 0 24 48" aria-hidden="true"><path d="M12 4 L12 42"/><path d="M5 34 L12 43 L19 34"/></svg>
+    <div class="p-after">
+      <img class="cmp-img" src="imagenes/NIO/nio-coach-v2.png" alt="Versión final de la sección del coach: el formulario para agendar una sesión a la izquierda y, a la derecha marcado en rojo, el perfil resumido del coach con su especialidad, certificaciones y notas" loading="lazy" decoding="async">
+      <p class="cmp-text">Invertimos el orden de las secciones, porque empezar la interacción por la izquierda era más <span class="hl">rápido</span> y <span class="hl">efectivo</span>. También ajustamos los colores, que no funcionaban visualmente.</p>
     </div>
   </div>
-  <div class="img-slot">[Imagen: antes y después de cada uno de los tres cambios]</div>
+
+  <!-- Bloque 3: Journey map -->
+  <div class="cmp cmp-pair">
+    <h4 class="cmp-title">Journey map</h4>
+    <div class="p-before">
+      <p class="cmp-bubble j-bubble">“¿Para qué son los <span class="hl">puntos</span>?”</p>
+      <img class="cmp-img" src="imagenes/NIO/nio-journey-map-v1.png" alt="Primera versión del journey map: siluetas grises de islas flotantes con candados para cada hito y la meta, un personaje corriendo al inicio y la pregunta de un test: What are the dots for?" loading="lazy" decoding="async">
+      <p class="cmp-text">Los textos y etiquetas generaban <span class="hl">confusión</span>.</p>
+    </div>
+    <svg class="cmp-arrow arrow-curve p-arrow" viewBox="0 0 120 200" aria-hidden="true"><path d="M8 180 C 70 175, 50 40, 110 18"/><path d="M94 15 L110 18 L100 30"/></svg>
+    <svg class="cmp-arrow arrow-down" viewBox="0 0 24 48" aria-hidden="true"><path d="M12 4 L12 42"/><path d="M5 34 L12 43 L19 34"/></svg>
+    <div class="p-after">
+      <img class="cmp-img" src="imagenes/NIO/nio-journey-map-v2.png" alt="Versión final del journey map: camino isométrico de bloques morados y turquesa desde Start hasta la meta Be less tired, con hitos, medallas, un árbol y un conejo que marca el progreso" loading="lazy" decoding="async">
+      <p class="cmp-text">La idea era que fuera <span class="hl">divertido</span>, como un videojuego, pero la sección no se sentía conectada con el resto de la app. La adaptamos para integrarla mejor con la temática.</p>
+    </div>
+  </div>
 
   <h3 class="sub-h">Resultado</h3>
   <p class="prose prose-wide">Entregamos el prototipo de alta fidelidad de la plataforma web y el cliente quedó satisfecho con el diseño.</p>
@@ -376,7 +446,8 @@
   <a class="figma-flow-link" href="https://www.figma.com/proto/q8ngUSywJHAk1kznFcw2fd/NIO-Project?node-id=506-72757&amp;viewport=1228%2C1149%2C0.23&amp;t=gZWPVyuQMitwPczn-1&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=444%3A111452&amp;page-id=417%3A70527" target="_blank" rel="noopener">Probar el prototipo en Figma (en inglés) →</a>
 
   <h3 class="sub-h">Aprendizajes</h3>
-  <p class="prose prose-wide"><em class="ph">[Placeholder: 2-3 líneas sobre qué aprendí, por ejemplo sobre consensuar decisiones en equipo o defender una apuesta arriesgada como el estilo videojuego]</em></p>
+  <p class="prose prose-wide">Lo que más me llevo es cómo trabajamos en equipo. No siempre coincidíamos, sobre todo con los colores, pero lo resolvimos repartiendo según lo que mejor se le daba a cada uno: una compañera llevó los colores y lo que debían transmitir, y mi otro compañero y yo, fans de los videojuegos, aportamos las ideas más originales.</p>
+  <p class="prose prose-wide">Hablábamos cada día para decidir qué haría cada uno, como un daily, y eso me enseñó a resolver problemas mucho más rápido. Además, empecé a mejorar en UI, prototipado y design system, con muchos trucos de Figma para ganar tiempo.</p>
 
   <div class="nextproj">
     <a href="rediseno.html">← Proyecto anterior</a>
